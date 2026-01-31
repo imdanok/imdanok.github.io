@@ -21,6 +21,9 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            /* Запрет выделения текста на всей странице */
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         .card {
@@ -50,10 +53,12 @@
             border: 2px solid var(--neon);
             box-shadow: 0 0 20px rgba(188, 19, 254, 0.3);
             
-            /* ЗАЩИТА АВАТАРКИ */
+            /* ПОЛНАЯ ЗАЩИТА АВАТАРКИ */
             user-select: none;
             -webkit-user-drag: none;
             -webkit-touch-callout: none;
+            touch-action: none;
+            pointer-events: auto;
         }
 
         .status-dot {
@@ -83,7 +88,6 @@
             font-weight: 700;
             color: #ffffff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px var(--neon);
-            user-select: none; /* Чтобы ник тоже нельзя было выделить */
         }
 
         .separator {
@@ -99,7 +103,6 @@
             text-transform: uppercase;
             font-weight: 800;
             opacity: 0.8;
-            user-select: none;
         }
 
         #ds-status {
@@ -109,7 +112,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             min-height: 12px;
-            user-select: none;
         }
 
         .links {
@@ -135,6 +137,8 @@
             /* ЗАЩИТА КНОПОК */
             user-select: none;
             -webkit-user-drag: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
         }
 
         .btn i { position: absolute; left: -35px; transition: 0.3s; font-size: 18px; }
@@ -166,11 +170,11 @@
         <div id="ds-status">Connecting...</div>
         
         <div class="links">
-            <a href="https://t.me/Im_Danok" class="btn tg" target="_blank" draggable="false"><i class="fab fa-telegram-plane"></i>Telegram</a>
-            <a href="https://discordapp.com/users/852876367871082519" class="btn ds" target="_blank" draggable="false"><i class="fab fa-discord"></i>Discord</a>
-            <a href="https://steamcommunity.com/id/im_danok/" class="btn st" target="_blank" draggable="false"><i class="fab fa-steam"></i>Steam</a>
-            <a href="https://funpay.com/users/8726493/" class="btn fp" target="_blank" draggable="false"><i class="fas fa-bolt"></i>FunPay</a>
-            <a href="https://mynickname.com/Im_Danok" class="btn mn" target="_blank" draggable="false"><i class="fas fa-id-card"></i>MyNickname</a>
+            <a href="https://t.me/Im_Danok" class="btn tg" target="_blank" draggable="false" oncontextmenu="return false;"><i class="fab fa-telegram-plane"></i>Telegram</a>
+            <a href="https://discordapp.com/users/852876367871082519" class="btn ds" target="_blank" draggable="false" oncontextmenu="return false;"><i class="fab fa-discord"></i>Discord</a>
+            <a href="https://steamcommunity.com/id/im_danok/" class="btn st" target="_blank" draggable="false" oncontextmenu="return false;"><i class="fab fa-steam"></i>Steam</a>
+            <a href="https://funpay.com/users/8726493/" class="btn fp" target="_blank" draggable="false" oncontextmenu="return false;"><i class="fas fa-bolt"></i>FunPay</a>
+            <a href="https://mynickname.com/Im_Danok" class="btn mn" target="_blank" draggable="false" oncontextmenu="return false;"><i class="fas fa-id-card"></i>MyNickname</a>
         </div>
 
         <div class="footer"></div>
@@ -209,3 +213,4 @@
     </script>
 </body>
 </html>
+
