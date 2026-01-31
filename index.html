@@ -16,6 +16,10 @@
         .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 15px; }
         .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 25px rgba(188, 19, 254, 0.5); }
         .status-dot { position: absolute; bottom: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--status-color); border: 3px solid #0b0b0b; }
+        .title-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
+        h1 { margin: 0; font-size: 22px; text-shadow: 0 0 15px var(--neon); }
+        .separator { width: 1px; height: 18px; background: rgba(255, 255, 255, 0.2); }
+        .links-label { font-size: 11px; letter-spacing: 2px; color: var(--neon); text-transform: uppercase; font-weight: 800; opacity: 0.8; }
         .activity-box { background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 15px; margin: 15px 0 25px; display: flex; align-items: center; gap: 12px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.05); }
         .activity-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(188, 19, 254, 0.1); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 10px var(--neon); overflow: hidden; flex-shrink: 0; }
         .activity-icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -33,6 +37,7 @@
     <video autoplay muted loop playsinline id="bg-video"><source src="assets/video1.mp4" type="video/mp4"></video>
     <div class="card">
         <div class="avatar-wrapper"><img src="assets/avatar.png" class="avatar"><div id="status-dot" class="status-dot"></div></div>
+        <div class="title-container"><h1>Im_Danokツ</h1><div class="separator"></div><div class="links-label">LINKS</div></div>
         <div class="activity-box">
             <div class="activity-icon" id="activity-icon"></div>
             <div class="activity-info">
@@ -45,6 +50,8 @@
             <a href="https://t.me/Im_Danok" class="btn" target="_blank">Telegram</a>
             <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank">Discord</a>
             <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank">Steam</a>
+            <a href="https://funpay.com/users/8726493/" class="btn" target="_blank">FunPay</a>
+            <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank">MyNickname</a>
         </div>
     </div>
     <script>
@@ -56,27 +63,18 @@
         });
         document.addEventListener('mouseleave', () => cursor.style.display = 'none');
         document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
+
         const gameStatusData = {
-            hsr: {
-                icon: "assets/images.jfif",
-                texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"]
-            },
-            endfield: {
-                icon: "assets/эндфилд.jfif",
-                texts: ["Проводит логистику завода", "Создает чертеж", "Исследует Талос-II", "Оптимизирует производство", "Путешествует по Долине IV", "Проверяет датчики", "Настраивает энергосеть", "Управляет дронами-разведчиками", "Собирает ресурсы", "Анализирует аномалии", "Укрепляет оборону базы", "Сканирует местность", "Разрабатывает новые технологии", "Следит за реактором", "Строит конвейерные ленты", "Настраивает автоматизацию", "Изучает протоколы Эндфилда", "Отражает нападение Аггелосов"]
-            },
-            zzz: {
-                icon: "assets/ззз.jfif",
-                texts: ["Исследует нулевую каверну", "Проходит беспощадную охоту", "Пьёт кофе у Тин", "Выбивает S-ранг", "Чинит видеопрокат", "Ищет Банбу", "Закрывает заказ Интернота", "Слушает пластинки в 6-м секторе", "Проверяет VR-тренировки", "Сражается с эфириалами", "Копит полихромы", "Покупает лапшу", "Изучает архив прокси", "Взламывает защиту каверны", "Тюнингует Банбу", "Смотрит пост в Интерноте"]
-            },
-            tundra: {
-                icon: "assets/тундра.png",
-                texts: ["Фармит серебряные львы", "Попадание в пулемет", "Тестирует новую технику", "Горит в танке", "Ловит рикошет", "Атакуйте точку А!", "Атакуйте точку D!", "Сбивает самолет на ЗСУ", "Ищет Д-6", "Проверяет бронепробитие", "Ждёт пополнения экипажа", "Сбивает гусеницу", "Наводит артиллерию", "Летит на аэродром", "Фармит Очки Возрождения", "Вызывает дух Сталина"]
-            }
+            hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Проходит режим Золото и шестерёнки"] },
+            endfield: { icon: "assets/эндфилд.jfif", texts: ["Проводит логистику завода", "Создает чертеж", "Исследует Талос-II", "Оптимизирует производство"] },
+            zzz: { icon: "assets/ззз.jfif", texts: ["Исследует нулевую каверну", "Проходит беспощадную охоту", "Пьёт кофе у Тин", "Смотрит пост в Интерноте"] },
+            tundra: { icon: "assets/тундра.png", texts: ["Фармит серебряные львы", "Попадание в пулемет", "Тестирует новую технику", "Горит в танке"] }
         };
+
         let currentActivityName = "";
         let fixedStatusText = "";
         let textTimer = 0;
+
         function formatTime(startMs) {
             const diff = Math.floor((Date.now() - startMs) / 1000);
             const h = Math.floor(diff / 3600).toString().padStart(2, '0');
@@ -84,6 +82,7 @@
             const s = (diff % 60).toString().padStart(2, '0');
             return `${h}:${m}:${s}`;
         }
+
         async function updateStatus() {
             try {
                 const r = await fetch('https://api.lanyard.rest/v1/users/852876367871082519');
@@ -95,7 +94,14 @@
                 const sub = document.getElementById('activity-sub');
                 const timeBox = document.getElementById('activity-time');
                 const name = document.getElementById('activity-name');
-                if (d.activities.length > 0) {
+
+                if (d.listening_to_spotify) {
+                    name.innerText = d.spotify.song;
+                    sub.innerText = d.spotify.artist;
+                    timeBox.innerText = "";
+                    icon.innerHTML = `<img src="${d.spotify.album_art_url}">`;
+                    currentActivityName = "spotify";
+                } else if (d.activities.length > 0) {
                     const a = d.activities.find(x => x.type === 0) || d.activities[0];
                     const n = a.name;
                     if (n !== currentActivityName || textTimer <= 0) {
@@ -118,7 +124,7 @@
                     }
                     name.innerText = n;
                     sub.innerText = fixedStatusText;
-                    timeBox.innerText = (a.timestamps && a.timestamps.start) ? `наиграно: ${formatTime(a.timestamps.start)}` : "";
+                    timeBox.innerText = (a.timestamps && a.timestamps.start) ? formatTime(a.timestamps.start) : "";
                     textTimer--;
                 } else {
                     name.innerText = d.discord_status.toUpperCase();
@@ -126,7 +132,6 @@
                     timeBox.innerText = "";
                     icon.innerHTML = '<i class="fas fa-ghost"></i>';
                     currentActivityName = "";
-                    textTimer = 0;
                 }
             } catch (e) {}
         }
