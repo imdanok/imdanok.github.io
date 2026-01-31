@@ -10,21 +10,7 @@
         :root { --neon: #bc13fe; --status-color: #747f8d; }
         body { background: #000; color: #fff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; user-select: none; -webkit-user-select: none; cursor: none; }
         a, button, .btn, .avatar, video { cursor: none !important; }
-        
-        #cursor { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 26px; 
-            height: 26px; 
-            z-index: 9999; 
-            pointer-events: none; 
-            will-change: transform; 
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); 
-            filter: drop-shadow(0 0 8px var(--neon)); 
-            display: none; /* Скрываем до первого движения мыши */
-        }
-
+        #cursor { position: fixed; top: 0; left: 0; width: 26px; height: 26px; z-index: 9999; pointer-events: none; will-change: transform; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); filter: drop-shadow(0 0 8px var(--neon)); display: none; }
         #bg-video { position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; z-index: -100; transform: translate(-50%, -50%); object-fit: cover; filter: brightness(0.3) contrast(1.1); pointer-events: none; }
         @keyframes boxPulse { 0% { box-shadow: 0 0 10px rgba(188, 19, 254, 0.1); transform: scale(1); } 50% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.4); transform: scale(1.02); } 100% { box-shadow: 0 0 10px rgba(188, 19, 254, 0.1); transform: scale(1); } }
         .pulse-active { animation: boxPulse 2.5s infinite ease-in-out; }
@@ -72,20 +58,12 @@
     <script>
         const cursor = document.getElementById('cursor');
         let firstMove = false;
-
         document.addEventListener('mousemove', (e) => {
-            // Фикс: показываем курсор только при первом движении
-            if (!firstMove) {
-                cursor.style.display = 'block';
-                firstMove = true;
-            }
+            if (!firstMove) { cursor.style.display = 'block'; firstMove = true; }
             cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
         });
-
         document.addEventListener('mouseleave', () => cursor.style.display = 'none');
-        document.addEventListener('mouseenter', () => {
-            if (firstMove) cursor.style.display = 'block';
-        });
+        document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
 
         const geminiSVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2JjMTNmZSIgZD0iTTEyIDJMMTQuOCA5LjJMMjIgMTJMMTQuOCAxNC44TDEyIDIyTDkuMiAxNC44TDIgMTJMOS4yIDkuMkwxMiAyWiIvPjwvc3ZnPg==";
 
@@ -97,15 +75,14 @@
                 const d = j.data;
                 const colors = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' };
                 document.getElementById('status-dot').style.background = colors[d.discord_status];
-                
-                const iconContainer = document.getElementById('activity-icon');
+                const icon = document.getElementById('activity-icon');
                 const box = document.getElementById('activity-box');
 
                 if (d.listening_to_spotify) {
                     document.getElementById('activity-label').innerText = "Listening to Spotify";
                     document.getElementById('activity-name').innerText = d.spotify.song;
                     document.getElementById('activity-sub').innerText = d.spotify.artist;
-                    iconContainer.innerHTML = `<img src="${d.spotify.album_art_url}">`;
+                    icon.innerHTML = `<img src="${d.spotify.album_art_url}">`;
                     box.classList.add('pulse-active');
                 } else if (d.activities.length > 0) {
                     const a = d.activities.find(x => x.type === 0) || d.activities[0];
@@ -113,22 +90,19 @@
                     document.getElementById('activity-name').innerText = a.name;
                     document.getElementById('activity-sub').innerText = a.details || a.state || "";
                     box.classList.remove('pulse-active');
-
-                    if (a.name.toLowerCase().includes('gemini')) {
-                        iconContainer.innerHTML = `<img src="${geminiSVG}">`;
-                    } else if (a.assets && a.assets.large_image) {
-                        let img = a.assets.large_image.includes('external') 
-                            ? `https://images.weserv.nl/?url=${a.assets.large_image.split('https/')[1]}`
-                            : `https://cdn.discordapp.com/app-assets/${a.application_id}/${a.assets.large_image}.png`;
-                        iconContainer.innerHTML = `<img src="${img}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-gamepad\'></i>'">`;
-                    } else {
-                        iconContainer.innerHTML = '<i class="fas fa-gamepad"></i>';
+                    let imgUrl = "";
+                    if (a.name.toLowerCase().includes('gemini')) { imgUrl = geminiSVG; }
+                    else if (a.assets && a.assets.large_image) {
+                        imgUrl = a.assets.large_image.includes('external') 
+                            ? `https://images.weserv.nl/?url=${a.assets.large_image.split('https/')[1]}` 
+                            : `https://images.weserv.nl/?url=https://cdn.discordapp.com/app-assets/${a.application_id}/${a.assets.large_image}.png`;
                     }
+                    icon.innerHTML = imgUrl ? `<img src="${imgUrl}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-gamepad\'></i>'">` : '<i class="fas fa-gamepad"></i>';
                 } else {
                     document.getElementById('activity-label').innerText = "Status";
                     document.getElementById('activity-name').innerText = d.discord_status.toUpperCase();
                     document.getElementById('activity-sub').innerText = "";
-                    iconContainer.innerHTML = '<i class="fas fa-ghost"></i>';
+                    icon.innerHTML = '<i class="fas fa-ghost"></i>';
                     box.classList.remove('pulse-active');
                 }
             } catch (e) {}
