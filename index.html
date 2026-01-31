@@ -61,6 +61,8 @@
         document.addEventListener('mouseleave', () => cursor.style.display = 'none');
         document.addEventListener('mouseenter', () => cursor.style.display = 'block');
 
+        const geminiSVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2JjMTNmZSIgZD0iTTEyIDJMMTQuOCA5LjJMMjIgMTJMMTQuOCAxNC44TDEyIDIyTDkuMiAxNC44TDIgMTJMOS4yIDkuMkwxMiAyWiIvPjwvc3ZnPg==";
+
         async function updateStatus() {
             try {
                 const r = await fetch('https://api.lanyard.rest/v1/users/852876367871082519');
@@ -86,18 +88,13 @@
                     document.getElementById('activity-sub').innerText = a.details || a.state || "";
                     box.classList.remove('pulse-active');
 
-                    if (a.assets && a.assets.large_image) {
-                        let url;
-                        if (a.assets.large_image.includes('external')) {
-                            url = `https://images.weserv.nl/?url=${a.assets.large_image.split('https/')[1]}`;
-                        } else {
-                            url = `https://cdn.discordapp.com/app-assets/${a.application_id}/${a.assets.large_image}.png`;
-                        }
-                        // Используем Image объект для тихой проверки загрузки
-                        const tester = new Image();
-                        tester.onload = () => iconContainer.innerHTML = `<img src="${url}">`;
-                        tester.onerror = () => iconContainer.innerHTML = '<i class="fas fa-gamepad"></i>';
-                        tester.src = url;
+                    if (a.name.toLowerCase().includes('gemini')) {
+                        iconContainer.innerHTML = `<img src="${geminiSVG}">`;
+                    } else if (a.assets && a.assets.large_image) {
+                        let img = a.assets.large_image.includes('external') 
+                            ? `https://images.weserv.nl/?url=${a.assets.large_image.split('https/')[1]}`
+                            : `https://cdn.discordapp.com/app-assets/${a.application_id}/${a.assets.large_image}.png`;
+                        iconContainer.innerHTML = `<img src="${img}" onerror="this.parentElement.innerHTML='<i class=\'fas fa-gamepad\'></i>'">`;
                     } else {
                         iconContainer.innerHTML = '<i class="fas fa-gamepad"></i>';
                     }
@@ -114,5 +111,6 @@
     </script>
 </body>
 </html>
+
 
 
