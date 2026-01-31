@@ -8,33 +8,169 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --neon: #bc13fe; --status-color: #747f8d; }
-        * { cursor: none !important; }
-        video { pointer-events: none !important; user-select: none !important; }
-        body { background: #000; color: #fff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; user-select: none; -webkit-user-select: none; }
-        #cursor { position: fixed; top: 0; left: 0; width: 26px; height: 26px; z-index: 9999; pointer-events: none; will-change: transform; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); filter: drop-shadow(0 0 8px var(--neon)); display: none; }
-        #bg-video { position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; z-index: -100; transform: translate(-50%, -50%); object-fit: cover; filter: brightness(0.3) contrast(1.1); }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); filter: blur(10px); } to { opacity: 1; transform: translateX(0); filter: blur(0); } }
-        .card { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 40px 30px; border-radius: 35px; text-align: center; width: 320px; box-shadow: 0 0 50px rgba(0,0,0,0.8); z-index: 1; }
+        
+        /* ПОЛНАЯ ЗАЩИТА И ФИКС КУРСОРA */
+        * { cursor: none !important; -webkit-user-drag: none; }
+        video, img, .avatar, .card, .btn { 
+            pointer-events: auto; 
+            user-select: none !important; 
+            -webkit-user-select: none; 
+        }
+        /* Блокируем функции Opera GX поверх контента */
+        video, .avatar { pointer-events: none !important; } 
+
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            overflow: hidden; 
+        }
+        
+        #cursor { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 26px; 
+            height: 26px; 
+            z-index: 9999; 
+            pointer-events: none; 
+            will-change: transform; 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); 
+            filter: drop-shadow(0 0 8px var(--neon)); 
+            display: none; 
+        }
+        
+        #bg-video { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            min-width: 100%; 
+            min-height: 100%; 
+            z-index: -100; 
+            transform: translate(-50%, -50%); 
+            object-fit: cover; 
+            filter: brightness(0.3) contrast(1.1); 
+        }
+        
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateX(-30px); filter: blur(10px); } 
+            to { opacity: 1; transform: translateX(0); filter: blur(0); } 
+        }
+
+        .card { 
+            background: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            padding: 40px 30px; 
+            border-radius: 35px; 
+            text-align: center; 
+            width: 320px; 
+            box-shadow: 0 0 50px rgba(0,0,0,0.8); 
+            z-index: 1; 
+        }
+
         .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 15px; }
-        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 25px rgba(188, 19, 254, 0.5); }
-        .status-dot { position: absolute; bottom: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--status-color); border: 3px solid #0b0b0b; }
+        .avatar { 
+            width: 100%; 
+            height: 100%; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            border: 2px solid var(--neon); 
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.5); 
+        }
+        .status-dot { 
+            position: absolute; 
+            bottom: 5px; 
+            right: 5px; 
+            width: 18px; 
+            height: 18px; 
+            border-radius: 50%; 
+            background: var(--status-color); 
+            border: 3px solid #0b0b0b; 
+        }
+        
         .title-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         h1 { margin: 0; font-size: 22px; text-shadow: 0 0 15px var(--neon); }
         .separator { width: 1px; height: 18px; background: rgba(255, 255, 255, 0.2); }
         .links-label { font-size: 11px; letter-spacing: 2px; color: var(--neon); text-transform: uppercase; font-weight: 800; opacity: 0.8; }
-        .activity-box { background: rgba(255, 255, 255, 0.03); border-radius: 20px; padding: 15px; margin: 15px 0 25px; display: flex; align-items: center; gap: 12px; text-align: left; border: 1px solid rgba(255, 255, 255, 0.05); }
-        .activity-icon { width: 50px; height: 50px; border-radius: 12px; background: rgba(188, 19, 254, 0.1); display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 0 10px var(--neon); overflow: hidden; flex-shrink: 0; }
+        
+        .activity-box { 
+            background: rgba(255, 255, 255, 0.03); 
+            border-radius: 20px; 
+            padding: 15px; 
+            margin: 15px 0 25px; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-align: left; 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+        }
+        .activity-icon { 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 12px; 
+            background: rgba(188, 19, 254, 0.1); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 20px; 
+            box-shadow: 0 0 10px var(--neon); 
+            overflow: hidden; 
+            flex-shrink: 0; 
+        }
         .activity-icon img { width: 100%; height: 100%; object-fit: cover; }
+        
         .activity-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
         .activity-label { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--neon); font-weight: 800; }
         .activity-name { font-size: 13px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .activity-sub { font-size: 11px; color: rgba(255, 255, 255, 0.5); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .play-time { font-size: 11px; color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 10px var(--neon); margin-top: 2px; }
+        .play-time { 
+            font-size: 11px; 
+            color: #fff; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            text-shadow: 0 0 10px var(--neon); 
+            margin-top: 2px; 
+        }
+
         .links { display: flex; flex-direction: column; gap: 12px; }
-        .btn { position: relative; padding: 14px; border-radius: 15px; text-decoration: none; color: rgba(255, 255, 255, 0.6); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; display: flex; align-items: center; justify-content: center; animation: slideIn 0.8s ease forwards; opacity: 0; overflow: hidden; }
+        
+        .btn { 
+            position: relative; 
+            padding: 14px; 
+            border-radius: 15px; 
+            text-decoration: none; 
+            color: rgba(255, 255, 255, 0.6); 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            transition: 0.3s; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            animation: slideIn 0.8s ease forwards; 
+            opacity: 0; 
+            overflow: hidden;
+            pointer-events: auto !important;
+        }
+
         .btn i { position: absolute; left: -35px; transition: 0.3s; font-size: 18px; }
-        .btn:hover { color: #fff; padding-left: 35px; background: rgba(188, 19, 254, 0.1); border-color: var(--neon); transform: translateY(-2px); }
+
+        .btn:hover { 
+            color: #fff; 
+            padding-left: 35px; 
+            background: rgba(188, 19, 254, 0.1); 
+            border-color: var(--neon); 
+            transform: translateY(-2px); 
+        }
+
         .btn:hover i { left: 20px; }
+        
         .btn:nth-child(1) { animation-delay: 0.1s; }
         .btn:nth-child(2) { animation-delay: 0.2s; }
         .btn:nth-child(3) { animation-delay: 0.3s; }
@@ -44,10 +180,19 @@
 </head>
 <body>
     <div id="cursor"></div>
-    <video autoplay muted loop playsinline id="bg-video"><source src="assets/video1.mp4" type="video/mp4"></video>
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="assets/video1.mp4" type="video/mp4">
+    </video>
     <div class="card">
-        <div class="avatar-wrapper"><img src="assets/avatar.png" class="avatar"><div id="status-dot" class="status-dot"></div></div>
-        <div class="title-container"><h1>Im_Danokツ</h1><div class="separator"></div><div class="links-label">LINKS</div></div>
+        <div class="avatar-wrapper">
+            <img src="assets/avatar.png" class="avatar">
+            <div id="status-dot" class="status-dot"></div>
+        </div>
+        <div class="title-container">
+            <h1>Im_Danokツ</h1>
+            <div class="separator"></div>
+            <div class="links-label">LINKS</div>
+        </div>
         <div class="activity-box">
             <div class="activity-icon" id="activity-icon"></div>
             <div class="activity-info">
@@ -65,13 +210,18 @@
             <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i>MyNickname</a>
         </div>
     </div>
+
     <script>
         const cursor = document.getElementById('cursor');
         let firstMove = false;
+
         document.addEventListener('mousemove', (e) => {
             if (!firstMove) { cursor.style.display = 'block'; firstMove = true; }
             cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
         });
+
+        document.addEventListener('mouseleave', () => cursor.style.display = 'none');
+        document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
 
         const gameStatusData = {
             hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"] },
@@ -113,6 +263,7 @@
                 const timeBox = document.getElementById('activity-time');
                 const name = document.getElementById('activity-name');
                 const label = document.getElementById('activity-label');
+
                 document.getElementById('status-dot').style.background = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' }[d.discord_status];
                 
                 const gameActivity = d.activities.find(x => x.type === 0);
@@ -129,6 +280,7 @@
                         else if (nl.includes('endfield')) gameKey = "endfield";
                         else if (nl.includes('zenless') || nl.includes('zzz')) gameKey = "zzz";
                         else if (nl.includes('war thunder') || nl.includes('тундр')) gameKey = "tundra";
+                        
                         if (gameKey) {
                             fixedStatusText = getNextText(gameKey);
                             icon.innerHTML = `<img src="${gameStatusData[gameKey].icon}">`;
@@ -158,11 +310,13 @@
                 }
             } catch (e) {}
         }
+
         setInterval(updateStatus, 1000);
         updateStatus();
     </script>
 </body>
 </html>
+
 
 
 
