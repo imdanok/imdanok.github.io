@@ -72,8 +72,6 @@
             if (!firstMove) { cursor.style.display = 'block'; firstMove = true; }
             cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
         });
-        document.addEventListener('mouseleave', () => cursor.style.display = 'none');
-        document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
 
         const gameStatusData = {
             hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"] },
@@ -116,16 +114,11 @@
                 const name = document.getElementById('activity-name');
                 const label = document.getElementById('activity-label');
                 document.getElementById('status-dot').style.background = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' }[d.discord_status];
-                if (d.listening_to_spotify) {
-                    label.innerText = "Listening to Spotify";
-                    name.innerText = d.spotify.song;
-                    sub.innerText = d.spotify.artist;
-                    timeBox.innerText = "";
-                    icon.innerHTML = `<img src="${d.spotify.album_art_url}">`;
-                    currentActivityName = "spotify";
-                } else if (d.activities.length > 0) {
-                    const a = d.activities.find(x => x.type === 0) || d.activities[0];
-                    const n = a.name;
+                
+                const gameActivity = d.activities.find(x => x.type === 0);
+
+                if (gameActivity) {
+                    const n = gameActivity.name;
                     label.innerText = "Playing";
                     if (n !== currentActivityName || textTimer <= 0) {
                         currentActivityName = n;
@@ -140,14 +133,21 @@
                             fixedStatusText = getNextText(gameKey);
                             icon.innerHTML = `<img src="${gameStatusData[gameKey].icon}">`;
                         } else {
-                            fixedStatusText = a.details || a.state || "";
+                            fixedStatusText = gameActivity.details || gameActivity.state || "";
                             icon.innerHTML = '<i class="fas fa-gamepad"></i>';
                         }
                     }
                     name.innerText = n;
                     sub.innerText = fixedStatusText;
-                    timeBox.innerText = (a.timestamps && a.timestamps.start) ? formatTime(a.timestamps.start) : "";
+                    timeBox.innerText = (gameActivity.timestamps && gameActivity.timestamps.start) ? formatTime(gameActivity.timestamps.start) : "";
                     textTimer--;
+                } else if (d.listening_to_spotify) {
+                    label.innerText = "Listening to Spotify";
+                    name.innerText = d.spotify.song;
+                    sub.innerText = d.spotify.artist;
+                    timeBox.innerText = "";
+                    icon.innerHTML = `<img src="${d.spotify.album_art_url}">`;
+                    currentActivityName = "spotify";
                 } else {
                     label.innerText = "Status";
                     name.innerText = "Currently Idling";
@@ -163,6 +163,7 @@
     </script>
 </body>
 </html>
+
 
 
 
