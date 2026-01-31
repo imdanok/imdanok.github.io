@@ -10,7 +10,21 @@
         :root { --neon: #bc13fe; --status-color: #747f8d; }
         body { background: #000; color: #fff; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; overflow: hidden; user-select: none; -webkit-user-select: none; cursor: none; }
         a, button, .btn, .avatar, video { cursor: none !important; }
-        #cursor { position: fixed; top: 0; left: 0; width: 26px; height: 26px; z-index: 9999; pointer-events: none; will-change: transform; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); filter: drop-shadow(0 0 8px var(--neon)); }
+        
+        #cursor { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 26px; 
+            height: 26px; 
+            z-index: 9999; 
+            pointer-events: none; 
+            will-change: transform; 
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); 
+            filter: drop-shadow(0 0 8px var(--neon)); 
+            display: none; /* Скрываем до первого движения мыши */
+        }
+
         #bg-video { position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; z-index: -100; transform: translate(-50%, -50%); object-fit: cover; filter: brightness(0.3) contrast(1.1); pointer-events: none; }
         @keyframes boxPulse { 0% { box-shadow: 0 0 10px rgba(188, 19, 254, 0.1); transform: scale(1); } 50% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.4); transform: scale(1.02); } 100% { box-shadow: 0 0 10px rgba(188, 19, 254, 0.1); transform: scale(1); } }
         .pulse-active { animation: boxPulse 2.5s infinite ease-in-out; }
@@ -57,9 +71,21 @@
     </div>
     <script>
         const cursor = document.getElementById('cursor');
-        document.addEventListener('mousemove', (e) => { cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`; });
+        let firstMove = false;
+
+        document.addEventListener('mousemove', (e) => {
+            // Фикс: показываем курсор только при первом движении
+            if (!firstMove) {
+                cursor.style.display = 'block';
+                firstMove = true;
+            }
+            cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+        });
+
         document.addEventListener('mouseleave', () => cursor.style.display = 'none');
-        document.addEventListener('mouseenter', () => cursor.style.display = 'block');
+        document.addEventListener('mouseenter', () => {
+            if (firstMove) cursor.style.display = 'block';
+        });
 
         const geminiSVG = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2JjMTNmZSIgZD0iTTEyIDJMMTQuOCA5LjJMMjIgMTJMMTQuOCAxNC44TDEyIDIyTDkuMiAxNC44TDIgMTJMOS4yIDkuMkwxMiAyWiIvPjwvc3ZnPg==";
 
@@ -111,6 +137,7 @@
     </script>
 </body>
 </html>
+
 
 
 
