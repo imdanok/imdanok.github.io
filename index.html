@@ -17,7 +17,10 @@
         
         * { -webkit-user-drag: none; box-sizing: border-box; }
 
-        @media (pointer: fine) { * { cursor: none !important; } }
+        /* ГЛАВНОЕ ИСПРАВЛЕНИЕ: Жестко скрываем курсор везде на ПК */
+        @media (pointer: fine) { 
+            * { cursor: none !important; } 
+        }
 
         body { 
             background: #000; 
@@ -158,8 +161,9 @@
             color: #fff; 
             transition: 0.3s; 
             border: 1px solid rgba(188, 19, 254, 0.1); 
-            cursor: pointer !important;
             height: 100%;
+            /* ИСПРАВЛЕНО: убран cursor: pointer, теперь наследуется cursor: none */
+            cursor: none !important;
         }
         .mail-block:hover { background: rgba(188, 19, 254, 0.1); border-color: var(--neon); transform: translateY(-2px); }
         .mail-icon { font-size: 28px; color: var(--neon); margin-bottom: 10px; }
@@ -243,7 +247,7 @@
                         <div class="bio-text">
                             Ценитель игр и цифровой эстетики.<br>
                             FunPay / Steam / Design<br>
-                            Живу в мире Аниме гач & War Thunder.<br><br>
+                            Живу в мире Honkai & War Thunder.<br><br>
                             <i>"Everything is decided by the stars"</i>
                         </div>
                     </div>
