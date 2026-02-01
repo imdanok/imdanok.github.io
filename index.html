@@ -15,15 +15,9 @@
             --bg-glass: rgba(0, 0, 0, 0.65); 
         }
         
-        /* ГЛОБАЛЬНАЯ ЗАЩИТА ИНТЕРФЕЙСА */
-        * { 
-            -webkit-user-drag: none; /* Запрет перетаскивания */
-            user-select: none; /* Запрет выделения текста */
-            -webkit-user-select: none;
-            box-sizing: border-box; 
-        }
+        * { -webkit-user-drag: none; box-sizing: border-box; }
 
-        /* Скрываем курсор на ПК */
+        /* СКРЫВАЕМ КУРСОР НА ПК */
         @media (pointer: fine) { 
             * { cursor: none !important; } 
             a, button, .btn, .mail-block { cursor: none !important; }
@@ -53,11 +47,19 @@
             #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
+        /* --- ФОН И ЗАЩИТА ОТ OPERA GX --- */
         #bg-video { 
             position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
             z-index: -100; transform: translate(-50%, -50%); object-fit: cover; 
             filter: brightness(0.3) contrast(1.1); 
-            pointer-events: none; /* Чтобы Opera не предлагала открыть видео */
+        }
+
+        /* ПРОЗРАЧНАЯ СТЕНА (FIX OPERA GX) */
+        #video-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -90; /* Выше видео (-100), но ниже контента (0) */
+            background: transparent;
         }
 
         @keyframes neon-breath {
@@ -79,6 +81,8 @@
             grid-template-columns: 300px 1fr;
             gap: 30px;
             animation: neon-breath 4s ease-in-out infinite alternate;
+            z-index: 1; /* Чтобы карточка точно была над видео-оверлеем */
+            position: relative;
         }
 
         /* --- ЛЕВАЯ КОЛОНКА --- */
@@ -136,6 +140,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
             padding: 20px; background: rgba(188, 19, 254, 0.05); border-radius: 18px; text-decoration: none; 
             color: #fff; transition: 0.3s; border: 1px solid rgba(188, 19, 254, 0.1); height: 100%;
+            cursor: none !important;
         }
         .mail-block:hover { background: rgba(188, 19, 254, 0.1); border-color: var(--neon); transform: translateY(-2px); }
         .mail-icon { font-size: 28px; color: var(--neon); margin-bottom: 10px; }
@@ -166,9 +171,11 @@
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
     <div id="cursor"></div>
-    <video autoplay muted loop playsinline id="bg-video">
+    
+    <video autoplay muted loop playsinline disablePictureInPicture id="bg-video">
         <source src="assets/video1.mp4" type="video/mp4">
     </video>
+    <div id="video-overlay"></div>
 
     <div class="main-card">
         <div class="col-left">
@@ -238,7 +245,7 @@
         const cursor = document.getElementById('cursor');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
         
-        // Скрипт запрета контекстного меню и F12 (опционально)
+        // Доп. защита от контекстного меню
         document.addEventListener('contextmenu', event => event.preventDefault());
 
         if (!isMobile) {
@@ -294,6 +301,7 @@
     </script>
 </body>
 </html>
+
 
 
 
