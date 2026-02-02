@@ -55,7 +55,7 @@
             #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
-        /* --- ФОН (CANVAS ВМЕСТО VIDEO) --- */
+        /* --- ФОН (CANVAS) --- */
         #bg-canvas { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: -100; 
@@ -63,8 +63,17 @@
             pointer-events: none;
         }
 
-        /* Скрытое видео (источник для Canvas) */
-        #source-video { display: none; }
+        /* --- ИСТОЧНИК ВИДЕО (ИСПРАВЛЕНО) --- */
+        /* Мы не используем display: none, иначе браузер остановит рендер.
+           Вместо этого делаем его прозрачным и маленьким. */
+        #source-video { 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 1px; height: 1px; 
+            opacity: 0; 
+            z-index: -9999; 
+            pointer-events: none;
+        }
 
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
@@ -226,7 +235,7 @@
     </div>
 
     <script>
-        /* --- 1. КУРСОР И ЗАЩИТА --- */
+        /* --- 1. КУРСОР --- */
         const cursor = document.getElementById('cursor');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
         
@@ -245,7 +254,7 @@
             document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
         }
 
-        /* --- 2. CANVAS VIDEO RENDER (FIX OPERA GX) --- */
+        /* --- 2. CANVAS VIDEO RENDER (ИСПРАВЛЕНО) --- */
         const video = document.getElementById('source-video');
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
@@ -275,7 +284,18 @@
             }
             requestAnimationFrame(drawVideo);
         }
-        video.addEventListener('play', drawVideo);
+        
+        // Принудительный запуск
+        video.play().then(() => {
+            drawVideo();
+        }).catch(e => {
+            // Если автоплей не сработал, попробуем запустить при клике
+            console.log("Autoplay blocked, waiting for interaction");
+            document.body.addEventListener('click', () => {
+                video.play();
+                drawVideo();
+            }, { once: true });
+        });
 
         /* --- 3. LANYARD STATUS --- */
         const gameStatusData = {
@@ -315,7 +335,6 @@
                         } 
                         else { 
                             fixedStatusText = gameActivity.details || gameActivity.state || "In Game"; 
-                            // FIX: Поддержка внешних иконок
                             let imgUrl = "";
                             if (gameActivity.assets && gameActivity.assets.large_image) {
                                 if (gameActivity.assets.large_image.startsWith("mp:")) {
