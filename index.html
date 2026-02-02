@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- ПЕРЕМЕННЫЕ И БАЗА --- */
+        /* --- ПЕРЕМЕННЫЕ --- */
         :root { 
             --neon: #bc13fe; 
             --status-color: #747f8d; 
@@ -18,8 +18,7 @@
         /* ГЛОБАЛЬНАЯ БЛОКИРОВКА */
         * { 
             -webkit-user-drag: none; 
-            user-select: none;
-            -webkit-user-select: none;
+            user-select: none; -webkit-user-select: none;
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent;
         }
@@ -56,48 +55,33 @@
             #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
-        /* --- ФОН И ЗАЩИТА ОТ OPERA --- */
-        #bg-video { 
-            position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
-            z-index: -100; transform: translate(-50%, -50%); object-fit: cover; 
+        /* --- ФОН (CANVAS ВМЕСТО VIDEO) --- */
+        #bg-canvas { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -100; 
             filter: brightness(0.3) contrast(1.1); 
-            pointer-events: none; /* Видео вообще не принимает клики */
+            pointer-events: none;
         }
 
-        /* ПРОЗРАЧНАЯ БРОНЯ ОТ OPERA GX */
-        #video-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -50; /* Лежит НАД видео (-100), но ПОД карточкой (10) */
-            background: rgba(0,0,0,0); /* Полностью прозрачный */
-            pointer-events: auto; /* Перехватывает мышь, чтобы она не касалась видео */
-        }
+        /* Скрытое видео (источник для Canvas) */
+        #source-video { display: none; }
 
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
 
-        /* --- ГЛАВНАЯ КАРТОЧКА --- */
+        /* --- КАРТОЧКИ --- */
         .main-card {
-            width: 100%;
-            max-width: 1050px;
-            min-height: 550px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(30px);
-            border-radius: 35px;
-            border: 2px solid rgba(188, 19, 254, 0.2);
-            padding: 35px;
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
+            width: 100%; max-width: 1050px; min-height: 550px;
+            background: var(--bg-glass); backdrop-filter: blur(30px);
+            border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
+            padding: 35px; display: grid; grid-template-columns: 300px 1fr; gap: 30px;
             animation: neon-breath 4s ease-in-out infinite alternate;
-            position: relative;
-            z-index: 10; /* Карточка выше оверлея */
+            position: relative; z-index: 10;
         }
 
-        /* --- ЛЕВАЯ КОЛОНКА --- */
         .col-left { display: flex; flex-direction: column; gap: 20px; }
-
         .profile-section { text-align: left; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
         .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
@@ -106,7 +90,6 @@
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
         
-        /* Статус */
         .mini-activity {
             background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px;
             display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 5px;
@@ -118,7 +101,6 @@
         .mini-act-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .mini-act-sub { font-size: 10px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Кнопки */
         .links-section { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
         .btn { 
             padding: 12px 14px; border-radius: 12px; text-decoration: none; color: rgba(255, 255, 255, 0.7); 
@@ -128,14 +110,7 @@
         .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 5px; }
         .btn:hover { background: rgba(188, 19, 254, 0.15); color: #fff; border-color: var(--neon); transform: translateX(5px); }
 
-        /* --- ПРАВАЯ КОЛОНКА --- */
-        .col-right { 
-            display: flex; 
-            flex-direction: column; 
-            height: 100%; 
-            justify-content: space-between; 
-        }
-        
+        .col-right { display: flex; flex-direction: column; height: 100%; justify-content: space-between; }
         .top-block-wrapper { display: flex; flex-direction: column; gap: 10px; }
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .section-title { font-size: 10px; color: #777; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-left: 2px; }
@@ -182,10 +157,9 @@
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
     <div id="cursor"></div>
     
-    <video autoplay muted loop playsinline disablePictureInPicture id="bg-video">
-        <source src="assets/video1.mp4" type="video/mp4">
-    </video>
-    <div id="video-overlay"></div>
+    <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
+    
+    <canvas id="bg-canvas"></canvas>
 
     <div class="main-card">
         <div class="col-left">
@@ -226,7 +200,7 @@
                         <div class="bio-text">
                             Ценитель игр и цифровой эстетики.<br>
                             FunPay / Steam / Design<br>
-                            Живу в мире Honkai & War Thunder.<br><br>
+                            Живу в мире Аниме гач & War Thunder.<br><br>
                             <i>"Everything is decided by the stars"</i>
                         </div>
                     </div>
@@ -252,6 +226,7 @@
     </div>
 
     <script>
+        /* --- 1. КУРСОР И ЗАЩИТА --- */
         const cursor = document.getElementById('cursor');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
         
@@ -270,6 +245,39 @@
             document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
         }
 
+        /* --- 2. CANVAS VIDEO RENDER (FIX OPERA GX) --- */
+        const video = document.getElementById('source-video');
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawVideo() {
+            if (!video.paused && !video.ended) {
+                // Имитация object-fit: cover
+                const vw = canvas.width;
+                const vh = canvas.height;
+                const vidW = video.videoWidth || 1280;
+                const vidH = video.videoHeight || 720;
+                
+                const scale = Math.max(vw / vidW, vh / vidH);
+                const drawW = vidW * scale;
+                const drawH = vidH * scale;
+                const startX = (vw - drawW) / 2;
+                const startY = (vh - drawH) / 2;
+
+                ctx.drawImage(video, startX, startY, drawW, drawH);
+            }
+            requestAnimationFrame(drawVideo);
+        }
+        video.addEventListener('play', drawVideo);
+
+        /* --- 3. LANYARD STATUS --- */
         const gameStatusData = {
             hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"] },
             endfield: { icon: "assets/эндфилд.jfif", texts: ["Проводит логистику завода", "Создает чертеж", "Исследует Талос-II", "Оптимизирует производство", "Путешествует по Долине IV", "Проверяет датчики", "Настраивает энергосеть", "Управляет дронами-разведчиками", "Собирает ресурсы", "Анализирует аномалии", "Укрепляет оборону базы", "Сканирует местность", "Разрабатывает новые технологии", "Следит за реактором", "Строит конвейерные ленты", "Настраивает автоматизацию", "Изучает протоколы Эндфилда", "Отражает нападение Аггелосов"] },
@@ -307,8 +315,7 @@
                         } 
                         else { 
                             fixedStatusText = gameActivity.details || gameActivity.state || "In Game"; 
-                            
-                            // ИСПРАВЛЕНИЕ ИКОНОК (mp: / external)
+                            // FIX: Поддержка внешних иконок
                             let imgUrl = "";
                             if (gameActivity.assets && gameActivity.assets.large_image) {
                                 if (gameActivity.assets.large_image.startsWith("mp:")) {
