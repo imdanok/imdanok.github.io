@@ -63,16 +63,9 @@
             pointer-events: none;
         }
 
-        /* --- ИСТОЧНИК ВИДЕО (ИСПРАВЛЕНО) --- */
-        /* Мы не используем display: none, иначе браузер остановит рендер.
-           Вместо этого делаем его прозрачным и маленьким. */
+        /* ИСТОЧНИК ВИДЕО (ПРОЗРАЧНЫЙ) */
         #source-video { 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 1px; height: 1px; 
-            opacity: 0; 
-            z-index: -9999; 
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
         @keyframes neon-breath {
@@ -80,7 +73,7 @@
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
 
-        /* --- КАРТОЧКИ --- */
+        /* --- КАРТОЧКА --- */
         .main-card {
             width: 100%; max-width: 1050px; min-height: 550px;
             background: var(--bg-glass); backdrop-filter: blur(30px);
@@ -235,7 +228,6 @@
     </div>
 
     <script>
-        /* --- 1. КУРСОР --- */
         const cursor = document.getElementById('cursor');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
         
@@ -254,7 +246,7 @@
             document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
         }
 
-        /* --- 2. CANVAS VIDEO RENDER (ИСПРАВЛЕНО) --- */
+        /* --- CANVAS VIDEO RENDER (С ИСПРАВЛЕННЫМ ЦЕНТРИРОВАНИЕМ) --- */
         const video = document.getElementById('source-video');
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
@@ -268,36 +260,32 @@
 
         function drawVideo() {
             if (!video.paused && !video.ended) {
-                // Имитация object-fit: cover
-                const vw = canvas.width;
-                const vh = canvas.height;
-                const vidW = video.videoWidth || 1280;
-                const vidH = video.videoHeight || 720;
+                const screenRatio = canvas.width / canvas.height;
+                const videoRatio = (video.videoWidth || 1280) / (video.videoHeight || 720);
                 
-                const scale = Math.max(vw / vidW, vh / vidH);
-                const drawW = vidW * scale;
-                const drawH = vidH * scale;
-                const startX = (vw - drawW) / 2;
-                const startY = (vh - drawH) / 2;
+                let drawWidth, drawHeight;
 
-                ctx.drawImage(video, startX, startY, drawW, drawH);
+                if (screenRatio > videoRatio) {
+                    drawWidth = canvas.width;
+                    drawHeight = canvas.width / videoRatio;
+                } else {
+                    drawHeight = canvas.height;
+                    drawWidth = canvas.height * videoRatio;
+                }
+
+                // Центрируем: (ШиринаЭкрана - ШиринаРисунка) / 2
+                const startX = (canvas.width - drawWidth) / 2;
+                const startY = (canvas.height - drawHeight) / 2;
+
+                ctx.drawImage(video, startX, startY, drawWidth, drawHeight);
             }
             requestAnimationFrame(drawVideo);
         }
         
-        // Принудительный запуск
-        video.play().then(() => {
-            drawVideo();
-        }).catch(e => {
-            // Если автоплей не сработал, попробуем запустить при клике
-            console.log("Autoplay blocked, waiting for interaction");
-            document.body.addEventListener('click', () => {
-                video.play();
-                drawVideo();
-            }, { once: true });
+        video.play().then(() => { drawVideo(); }).catch(e => {
+            document.body.addEventListener('click', () => { video.play(); drawVideo(); }, { once: true });
         });
 
-        /* --- 3. LANYARD STATUS --- */
         const gameStatusData = {
             hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"] },
             endfield: { icon: "assets/эндфилд.jfif", texts: ["Проводит логистику завода", "Создает чертеж", "Исследует Талос-II", "Оптимизирует производство", "Путешествует по Долине IV", "Проверяет датчики", "Настраивает энергосеть", "Управляет дронами-разведчиками", "Собирает ресурсы", "Анализирует аномалии", "Укрепляет оборону базы", "Сканирует местность", "Разрабатывает новые технологии", "Следит за реактором", "Строит конвейерные ленты", "Настраивает автоматизацию", "Изучает протоколы Эндфилда", "Отражает нападение Аггелосов"] },
@@ -329,10 +317,7 @@
                         else if (nl.includes('zenless') || nl.includes('zzz')) gameKey = "zzz";
                         else if (nl.includes('war thunder') || nl.includes('тундр')) gameKey = "tundra";
                         
-                        if (gameKey) { 
-                            fixedStatusText = getNextText(gameKey); 
-                            icon.innerHTML = `<img src="${gameStatusData[gameKey].icon}">`; 
-                        } 
+                        if (gameKey) { fixedStatusText = getNextText(gameKey); icon.innerHTML = `<img src="${gameStatusData[gameKey].icon}">`; } 
                         else { 
                             fixedStatusText = gameActivity.details || gameActivity.state || "In Game"; 
                             let imgUrl = "";
