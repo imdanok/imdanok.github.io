@@ -15,7 +15,24 @@
             --bg-glass: rgba(0, 0, 0, 0.65); 
         }
         
-        * { -webkit-user-drag: none; box-sizing: border-box; }
+        /* ГЛОБАЛЬНАЯ БЛОКИРОВКА ВСЕГО */
+        * { 
+            -webkit-user-drag: none; 
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+            
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        img, i { pointer-events: none !important; }
 
         /* СКРЫВАЕМ КУРСОР НА ПК */
         @media (pointer: fine) { 
@@ -47,19 +64,17 @@
             #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
-        /* --- ФОН И ЗАЩИТА ОТ OPERA GX --- */
+        /* --- ФОН --- */
         #bg-video { 
             position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
             z-index: -100; transform: translate(-50%, -50%); object-fit: cover; 
             filter: brightness(0.3) contrast(1.1); 
+            pointer-events: none;
         }
 
-        /* ПРОЗРАЧНАЯ СТЕНА (FIX OPERA GX) */
         #video-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -90; /* Выше видео (-100), но ниже контента (0) */
-            background: transparent;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -90; background: transparent; pointer-events: auto;
         }
 
         @keyframes neon-breath {
@@ -81,8 +96,8 @@
             grid-template-columns: 300px 1fr;
             gap: 30px;
             animation: neon-breath 4s ease-in-out infinite alternate;
-            z-index: 1; /* Чтобы карточка точно была над видео-оверлеем */
             position: relative;
+            z-index: 10;
         }
 
         /* --- ЛЕВАЯ КОЛОНКА --- */
@@ -90,7 +105,7 @@
 
         .profile-section { text-align: left; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
-        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); pointer-events: none; }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
         .status-dot { position: absolute; bottom: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--status-color); border: 3px solid #0b0b0b; }
         
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
@@ -221,7 +236,7 @@
                         </div>
                     </div>
                     
-                    <a href="mailto:admin@imdanok.com" class="mail-block">
+                    <a href="mailto:admin@imdanok.com" class="mail-block" target="_blank">
                         <i class="fas fa-paper-plane mail-icon"></i>
                         <div class="mail-info">
                             <span class="mail-addr">admin@imdanok.com</span>
@@ -245,8 +260,10 @@
         const cursor = document.getElementById('cursor');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
         
-        // Доп. защита от контекстного меню
         document.addEventListener('contextmenu', event => event.preventDefault());
+        window.oncontextmenu = function() { return false; }
+        document.addEventListener('dragstart', event => event.preventDefault());
+        document.addEventListener('selectstart', event => event.preventDefault());
 
         if (!isMobile) {
             let firstMove = false;
@@ -301,6 +318,7 @@
     </script>
 </body>
 </html>
+
 
 
 
