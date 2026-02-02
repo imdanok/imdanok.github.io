@@ -15,19 +15,11 @@
             --bg-glass: rgba(0, 0, 0, 0.65); 
         }
         
-        /* ГЛОБАЛЬНАЯ БЛОКИРОВКА ВСЕГО */
+        /* ГЛОБАЛЬНАЯ БЛОКИРОВКА */
         * { 
             -webkit-user-drag: none; 
-            -khtml-user-drag: none;
-            -moz-user-drag: none;
-            -o-user-drag: none;
-            user-drag: none;
-            
             user-select: none;
             -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            
             box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent;
         }
@@ -64,17 +56,20 @@
             #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
-        /* --- ФОН --- */
+        /* --- ФОН И ЗАЩИТА ОТ OPERA --- */
         #bg-video { 
             position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
             z-index: -100; transform: translate(-50%, -50%); object-fit: cover; 
             filter: brightness(0.3) contrast(1.1); 
-            pointer-events: none;
+            pointer-events: none; /* Видео вообще не принимает клики */
         }
 
+        /* ПРОЗРАЧНАЯ БРОНЯ ОТ OPERA GX */
         #video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -90; background: transparent; pointer-events: auto;
+            z-index: -50; /* Лежит НАД видео (-100), но ПОД карточкой (10) */
+            background: rgba(0,0,0,0); /* Полностью прозрачный */
+            pointer-events: auto; /* Перехватывает мышь, чтобы она не касалась видео */
         }
 
         @keyframes neon-breath {
@@ -97,7 +92,7 @@
             gap: 30px;
             animation: neon-breath 4s ease-in-out infinite alternate;
             position: relative;
-            z-index: 10;
+            z-index: 10; /* Карточка выше оверлея */
         }
 
         /* --- ЛЕВАЯ КОЛОНКА --- */
@@ -231,7 +226,7 @@
                         <div class="bio-text">
                             Ценитель игр и цифровой эстетики.<br>
                             FunPay / Steam / Design<br>
-                            Живу в мире Аниме гач & War Thunder.<br><br>
+                            Живу в мире Honkai & War Thunder.<br><br>
                             <i>"Everything is decided by the stars"</i>
                         </div>
                     </div>
@@ -287,6 +282,7 @@
             if (queue.length === 0) queue = [...gameStatusData[gameKey].texts].sort(() => Math.random() - 0.5);
             const next = queue.shift(); localStorage.setItem(`queue_${gameKey}`, JSON.stringify(queue)); return next;
         }
+        
         async function updateStatus() {
             try {
                 const r = await fetch('https://api.lanyard.rest/v1/users/852876367871082519');
@@ -294,6 +290,7 @@
                 const icon = document.getElementById('activity-icon'), sub = document.getElementById('activity-sub'), name = document.getElementById('activity-name'), label = document.getElementById('activity-label'), statusDot = document.getElementById('status-dot');
                 statusDot.style.background = { online: '#43b581', idle: '#faa61a', dnd: '#f04747', offline: '#747f8d' }[d.discord_status] || '#747f8d';
                 const gameActivity = d.activities.find(x => x.type === 0);
+                
                 if (gameActivity) {
                     const n = gameActivity.name; label.innerText = "PLAYING";
                     if (n !== currentActivityName || textTimer <= 0) {
@@ -303,8 +300,27 @@
                         else if (nl.includes('endfield')) gameKey = "endfield";
                         else if (nl.includes('zenless') || nl.includes('zzz')) gameKey = "zzz";
                         else if (nl.includes('war thunder') || nl.includes('тундр')) gameKey = "tundra";
-                        if (gameKey) { fixedStatusText = getNextText(gameKey); icon.innerHTML = `<img src="${gameStatusData[gameKey].icon}">`; } 
-                        else { fixedStatusText = gameActivity.details || gameActivity.state || "In Game"; icon.innerHTML = (gameActivity.assets && gameActivity.assets.large_image) ? `<img src="https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png">` : '<i class="fas fa-gamepad" style="color:#fff; font-size:20px;"></i>'; }
+                        
+                        if (gameKey) { 
+                            fixedStatusText = getNextText(gameKey); 
+                            icon.innerHTML = `<img src="${gameStatusData[gameKey].icon}">`; 
+                        } 
+                        else { 
+                            fixedStatusText = gameActivity.details || gameActivity.state || "In Game"; 
+                            
+                            // ИСПРАВЛЕНИЕ ИКОНОК (mp: / external)
+                            let imgUrl = "";
+                            if (gameActivity.assets && gameActivity.assets.large_image) {
+                                if (gameActivity.assets.large_image.startsWith("mp:")) {
+                                    imgUrl = gameActivity.assets.large_image.replace("mp:", "https://media.discordapp.net/");
+                                } else {
+                                    imgUrl = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${gameActivity.assets.large_image}.png`;
+                                }
+                                icon.innerHTML = `<img src="${imgUrl}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-gamepad\\' style=\\'color:#fff; font-size:20px;\\'></i>'">`;
+                            } else {
+                                icon.innerHTML = '<i class="fas fa-gamepad" style="color:#fff; font-size:20px;"></i>';
+                            }
+                        }
                     }
                     name.innerText = n; sub.innerText = fixedStatusText; textTimer--;
                 } else if (d.listening_to_spotify) {
@@ -318,6 +334,7 @@
     </script>
 </body>
 </html>
+
 
 
 
