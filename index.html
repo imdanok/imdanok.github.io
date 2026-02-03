@@ -24,6 +24,7 @@
         img, i { pointer-events: none !important; }
 
         @media (pointer: fine) { 
+            /* Глобально скрываем системный курсор, чтобы был виден только кастомный */
             * { cursor: none !important; } 
             a, button, .btn, .mail-block, .game-card, .toggle-btn { cursor: none !important; }
         }
@@ -173,49 +174,31 @@
             z-index: 0; pointer-events: none; filter: brightness(0.5);
         }
 
-        /* --- АНИМАЦИЯ ФОНА (ОСЛАБЛЕНА) --- */
-        /* Было brightness(1.2), стало 1.05 (еле заметно) */
         @keyframes bg-glow {
             0% { filter: brightness(1); }
             100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); }
         }
 
-        .games-grid:has(.card-wt:hover) .bg-wt { 
-            opacity: 1; 
-            animation: bg-glow 2s ease-in-out infinite alternate; 
-        } 
-        .games-grid:has(.card-hsr:hover) .bg-hsr { 
-            opacity: 1; 
-            animation: bg-glow 2s ease-in-out infinite alternate;
-        }
-        .games-grid:has(.card-end:hover) .bg-end { 
-            opacity: 1; 
-            animation: bg-glow 2s ease-in-out infinite alternate;
-        }
+        .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; } 
+        .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
+        .games-grid:has(.card-end:hover) .bg-end { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
 
-        /* АНИМАЦИЯ КАРТОЧКИ: Пульсация неона */
         @keyframes card-pulse-strong {
-            0% { 
-                box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); 
-                border-color: rgba(188, 19, 254, 0.5); 
-            }
-            100% { 
-                box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); 
-                border-color: #bc13fe; 
-            }
+            0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); }
+            100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; }
         }
 
         .game-card {
             background: rgba(255,255,255,0.03); border-radius: 18px;
             border: 2px solid rgba(188, 19, 254, 0.5);
             animation: card-pulse-strong 2s ease-in-out infinite alternate;
-            
             position: relative; overflow: hidden; display: flex; 
             flex-direction: column; justify-content: flex-end;
             padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
             height: 100%; width: 100%; z-index: 1;
             color: #fff !important; 
-            cursor: default !important; 
+            /* Скрываем системный курсор принудительно */
+            cursor: none !important; 
         }
 
         .games-grid:hover .game-card { opacity: 0; filter: blur(2px); }
