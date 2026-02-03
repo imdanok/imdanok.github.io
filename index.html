@@ -173,7 +173,7 @@
             z-index: 0; pointer-events: none; filter: brightness(0.5);
         }
 
-        /* --- НОВАЯ АНИМАЦИЯ ФОНА (СВЕЧЕНИЕ) --- */
+        /* АНИМАЦИЯ ФОНА: Плавное свечение при появлении */
         @keyframes bg-glow {
             0% { filter: brightness(1); }
             100% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(188, 19, 254, 0.5)); }
@@ -192,7 +192,7 @@
             animation: bg-glow 2s ease-in-out infinite alternate;
         }
 
-        /* --- НОВАЯ АНИМАЦИЯ КАРТОЧЕК (ПУЛЬСАЦИЯ) --- */
+        /* АНИМАЦИЯ КАРТОЧКИ: Пульсация неона */
         @keyframes card-pulse-strong {
             0% { 
                 box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); 
@@ -200,33 +200,34 @@
             }
             100% { 
                 box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); 
-                border-color: #bc13fe; /* Яркий неон */
+                border-color: #bc13fe; 
             }
         }
 
+        /* ВАЖНО: Используем DIV, чтобы не было ссылки # */
         .game-card {
             background: rgba(255,255,255,0.03); border-radius: 18px;
             
-            /* Яркая рамка по умолчанию */
+            /* Рамка и анимация */
             border: 2px solid rgba(188, 19, 254, 0.5);
-            /* Анимация пульсации */
             animation: card-pulse-strong 2s ease-in-out infinite alternate;
             
             position: relative; overflow: hidden; display: flex; 
             flex-direction: column; justify-content: flex-end;
-            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
             height: 100%; width: 100%; z-index: 1;
             color: #fff !important; 
+            /* Курсор обычный, так как это не ссылка */
+            cursor: default !important; 
         }
 
         .games-grid:hover .game-card { opacity: 0; filter: blur(2px); }
 
         .games-grid .game-card:hover { 
             opacity: 1; filter: none;
-            /* Убираем рамку при наведении (так как есть фон) */
             border-color: transparent !important; 
             box-shadow: none !important; 
-            animation: none; /* Останавливаем пульсацию */
+            animation: none; 
             background: transparent; 
         }
 
@@ -377,12 +378,12 @@
                 <div id="tab-games" class="tab-content active-content">
                     <div class="games-grid">
                         
-                        <div class="grid-bg bg-wt" style="background-image: url('assets/wt-profile.png?v=2');"></div>
-                        <div class="grid-bg bg-hsr" style="background-image: url('assets/hsr-profile.png?v=2');"></div>
-                        <div class="grid-bg bg-end" style="background-image: url('assets/endfield-profile.png?v=2');"></div>
+                        <div class="grid-bg bg-wt" style="background-image: url('assets/wt-profile.png?v=3');"></div>
+                        <div class="grid-bg bg-hsr" style="background-image: url('assets/hsr-profile.png?v=3');"></div>
+                        <div class="grid-bg bg-end" style="background-image: url('assets/endfield-profile.png?v=3');"></div>
 
                         <div class="game-card card-wt">
-                            <img src="assets/wt-poster.jpeg?v=2" class="game-bg-img">
+                            <img src="assets/wt-poster.jpeg?v=3" class="game-bg-img">
                             <span class="game-title">War Thunder</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-plane"></i> Air Superiority</span>
@@ -390,7 +391,7 @@
                         </div>
 
                         <div class="game-card card-hsr">
-                            <img src="assets/hsr-poster.jpg?v=2" class="game-bg-img">
+                            <img src="assets/hsr-poster.jpg?v=3" class="game-bg-img">
                             <span class="game-title">Star Rail</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-star"></i> TL 70 • Endgame</span>
@@ -398,7 +399,7 @@
                         </div>
 
                         <div class="game-card card-end">
-                            <img src="assets/endfield-poster.jpg?v=2" class="game-bg-img">
+                            <img src="assets/endfield-poster.jpg?v=3" class="game-bg-img">
                             <span class="game-title">Endfield</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-cube"></i> Endministrator</span>
@@ -533,6 +534,7 @@
     </script>
 </body>
 </html>
+
 
 
 
