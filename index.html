@@ -173,10 +173,11 @@
             z-index: 0; pointer-events: none; filter: brightness(0.5);
         }
 
-        /* АНИМАЦИЯ ФОНА: Плавное свечение при появлении */
+        /* --- АНИМАЦИЯ ФОНА (ОСЛАБЛЕНА) --- */
+        /* Было brightness(1.2), стало 1.05 (еле заметно) */
         @keyframes bg-glow {
             0% { filter: brightness(1); }
-            100% { filter: brightness(1.2) drop-shadow(0 0 15px rgba(188, 19, 254, 0.5)); }
+            100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); }
         }
 
         .games-grid:has(.card-wt:hover) .bg-wt { 
@@ -204,11 +205,8 @@
             }
         }
 
-        /* ВАЖНО: Используем DIV, чтобы не было ссылки # */
         .game-card {
             background: rgba(255,255,255,0.03); border-radius: 18px;
-            
-            /* Рамка и анимация */
             border: 2px solid rgba(188, 19, 254, 0.5);
             animation: card-pulse-strong 2s ease-in-out infinite alternate;
             
@@ -217,7 +215,6 @@
             padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
             height: 100%; width: 100%; z-index: 1;
             color: #fff !important; 
-            /* Курсор обычный, так как это не ссылка */
             cursor: default !important; 
         }
 
