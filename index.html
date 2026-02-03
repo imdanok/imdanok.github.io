@@ -161,13 +161,11 @@
         .tab-content { display: none; width: 100%; }
         .tab-content.active-content { display: block; animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-        /* --- СЕТКА ИГР --- */
         .games-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
             width: 100%; height: 340px; position: relative;
         }
 
-        /* --- ФОНОВЫЕ СЛОИ --- */
         .grid-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
@@ -179,7 +177,6 @@
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; transform: scale(1.02); }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; transform: scale(1.02); }
 
-        /* --- КАРТОЧКИ --- */
         .game-card {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
             position: relative; overflow: hidden; display: flex; 
@@ -193,7 +190,6 @@
 
         .games-grid .game-card:hover { 
             opacity: 1; transform: scale(1); filter: none;
-            /* ВАЖНО: Убираем рамку полностью */
             border-color: transparent !important; 
             background: transparent; box-shadow: none;
         }
@@ -226,20 +222,17 @@
             transition: 0.3s;
         }
 
-        /* --- НАЗВАНИЕ ИГРЫ --- */
         .game-title { 
             font-size: 16px; font-weight: 800; text-transform: uppercase; 
             text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); 
             margin-bottom: 5px; 
             transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left;
             position: absolute; 
-            /* Обычное состояние: чуть выше */
             bottom: 35px; left: 20px; 
             z-index: 20;
             white-space: nowrap; color: #fff;
         }
         
-        /* При наведении: Опускается ВНИЗ в угол */
         .game-card:hover .game-title {
             bottom: 20px; left: 20px;
             font-size: 21px; 
@@ -356,7 +349,7 @@
                         <div class="grid-bg bg-end" style="background-image: url('assets/endfield-profile.png');"></div>
 
                         <a href="#" class="game-card card-wt">
-                            <img src="assets/wt-poster.jpg" class="game-bg-img">
+                            <img src="assets/wt-poster.jpeg" class="game-bg-img">
                             <span class="game-title">War Thunder</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-plane"></i> Air Superiority</span>
@@ -364,7 +357,7 @@
                         </a>
 
                         <a href="#" class="game-card card-hsr">
-                            <img src="assets/hsr-poster.png" class="game-bg-img">
+                            <img src="assets/hsr-poster.jpg" class="game-bg-img">
                             <span class="game-title">Star Rail</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-star"></i> TL 70 • Endgame</span>
@@ -372,7 +365,7 @@
                         </a>
 
                         <a href="#" class="game-card card-end">
-                            <img src="assets/endfield-poster.png" class="game-bg-img">
+                            <img src="assets/endfield-poster.jpg" class="game-bg-img">
                             <span class="game-title">Endfield</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-cube"></i> Endministrator</span>
@@ -448,11 +441,10 @@
             document.body.addEventListener('click', () => { video.play(); drawVideo(); }, { once: true });
         });
 
-        // Квадратные иконки для статуса
         const gameStatusData = {
             hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"] },
             endfield: { icon: "assets/эндфилд.jfif", texts: ["Проводит логистику завода", "Создает чертеж", "Исследует Талос-II", "Оптимизирует производство", "Путешествует по Долине IV", "Проверяет датчики", "Настраивает энергосеть", "Управляет дронами-разведчиками", "Собирает ресурсы", "Анализирует аномалии", "Укрепляет оборону базы", "Сканирует местность", "Разрабатывает новые технологии", "Следит за реактором", "Строит конвейерные ленты", "Настраивает автоматизацию", "Изучает протоколы Эндфилда", "Отражает нападение Аггелосов"] },
-            zzz: { icon: "assets/ззз.jfif", texts: ["Исследует нулевую каверну", "Проходит беспощадную охоту", "Пьёт кофе у Тин", "Выбивает S-ранг", "Чинит видеопрокат", "Ищет Банбу", "Закрывает заказ Интернота", "Слушает пластинки в 6-м секторе", "Проверяет VR-тренировки", "Сражается с эфириалами", "Копит полихромы", "Покупает лапшу", "Изучает архив прокси", "Взламывает защиту каверны", "Тюнингует Банбу", "Смотрит пост в Интерноте"] },
+            zzz: { icon: "assets/zzz.jfif", texts: ["Исследует нулевую каверну", "Проходит беспощадную охоту", "Пьёт кофе у Тин", "Выбивает S-ранг", "Чинит видеопрокат", "Ищет Банбу", "Закрывает заказ Интернота", "Слушает пластинки в 6-м секторе", "Проверяет VR-тренировки", "Сражается с эфириалами", "Копит полихромы", "Покупает лапшу", "Изучает архив прокси", "Взламывает защиту каверны", "Тюнингует Банбу", "Смотрит пост в Интерноте"] },
             tundra: { icon: "assets/тундра.png", texts: ["Фармит серебряные львы", "Попадание в пулемет", "Тестирует новую технику", "Горит в танке", "Ловит рикошет", "Атакуйте точку А!", "Атакуйте точку D!", "Сбивает самолет на ЗСУ", "Ищет Д-6", "Проверяет бронепробитие", "Ждёт пополнения экипажа", "Сбивает гусеницу", "Наводит артиллерию", "Летит на аэродром", "Фармит Очки Возрождения", "Вызывает дух Сталина"] }
         };
         let currentActivityName = "", fixedStatusText = "", textTimer = 0;
@@ -508,6 +500,7 @@
     </script>
 </body>
 </html>
+
 
 
 
