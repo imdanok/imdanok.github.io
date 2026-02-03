@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Im_Danokツ | Profile</title>
+    <meta name="description" content="Официальный профиль Im_Danok. Геймер, разработчик, продавец на FunPay.">
+    
     <link rel="icon" type="image/jpeg" href="assets/galera1.jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -24,9 +26,8 @@
         img, i { pointer-events: none !important; }
 
         @media (pointer: fine) { 
-            /* Глобально скрываем системный курсор, чтобы был виден только кастомный */
             * { cursor: none !important; } 
-            a, button, .btn, .mail-block, .game-card, .toggle-btn { cursor: none !important; }
+            a, button, .btn, .mail-block, .game-card, .toggle-btn, .footer-link { cursor: none !important; }
         }
 
         body { 
@@ -69,6 +70,7 @@
 
         .main-card {
             width: 100%; max-width: 1050px; 
+            min-height: 600px; 
             height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
@@ -76,12 +78,14 @@
             gap: 35px;
             animation: neon-breath 4s ease-in-out infinite alternate;
             position: relative; z-index: 10;
-            align-items: start;
+            align-items: stretch;
         }
 
         .col-left { 
             display: flex; flex-direction: column; gap: 25px; 
-            height: 100%; justify-content: flex-start; 
+            height: 100%; 
+            justify-content: flex-start; 
+            position: relative;
         }
         
         .profile-section { text-align: left; }
@@ -113,6 +117,42 @@
         }
         .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 8px; }
         .btn:hover { background: rgba(188, 19, 254, 0.15); color: #fff; border-color: var(--neon); transform: translateX(5px); }
+
+        .internal-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            align-items: center;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .footer-link i { color: var(--neon); font-size: 10px; }
+        .footer-link:hover { color: #fff; text-shadow: 0 0 5px var(--neon); }
+        .sep { color: rgba(255, 255, 255, 0.1); }
 
         .col-right { display: flex; flex-direction: column; height: 100%; justify-content: flex-start; gap: 20px; }
         .top-block-wrapper { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
@@ -197,7 +237,6 @@
             padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
             height: 100%; width: 100%; z-index: 1;
             color: #fff !important; 
-            /* Скрываем системный курсор принудительно */
             cursor: none !important; 
         }
 
@@ -247,9 +286,7 @@
         }
         
         .game-card:hover .game-title {
-            bottom: 20px; 
-            left: 20px;
-            font-size: 21px; 
+            bottom: 20px; left: 20px; font-size: 21px; 
             text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8);
         }
 
@@ -288,6 +325,8 @@
             .game-card:hover::after { opacity: 1 !important; }
             .game-card:hover .game-stat { opacity: 1 !important; transform: none; }
             .game-card:hover .game-title { bottom: 35px; left: 20px; font-size: 16px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+            
+            .internal-footer { margin-top: 20px; align-items: center; padding-left: 0; }
         }
     </style>
 </head>
@@ -298,32 +337,48 @@
 
     <div class="main-card">
         <div class="col-left">
-            <div class="profile-section">
-                <div class="avatar-wrapper">
-                    <img src="assets/avatar.png" class="avatar">
-                    <div id="status-dot" class="status-dot"></div>
+            <div>
+                <div class="profile-section">
+                    <div class="avatar-wrapper">
+                        <img src="assets/avatar.png" class="avatar">
+                        <div id="status-dot" class="status-dot"></div>
+                    </div>
+                    <h1 class="nickname">Im_Danokツ</h1>
+                    <div class="sub-nick">Gamer / Digital Creator</div>
+                    
+                    <div class="mini-activity">
+                        <div class="mini-act-icon" id="activity-icon">
+                            <i class="fas fa-ghost" style="color: #555; font-size: 20px;"></i>
+                        </div>
+                        <div class="mini-act-info">
+                            <span class="mini-act-label" id="activity-label">STATUS</span>
+                            <span class="mini-act-name" id="activity-name">Loading...</span>
+                            <span class="mini-act-sub" id="activity-sub">Connecting</span>
+                        </div>
+                    </div>
                 </div>
-                <h1 class="nickname">Im_Danokツ</h1>
-                <div class="sub-nick">Gamer / Digital Creator</div>
-                
-                <div class="mini-activity">
-                    <div class="mini-act-icon" id="activity-icon">
-                        <i class="fas fa-ghost" style="color: #555; font-size: 20px;"></i>
-                    </div>
-                    <div class="mini-act-info">
-                        <span class="mini-act-label" id="activity-label">STATUS</span>
-                        <span class="mini-act-name" id="activity-name">Loading...</span>
-                        <span class="mini-act-sub" id="activity-sub">Connecting</span>
-                    </div>
+
+                <div class="links-section" style="margin-top: 25px;">
+                    <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i>Discord</a>
+                    <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i>Steam</a>
+                    <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i>FunPay</a>
+                    <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i>MyNickname</a>
                 </div>
             </div>
 
-            <div class="links-section">
-                <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i>Discord</a>
-                <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i>Steam</a>
-                <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i>FunPay</a>
-                <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i>MyNickname</a>
+            <div class="internal-footer">
+                <span class="copyright">© 2026 Im_Danok. Все права защищены.</span>
+                <div class="footer-links">
+                    <a href="https://mynickname.com/Im_Danok" target="_blank" class="footer-link">
+                        <i class="fas fa-certificate"></i> Ник
+                    </a>
+                    <span class="sep">|</span>
+                    <a href="https://github.com/imdanok/imdanok.github.io/blob/main/LICENSE" target="_blank" class="footer-link">
+                        <i class="fas fa-balance-scale"></i> MIT License
+                    </a>
+                </div>
             </div>
+            
         </div>
 
         <div class="col-right">
@@ -514,6 +569,7 @@
     </script>
 </body>
 </html>
+
 
 
 
