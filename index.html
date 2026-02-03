@@ -177,8 +177,18 @@
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; transform: scale(1.0); }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; transform: scale(1.0); }
 
+        /* --- НОВАЯ АНИМАЦИЯ: ПУЛЬСАЦИЯ РАМКИ --- */
+        @keyframes card-pulse {
+            0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.3); }
+            100% { box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.7); }
+        }
+
         .game-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
+            background: rgba(255,255,255,0.03); border-radius: 18px;
+            /* Ставим начальную рамку и включаем пульсацию */
+            border: 2px solid rgba(188, 19, 254, 0.3);
+            animation: card-pulse 3s ease-in-out infinite alternate;
+            
             position: relative; overflow: hidden; display: flex; 
             flex-direction: column; justify-content: flex-end;
             padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); text-decoration: none;
@@ -190,8 +200,9 @@
 
         .games-grid .game-card:hover { 
             opacity: 1; filter: none;
-            border-color: transparent !important; 
-            background: transparent; box-shadow: none;
+            /* При наведении рамка исчезает, так как появляется фон */
+            border-color: transparent !important; box-shadow: none !important; animation: none;
+            background: transparent; 
         }
 
         .game-card:hover .game-bg-img { opacity: 0 !important; }
@@ -203,18 +214,10 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; opacity: 0.5; z-index: 0;
             filter: grayscale(20%); 
-            /* Очень медленная и маленькая анимация */
-            animation: game-bg-move 20s ease-in-out infinite alternate;
+            /* Статичная картинка, больше не двигается */
             transition: 0.3s;
         }
         
-        /* ПАССИВНАЯ АНИМАЦИЯ: Только 2% зум */
-        @keyframes game-bg-move {
-            0% { transform: scale(1.0); }
-            50% { transform: scale(1.02); } 
-            100% { transform: scale(1.0); }
-        }
-
         .game-info {
             position: relative; z-index: 2; display: flex; flex-direction: column;
             width: 100%; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -238,6 +241,7 @@
             white-space: nowrap; color: #fff;
         }
         
+        /* При наведении текст съезжает ВНИЗ */
         .game-card:hover .game-title {
             bottom: 20px; 
             left: 20px;
