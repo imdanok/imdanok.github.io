@@ -173,7 +173,7 @@
             z-index: 0; pointer-events: none; filter: brightness(0.5);
         }
 
-        .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; transform: scale(1.0); } /* Фон просто появляется, без зума */
+        .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; transform: scale(1.0); } 
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; transform: scale(1.0); }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; transform: scale(1.0); }
 
@@ -186,10 +186,8 @@
             color: #fff !important; 
         }
 
-        /* Убрал scale(0.95), теперь карточки не уменьшаются */
         .games-grid:hover .game-card { opacity: 0; filter: blur(2px); }
 
-        /* Убрал scale(1), они просто остаются на месте */
         .games-grid .game-card:hover { 
             opacity: 1; filter: none;
             border-color: transparent !important; 
@@ -205,15 +203,15 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover; opacity: 0.5; z-index: 0;
             filter: grayscale(20%); 
-            /* Новая, медленная пассивная анимация */
-            animation: game-bg-move 30s ease-in-out infinite alternate;
+            /* Очень медленная и маленькая анимация */
+            animation: game-bg-move 20s ease-in-out infinite alternate;
             transition: 0.3s;
         }
         
-        /* ПАССИВНАЯ АНИМАЦИЯ: Очень нежное движение (всего 5% зум) */
+        /* ПАССИВНАЯ АНИМАЦИЯ: Только 2% зум */
         @keyframes game-bg-move {
             0% { transform: scale(1.0); }
-            50% { transform: scale(1.05); } 
+            50% { transform: scale(1.02); } 
             100% { transform: scale(1.0); }
         }
 
@@ -234,14 +232,12 @@
             margin-bottom: 5px; 
             transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left;
             position: absolute; 
-            /* В покое текст ВЫШЕ */
             bottom: 45px; 
             left: 20px; 
             z-index: 20;
             white-space: nowrap; color: #fff;
         }
         
-        /* При наведении текст съезжает ВНИЗ */
         .game-card:hover .game-title {
             bottom: 20px; 
             left: 20px;
