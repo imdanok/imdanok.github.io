@@ -8,14 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        /* --- ПЕРЕМЕННЫЕ --- */
         :root { 
             --neon: #bc13fe; 
             --status-color: #747f8d; 
             --bg-glass: rgba(0, 0, 0, 0.65); 
         }
         
-        /* ГЛОБАЛЬНАЯ БЛОКИРОВКА */
         * { 
             -webkit-user-drag: none; 
             user-select: none; -webkit-user-select: none;
@@ -25,10 +23,9 @@
 
         img, i { pointer-events: none !important; }
 
-        /* СКРЫВАЕМ КУРСОР НА ПК */
         @media (pointer: fine) { 
             * { cursor: none !important; } 
-            a, button, .btn, .mail-block { cursor: none !important; }
+            a, button, .btn, .mail-block, .game-card, .toggle-btn { cursor: none !important; }
         }
 
         body { 
@@ -44,7 +41,6 @@
             overflow: hidden; 
         }
         
-        /* --- КУРСОР --- */
         #cursor { 
             position: fixed; top: 0; left: 0; width: 26px; height: 26px; z-index: 99999; 
             pointer-events: none; will-change: transform; 
@@ -55,15 +51,12 @@
             #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
-        /* --- ФОН (CANVAS) --- */
         #bg-canvas { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             z-index: -100; 
             filter: brightness(0.3) contrast(1.1); 
             pointer-events: none;
         }
-
-        /* ИСТОЧНИК ВИДЕО (ПРОЗРАЧНЫЙ) */
         #source-video { 
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
@@ -73,17 +66,23 @@
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
 
-        /* --- КАРТОЧКА --- */
         .main-card {
-            width: 100%; max-width: 1050px; min-height: 550px;
+            width: 100%; max-width: 1050px; 
+            height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
-            padding: 35px; display: grid; grid-template-columns: 300px 1fr; gap: 30px;
+            padding: 35px; display: grid; grid-template-columns: 320px 1fr; 
+            gap: 35px;
             animation: neon-breath 4s ease-in-out infinite alternate;
             position: relative; z-index: 10;
+            align-items: start;
         }
 
-        .col-left { display: flex; flex-direction: column; gap: 20px; }
+        .col-left { 
+            display: flex; flex-direction: column; gap: 25px; 
+            height: 100%; justify-content: flex-start; 
+        }
+        
         .profile-section { text-align: left; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
         .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
@@ -94,7 +93,8 @@
         
         .mini-activity {
             background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px;
-            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 5px;
+            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); 
+            margin-bottom: 0; 
         }
         .mini-act-icon { width: 42px; height: 42px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .mini-act-icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -103,19 +103,19 @@
         .mini-act-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .mini-act-sub { font-size: 10px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .links-section { display: flex; flex-direction: column; gap: 10px; margin-top: auto; }
+        .links-section { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
         .btn { 
-            padding: 12px 14px; border-radius: 12px; text-decoration: none; color: rgba(255, 255, 255, 0.7); 
+            padding: 14px 20px; border-radius: 14px; 
+            text-decoration: none; color: rgba(255, 255, 255, 0.7); 
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
             transition: 0.3s; display: flex; align-items: center; font-size: 14px; pointer-events: auto !important;
         }
-        .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 5px; }
+        .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 8px; }
         .btn:hover { background: rgba(188, 19, 254, 0.15); color: #fff; border-color: var(--neon); transform: translateX(5px); }
 
-        .col-right { display: flex; flex-direction: column; height: 100%; justify-content: space-between; }
-        .top-block-wrapper { display: flex; flex-direction: column; gap: 10px; }
+        .col-right { display: flex; flex-direction: column; height: 100%; justify-content: flex-start; gap: 20px; }
+        .top-block-wrapper { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .section-title { font-size: 10px; color: #777; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-left: 2px; }
         
         .bio-box { 
             background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); 
@@ -135,11 +135,121 @@
         .mail-addr { font-size: 14px; font-weight: 700; word-break: break-all; }
         .mail-sub { font-size: 11px; color: #aaa; margin-top: 4px; }
 
-        .projects-wrapper { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; margin-top: 35px; }
+        .projects-wrapper { display: flex; flex-direction: column; gap: 15px; }
+
+        .toggle-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px; padding: 4px; width: fit-content; flex-shrink: 0;
+        }
+        .toggle-btn {
+            padding: 10px 24px; border-radius: 12px; border: none; background: transparent;
+            color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px;
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase;
+        }
+        .toggle-btn:hover { color: rgba(255, 255, 255, 0.8); }
+        .toggle-btn.active {
+            color: #fff; background: rgba(188, 19, 254, 0.15); box-shadow: 0 0 15px rgba(188, 19, 254, 0.15);
+            text-shadow: 0 0 8px var(--neon);
+        }
+        
+        @keyframes fadeInSlide {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content { display: none; width: 100%; }
+        .tab-content.active-content { display: block; animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+        .games-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            width: 100%; height: 340px; position: relative;
+        }
+
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px;
+            z-index: 0; pointer-events: none; filter: brightness(0.5);
+        }
+
+        .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; transform: scale(1.02); }
+        .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; transform: scale(1.02); }
+        .games-grid:has(.card-end:hover) .bg-end { opacity: 1; transform: scale(1.02); }
+
+        .game-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
+            position: relative; overflow: hidden; display: flex; 
+            flex-direction: column; justify-content: flex-end;
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); text-decoration: none;
+            height: 100%; width: 100%; z-index: 1;
+            color: #fff !important; 
+        }
+
+        .games-grid:hover .game-card { opacity: 0; transform: scale(0.95); filter: blur(2px); }
+
+        .games-grid .game-card:hover { 
+            opacity: 1; transform: scale(1); filter: none;
+            border-color: rgba(255,255,255,0.1); background: transparent; box-shadow: none;
+        }
+
+        .game-card:hover .game-bg-img { opacity: 0 !important; }
+        .game-card:hover::after { opacity: 0 !important; }
+        .game-card:hover .game-stat { opacity: 0 !important; transform: translateY(10px); }
+        .profile-overlay { display: none !important; }
+
+        .game-bg-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.5; z-index: 0;
+            filter: grayscale(20%); animation: game-bg-move 20s ease-in-out infinite alternate;
+            transition: 0.3s;
+        }
+        @keyframes game-bg-move {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.15) translate(-2%, -5%); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+
+        .game-info {
+            position: relative; z-index: 2; display: flex; flex-direction: column;
+            width: 100%; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .game-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); z-index: 1;
+            transition: 0.3s;
+        }
+
+        .game-title { 
+            font-size: 16px; font-weight: 800; text-transform: uppercase; 
+            text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); 
+            margin-bottom: 2px; 
+            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left;
+            position: relative; z-index: 20;
+            white-space: nowrap; color: #fff;
+        }
+        
+        .game-card:hover .game-title {
+            position: absolute;
+            bottom: 20px; left: 20px;
+            font-size: 21px;
+            text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .game-stat { 
+            font-size: 11px; color: #ddd; font-weight: 500; text-transform: uppercase; 
+            letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); 
+            transition: 0.3s;
+        }
+        .game-stat i { font-size: 9px; margin-right: 5px; color: var(--neon); }
+
         .projects-box {
             background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
-            border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; height: 100%; min-height: 180px;
+            border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; 
+            height: 340px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin-top: 0; padding-top: 0;
         }
         .projects-icon { font-size: 40px; color: rgba(255,255,255,0.08); margin-bottom: 10px; }
         .projects-text { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 5px; text-transform: uppercase; font-weight: 700; }
@@ -152,15 +262,22 @@
             .projects-wrapper { margin-top: 25px; }
             .nickname, .sub-nick { text-align: center; }
             .avatar-wrapper { margin: 0 auto 15px auto; }
-            .projects-box { min-height: 200px; }
+            .games-grid { grid-template-columns: 1fr; height: auto; }
+            .game-card { aspect-ratio: 16/9; height: 180px; }
+            .projects-box { height: 200px; }
+            .grid-bg { display: none; }
+            .games-grid:hover .game-card { opacity: 1; transform: none; filter: none; }
+            .games-grid .game-card:hover { opacity: 1; background: rgba(255,255,255,0.03); border-color: var(--neon); }
+            .game-card:hover .game-bg-img { opacity: 0.3 !important; }
+            .game-card:hover::after { opacity: 1 !important; }
+            .game-card:hover .game-stat { opacity: 1 !important; transform: none; }
+            .game-card:hover .game-title { position: relative; bottom: auto; left: auto; font-size: 16px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
         }
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
     <div id="cursor"></div>
-    
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
-    
     <canvas id="bg-canvas"></canvas>
 
     <div class="main-card">
@@ -186,7 +303,6 @@
             </div>
 
             <div class="links-section">
-                <a href="https://t.me/Im_Danok" class="btn" target="_blank"><i class="fab fa-telegram-plane"></i>Telegram</a>
                 <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i>Discord</a>
                 <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i>Steam</a>
                 <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i>FunPay</a>
@@ -218,16 +334,64 @@
             </div>
 
             <div class="projects-wrapper">
-                <div class="section-title">PROJECTS</div>
-                <div class="projects-box">
-                    <i class="fas fa-code projects-icon"></i>
-                    <span class="projects-text">PROJECTS SOON</span>
+                <div class="toggle-container">
+                    <button class="toggle-btn active" onclick="switchTab('games', this)">MY GAMES</button>
+                    <button class="toggle-btn" onclick="switchTab('projects', this)">PROJECTS</button>
                 </div>
+
+                <div id="tab-games" class="tab-content active-content">
+                    <div class="games-grid">
+                        
+                        <div class="grid-bg bg-wt" style="background-image: url('assets/wt-profile.png');"></div>
+                        <div class="grid-bg bg-hsr" style="background-image: url('assets/hsr-profile.png');"></div>
+                        <div class="grid-bg bg-end" style="background-image: url('assets/endfield-profile.png');"></div>
+
+                        <a href="#" class="game-card card-wt">
+                            <img src="assets/wt-poster.jpg" class="game-bg-img">
+                            <span class="game-title">War Thunder</span>
+                            <div class="game-info">
+                                <span class="game-stat"><i class="fas fa-plane"></i> Air Superiority</span>
+                            </div>
+                        </a>
+
+                        <a href="#" class="game-card card-hsr">
+                            <img src="assets/hsr-poster.jpg" class="game-bg-img">
+                            <span class="game-title">Star Rail</span>
+                            <div class="game-info">
+                                <span class="game-stat"><i class="fas fa-star"></i> TL 70 • Endgame</span>
+                            </div>
+                        </a>
+
+                        <a href="#" class="game-card card-end">
+                            <img src="assets/endfield-poster.jpg" class="game-bg-img">
+                            <span class="game-title">Endfield</span>
+                            <div class="game-info">
+                                <span class="game-stat"><i class="fas fa-cube"></i> Endministrator</span>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="tab-projects" class="tab-content">
+                    <div class="projects-box">
+                        <i class="fas fa-code projects-icon"></i>
+                        <span class="projects-text">PROJECTS SOON</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 
     <script>
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-content'));
+            document.querySelectorAll('.toggle-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active-content');
+            element.classList.add('active');
+        }
+
         const cursor = document.getElementById('cursor');
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
         
@@ -246,7 +410,6 @@
             document.addEventListener('mouseenter', () => { if (firstMove) cursor.style.display = 'block'; });
         }
 
-        /* --- CANVAS VIDEO RENDER (С ИСПРАВЛЕННЫМ ЦЕНТРИРОВАНИЕМ) --- */
         const video = document.getElementById('source-video');
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
@@ -262,21 +425,11 @@
             if (!video.paused && !video.ended) {
                 const screenRatio = canvas.width / canvas.height;
                 const videoRatio = (video.videoWidth || 1280) / (video.videoHeight || 720);
-                
                 let drawWidth, drawHeight;
-
-                if (screenRatio > videoRatio) {
-                    drawWidth = canvas.width;
-                    drawHeight = canvas.width / videoRatio;
-                } else {
-                    drawHeight = canvas.height;
-                    drawWidth = canvas.height * videoRatio;
-                }
-
-                // Центрируем: (ШиринаЭкрана - ШиринаРисунка) / 2
+                if (screenRatio > videoRatio) { drawWidth = canvas.width; drawHeight = canvas.width / videoRatio; } 
+                else { drawHeight = canvas.height; drawWidth = canvas.height * videoRatio; }
                 const startX = (canvas.width - drawWidth) / 2;
                 const startY = (canvas.height - drawHeight) / 2;
-
                 ctx.drawImage(video, startX, startY, drawWidth, drawHeight);
             }
             requestAnimationFrame(drawVideo);
@@ -345,6 +498,7 @@
     </script>
 </body>
 </html>
+
 
 
 
