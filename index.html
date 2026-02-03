@@ -161,11 +161,13 @@
         .tab-content { display: none; width: 100%; }
         .tab-content.active-content { display: block; animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
+        /* --- СЕТКА ИГР --- */
         .games-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
             width: 100%; height: 340px; position: relative;
         }
 
+        /* --- ФОНОВЫЕ СЛОИ --- */
         .grid-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
@@ -177,6 +179,7 @@
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; transform: scale(1.02); }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; transform: scale(1.02); }
 
+        /* --- КАРТОЧКИ --- */
         .game-card {
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px;
             position: relative; overflow: hidden; display: flex; 
@@ -190,7 +193,9 @@
 
         .games-grid .game-card:hover { 
             opacity: 1; transform: scale(1); filter: none;
-            border-color: rgba(255,255,255,0.1); background: transparent; box-shadow: none;
+            /* ВАЖНО: Убираем рамку полностью */
+            border-color: transparent !important; 
+            background: transparent; box-shadow: none;
         }
 
         .game-card:hover .game-bg-img { opacity: 0 !important; }
@@ -221,19 +226,23 @@
             transition: 0.3s;
         }
 
+        /* --- НАЗВАНИЕ ИГРЫ --- */
         .game-title { 
             font-size: 16px; font-weight: 800; text-transform: uppercase; 
             text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); 
-            margin-bottom: 2px; 
+            margin-bottom: 5px; 
             transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left;
-            position: relative; z-index: 20;
+            position: absolute; 
+            /* Обычное состояние: чуть выше */
+            bottom: 35px; left: 20px; 
+            z-index: 20;
             white-space: nowrap; color: #fff;
         }
         
+        /* При наведении: Опускается ВНИЗ в угол */
         .game-card:hover .game-title {
-            position: absolute;
             bottom: 20px; left: 20px;
-            font-size: 21px;
+            font-size: 21px; 
             text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8);
         }
 
@@ -267,11 +276,11 @@
             .projects-box { height: 200px; }
             .grid-bg { display: none; }
             .games-grid:hover .game-card { opacity: 1; transform: none; filter: none; }
-            .games-grid .game-card:hover { opacity: 1; background: rgba(255,255,255,0.03); border-color: var(--neon); }
+            .games-grid .game-card:hover { opacity: 1; background: rgba(255,255,255,0.03); border-color: var(--neon) !important; }
             .game-card:hover .game-bg-img { opacity: 0.3 !important; }
             .game-card:hover::after { opacity: 1 !important; }
             .game-card:hover .game-stat { opacity: 1 !important; transform: none; }
-            .game-card:hover .game-title { position: relative; bottom: auto; left: auto; font-size: 16px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+            .game-card:hover .game-title { bottom: 35px; left: 20px; font-size: 16px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
         }
     </style>
 </head>
@@ -355,7 +364,7 @@
                         </a>
 
                         <a href="#" class="game-card card-hsr">
-                            <img src="assets/hsr-poster.jpg" class="game-bg-img">
+                            <img src="assets/hsr-poster.png" class="game-bg-img">
                             <span class="game-title">Star Rail</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-star"></i> TL 70 • Endgame</span>
@@ -363,7 +372,7 @@
                         </a>
 
                         <a href="#" class="game-card card-end">
-                            <img src="assets/endfield-poster.jpg" class="game-bg-img">
+                            <img src="assets/endfield-poster.png" class="game-bg-img">
                             <span class="game-title">Endfield</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-cube"></i> Endministrator</span>
@@ -439,6 +448,7 @@
             document.body.addEventListener('click', () => { video.play(); drawVideo(); }, { once: true });
         });
 
+        // Квадратные иконки для статуса
         const gameStatusData = {
             hsr: { icon: "assets/images.jfif", texts: ["Путешествует по Двухмернии", "Тестирует Виртуальную Вселенную", "Ищет сундуки на Лофу", "Сражается со Стеллароном", "Тратит энергию Освоения", "Проходит Зал забвения", "Осматривает Звездный экспресс", "Беседует с Пом-Пом", "Выбивает артефакты", "Прокачивает световые конусы", "Выполняет заказы Герты", "Слушает лекции Вельта", "Смотрит новости Межзвездного мира", "Изучает Нашествие роя", "Ищет Кафку", "Считает кредиты", "Проходит Чистый вымысел", "Сражается в Иллюзии конца", "Проходит режим Золото и шестерёнки"] },
             endfield: { icon: "assets/эндфилд.jfif", texts: ["Проводит логистику завода", "Создает чертеж", "Исследует Талос-II", "Оптимизирует производство", "Путешествует по Долине IV", "Проверяет датчики", "Настраивает энергосеть", "Управляет дронами-разведчиками", "Собирает ресурсы", "Анализирует аномалии", "Укрепляет оборону базы", "Сканирует местность", "Разрабатывает новые технологии", "Следит за реактором", "Строит конвейерные ленты", "Настраивает автоматизацию", "Изучает протоколы Эндфилда", "Отражает нападение Аггелосов"] },
