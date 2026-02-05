@@ -240,7 +240,12 @@
             cursor: none !important; 
         }
 
-        .games-grid:hover .game-card { opacity: 0; filter: blur(2px); }
+        /* --- FIX START: Скрываем только НЕ активные карточки --- */
+        .games-grid:has(.game-card:hover) .game-card:not(:hover) { 
+            opacity: 0; 
+            filter: blur(2px); 
+        }
+        /* --- FIX END --- */
 
         .games-grid .game-card:hover { 
             opacity: 1; filter: none;
