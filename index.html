@@ -25,15 +25,15 @@
 
         img, i { pointer-events: none !important; }
 
-        /* 🔥 МАГИЯ КУРСОРОВ НАЧИНАЕТСЯ ЗДЕСЬ */
+        /* 🔥 КАСТОМНЫЕ КУРСОРЫ (Только для ПК) */
         @media (pointer: fine) { 
             /* Базовый курсор для всего сайта */
             * { 
-                cursor: url('assets/normal.cur'), auto !important; 
+                cursor: url('assets/normal.png'), auto !important; 
             } 
-            /* Курсор для ссылок, кнопок и карточек */
+            /* Курсор-палец для кнопок, ссылок и интерактивных карточек */
             a, button, .btn, .mail-block, .game-card, .toggle-btn, .footer-link { 
-                cursor: url('assets/link.cur'), pointer !important; 
+                cursor: url('assets/link.png'), pointer !important; 
             }
         }
 
@@ -251,7 +251,6 @@
         .game-card:hover .game-bg-img { opacity: 0 !important; }
         .game-card:hover::after { opacity: 0 !important; }
         .game-card:hover .game-stat { opacity: 0 !important; transform: translateY(10px); }
-        .profile-overlay { display: none !important; }
 
         .game-bg-img {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -553,6 +552,7 @@
     </script>
 </body>
 </html>
+
 
 
 
