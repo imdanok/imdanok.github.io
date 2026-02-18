@@ -25,9 +25,16 @@
 
         img, i { pointer-events: none !important; }
 
+        /* 🔥 МАГИЯ КУРСОРОВ НАЧИНАЕТСЯ ЗДЕСЬ */
         @media (pointer: fine) { 
-            * { cursor: none !important; } 
-            a, button, .btn, .mail-block, .game-card, .toggle-btn, .footer-link { cursor: none !important; }
+            /* Базовый курсор для всего сайта */
+            * { 
+                cursor: url('assets/normal.cur'), auto !important; 
+            } 
+            /* Курсор для ссылок, кнопок и карточек */
+            a, button, .btn, .mail-block, .game-card, .toggle-btn, .footer-link { 
+                cursor: url('assets/link.cur'), pointer !important; 
+            }
         }
 
         body { 
@@ -41,16 +48,6 @@
             margin: 0; 
             padding: 20px; 
             overflow: hidden; 
-        }
-        
-        #cursor { 
-            position: fixed; top: 0; left: 0; width: 26px; height: 26px; z-index: 99999; 
-            pointer-events: none; will-change: transform; transition: none !important;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" stroke="%23bc13fe" stroke-width="2" d="M7 2l12 11.2l-5.8 0.5L17 20l-3 1.3l-3.7-8.3L7 16z"/></svg>'); 
-            filter: drop-shadow(0 0 8px var(--neon)); display: none; 
-        }
-        @media (pointer: coarse), (max-width: 768px) { 
-            #cursor { display: none !important; } * { cursor: auto !important; } 
         }
 
         #bg-canvas { 
@@ -168,7 +165,6 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
             padding: 20px; background: rgba(188, 19, 254, 0.05); border-radius: 18px; text-decoration: none; 
             color: #fff; transition: 0.3s; border: 1px solid rgba(188, 19, 254, 0.1); height: 100%;
-            cursor: none !important;
         }
         .mail-block:hover { background: rgba(188, 19, 254, 0.1); border-color: var(--neon); transform: translateY(-2px); }
         .mail-icon { font-size: 28px; color: var(--neon); margin-bottom: 10px; }
@@ -186,7 +182,7 @@
         .toggle-btn {
             padding: 10px 24px; border-radius: 12px; border: none; background: transparent;
             color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px;
-            cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase;
         }
         .toggle-btn:hover { color: rgba(255, 255, 255, 0.8); }
         .toggle-btn.active {
@@ -237,15 +233,12 @@
             padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
             height: 100%; width: 100%; z-index: 1;
             color: #fff !important; 
-            cursor: none !important; 
         }
 
-        /* --- FIX START: Скрываем только НЕ активные карточки --- */
         .games-grid:has(.game-card:hover) .game-card:not(:hover) { 
             opacity: 0; 
             filter: blur(2px); 
         }
-        /* --- FIX END --- */
 
         .games-grid .game-card:hover { 
             opacity: 1; filter: none;
@@ -336,7 +329,6 @@
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
-    <div id="cursor"></div>
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
 
@@ -468,35 +460,6 @@
             element.classList.add('active');
         }
 
-        const cursor = document.getElementById('cursor');
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.matchMedia("(pointer: coarse)").matches);
-        
-        let mouseX = 0;
-        let mouseY = 0;
-        let isCursorVisible = false;
-
-        if (!isMobile) {
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                if (!isCursorVisible) {
-                    cursor.style.display = 'block';
-                    isCursorVisible = true;
-                }
-            }, { passive: true });
-
-            function updateCursor() {
-                if (isCursorVisible) {
-                    cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-                }
-                requestAnimationFrame(updateCursor);
-            }
-            updateCursor();
-
-            document.addEventListener('mouseleave', () => { cursor.style.display = 'none'; isCursorVisible = false; });
-            document.addEventListener('mouseenter', () => { cursor.style.display = 'block'; isCursorVisible = true; });
-        }
-
         document.addEventListener('contextmenu', event => event.preventDefault());
         window.oncontextmenu = function() { return false; }
         document.addEventListener('dragstart', event => event.preventDefault());
@@ -590,6 +553,7 @@
     </script>
 </body>
 </html>
+
 
 
 
