@@ -27,14 +27,15 @@
 
         /* 🔥 КАСТОМНЫЕ КУРСОРЫ (Только для ПК) */
         @media (pointer: fine) { 
-            /* Добавили координаты 0 0 для обычного и, например, 10 10 для пальца */
             * { 
                 cursor: url('assets/normal.png') 0 0, auto !important; 
             } 
-            a, a *, button, button *, .btn, .btn *, .mail-block, .mail-block *, .game-card, .game-card *, .toggle-btn, .toggle-btn *, .footer-link, .footer-link * { 
+            /* Добавил .project-card, чтобы курсор работал и на карточке бота */
+            a, a *, button, button *, .btn, .btn *, .mail-block, .mail-block *, .game-card, .game-card *, .project-card, .project-card *, .toggle-btn, .toggle-btn *, .footer-link, .footer-link * { 
                 cursor: url('assets/link.png') 5 7, pointer !important; 
             }
         }
+
         body { 
             background: #000; 
             color: #fff; 
@@ -292,12 +293,67 @@
         }
         .game-stat i { font-size: 9px; margin-right: 5px; color: var(--neon); }
 
+        /* 🔥 НОВАЯ СЕТКА И СТИЛИ ДЛЯ ВКАЛДКИ ПРОЕКТОВ */
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            width: 100%; height: 340px;
+        }
+
+        .project-card {
+            background: rgba(255,255,255,0.03); border-radius: 18px;
+            border: 2px solid rgba(188, 19, 254, 0.5);
+            animation: card-pulse-strong 2s ease-in-out infinite alternate;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
+            height: 100%; width: 100%; text-decoration: none; color: #fff;
+            position: relative; overflow: hidden;
+        }
+
+        .project-card:hover {
+            background: rgba(188, 19, 254, 0.08);
+            border-color: var(--neon) !important; 
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.4) !important; 
+            animation: none; transform: translateY(-5px);
+        }
+
+        .bot-avatar-wrapper {
+            width: 90px; height: 90px; border-radius: 50%;
+            margin-bottom: 20px; border: 2px solid var(--neon);
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.3);
+            overflow: hidden; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
+        .bot-avatar-wrapper img { 
+            width: 100%; height: 100%; object-fit: cover; 
+        }
+
+        .project-card:hover .bot-avatar-wrapper { 
+            transform: scale(1.08); box-shadow: 0 0 30px rgba(188, 19, 254, 0.6); 
+        }
+
+        .project-title { 
+            font-size: 22px; font-weight: 800; text-shadow: 0 0 10px var(--neon); 
+            margin-bottom: 8px; transition: 0.3s; 
+        }
+        
+        .project-sub { 
+            font-size: 12px; color: rgba(255,255,255,0.6); 
+            text-align: center; line-height: 1.4; transition: 0.3s; 
+        }
+
+        .project-card:hover .project-title { text-shadow: 0 0 20px var(--neon), 0 0 30px rgba(188, 19, 254, 0.5); }
+        .project-card:hover .project-sub { color: #fff; }
+
+        /* Коробка PROJECTS SOON теперь занимает 2 колонки из 3-х */
+        .projects-grid .projects-box {
+            grid-column: span 2;
+            height: 100%;
+        }
+
         .projects-box {
             background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
             border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; 
-            height: 340px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            margin-top: 0; padding-top: 0;
         }
         .projects-icon { font-size: 40px; color: rgba(255,255,255,0.08); margin-bottom: 10px; }
         .projects-text { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 5px; text-transform: uppercase; font-weight: 700; }
@@ -312,7 +368,6 @@
             .avatar-wrapper { margin: 0 auto 15px auto; }
             .games-grid { grid-template-columns: 1fr; height: auto; }
             .game-card { aspect-ratio: 16/9; height: 180px; }
-            .projects-box { height: 200px; }
             .grid-bg { display: none; }
             .games-grid:hover .game-card { opacity: 1; transform: none; filter: none; }
             .games-grid .game-card:hover { opacity: 1; background: rgba(255,255,255,0.03); border-color: var(--neon) !important; }
@@ -320,6 +375,12 @@
             .game-card:hover::after { opacity: 1 !important; }
             .game-card:hover .game-stat { opacity: 1 !important; transform: none; }
             .game-card:hover .game-title { bottom: 35px; left: 20px; font-size: 16px; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+            
+            /* Фикс для мобилок во вкладке проектов */
+            .projects-grid { grid-template-columns: 1fr; height: auto; }
+            .projects-grid .projects-box { grid-column: span 1; height: 200px; }
+            .project-card { height: 220px; }
+            .project-card:hover { transform: none; }
             
             .internal-footer { margin-top: 20px; align-items: center; padding-left: 0; }
         }
@@ -439,9 +500,21 @@
                 </div>
 
                 <div id="tab-projects" class="tab-content">
-                    <div class="projects-box">
-                        <i class="fas fa-code projects-icon"></i>
-                        <span class="projects-text">PROJECTS SOON</span>
+                    <div class="projects-grid">
+                        
+                        <a href="#" class="project-card">
+                            <div class="bot-avatar-wrapper">
+                                <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" alt="ArmяBot">
+                            </div>
+                            <div class="project-title">ArmяBot</div>
+                            <div class="project-sub">Многофункциональный<br>Telegram AI-ассистент</div>
+                        </a>
+
+                        <div class="projects-box">
+                            <i class="fas fa-code projects-icon"></i>
+                            <span class="projects-text">PROJECTS SOON</span>
+                        </div>
+                        
                     </div>
                 </div>
 
@@ -550,6 +623,7 @@
     </script>
 </body>
 </html>
+
 
 
 
