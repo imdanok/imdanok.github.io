@@ -31,8 +31,8 @@
             * { 
                 cursor: url('assets/normal.png'), auto !important; 
             } 
-            /* Курсор-палец для кнопок, ссылок и интерактивных карточек */
-            a, button, .btn, .mail-block, .game-card, .toggle-btn, .footer-link { 
+            /* Курсор-палец для самих кнопок и ВСЕХ элементов внутри них (текст, иконки и т.д.) */
+            a, a *, button, button *, .btn, .btn *, .mail-block, .mail-block *, .game-card, .game-card *, .toggle-btn, .toggle-btn *, .footer-link, .footer-link * { 
                 cursor: url('assets/link.png'), pointer !important; 
             }
         }
@@ -552,6 +552,7 @@
     </script>
 </body>
 </html>
+
 
 
 
