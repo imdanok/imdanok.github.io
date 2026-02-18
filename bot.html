@@ -76,9 +76,29 @@
         }
         .bot-title img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--neon); object-fit: cover; }
 
+        /* 🔥 НОВЫЙ БЛОК БИОГРАФИИ */
+        .bio-block {
+            background: rgba(188, 19, 254, 0.05);
+            border-left: 4px solid var(--neon);
+            padding: 20px 25px;
+            border-radius: 16px;
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.9);
+            box-shadow: inset 0 0 20px rgba(188, 19, 254, 0.05);
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .bio-header { 
+            font-weight: 800; font-size: 18px; color: #fff; 
+            display: flex; align-items: center; gap: 10px;
+            text-shadow: 0 0 10px rgba(188, 19, 254, 0.5);
+        }
+        .bio-header i { color: var(--neon); }
+        .bio-text b { color: #fff; font-weight: 700; text-shadow: 0 0 5px rgba(188, 19, 254, 0.5); }
+
         /* 🔥 СЕТКА ПРЕЗЕНТАЦИИ */
         .presentation-grid {
-            display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; height: 550px;
+            display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; height: 480px;
         }
 
         /* Левый блок: Экран */
@@ -103,7 +123,6 @@
             overflow-y: auto; padding-right: 10px;
         }
 
-        /* Кастомный ползунок прокрутки */
         .features-list::-webkit-scrollbar { width: 6px; }
         .features-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
         .features-list::-webkit-scrollbar-thumb { background: rgba(188, 19, 254, 0.5); border-radius: 10px; }
@@ -123,9 +142,11 @@
 
         .feature-btn:hover { background: rgba(255,255,255,0.05); }
 
+        /* ИСПРАВЛЕНО: Убран сдвиг влево (transform), чтобы кнопки не съезжали */
         .feature-btn.active {
             background: rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.4);
-            box-shadow: 0 0 20px rgba(188, 19, 254, 0.15); transform: translateX(-5px);
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.15); 
+            /* transform: translateX(-5px);  <-- ЭТУ СТРОКУ УБРАЛИ */
         }
         .feature-btn.active::before { transform: scaleY(1); }
 
@@ -143,11 +164,13 @@
 
         @media (max-width: 900px) {
             body { padding: 15px; overflow: auto; }
+            .main-card { gap: 20px; padding: 25px; }
             .presentation-grid { grid-template-columns: 1fr; height: auto; }
             .mockup-screen { height: 350px; }
             .features-list { max-height: 400px; padding-right: 5px; }
             .feature-btn.active { transform: none; }
             .header-bar { flex-direction: column-reverse; gap: 20px; align-items: flex-start; }
+            .bio-block { font-size: 14px; padding: 15px; }
         }
     </style>
 </head>
@@ -162,6 +185,13 @@
             <div class="bot-title">
                 ArmяBot
                 <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" alt="Bot">
+            </div>
+        </div>
+
+        <div class="bio-block">
+            <div class="bio-header"><i class="fas fa-history"></i> История проекта</div>
+            <div class="bio-text">
+                Изначально <b>ArmяBot</b> создавался из простой мечты — портировать всю мощь нейросети Gemini прямо в Telegram для личного удобства. Однако идея быстрого и умного ИИ-ассистента оказалась настолько востребованной, что проект перерос в нечто большее. Теперь это не просто инструмент, а полноценная часть цифровой семьи в нашем сообществе.
             </div>
         </div>
 
