@@ -30,10 +30,11 @@
             }
         }
 
+        /* ИСПРАВЛЕНИЕ: Теперь страницу можно листать (overflow-y: auto) */
         body { 
             background: #000; color: #fff; font-family: 'Inter', sans-serif; 
             display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; margin: 0; padding: 20px; overflow: hidden; 
+            min-height: 100vh; margin: 0; padding: 30px 20px; overflow-y: auto; overflow-x: hidden;
         }
 
         #bg-canvas { 
@@ -49,64 +50,65 @@
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
 
+        /* 🔥 СЕТКА КАК НА ГЛАВНОЙ СТРАНИЦЕ */
         .main-card {
             width: 100%; max-width: 1150px; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; animation: neon-breath 4s ease-in-out infinite alternate;
-            position: relative; z-index: 10; display: flex; flex-direction: column; gap: 25px;
+            position: relative; z-index: 10; 
+            display: grid; grid-template-columns: 320px 1fr; gap: 35px;
+            align-items: stretch; margin: auto;
         }
 
-        .header-bar {
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;
+        .col-left { 
+            display: flex; flex-direction: column; gap: 20px; 
+            height: 100%; justify-content: flex-start; 
         }
 
+        .col-right { 
+            display: flex; flex-direction: column; height: 100%; 
+        }
+
+        /* ЛЕВАЯ КОЛОНКА: ПРОФИЛЬ БОТА */
         .back-btn {
             display: flex; align-items: center; gap: 10px; text-decoration: none;
             color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 600; transition: 0.3s;
             background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.05); width: fit-content;
         }
         .back-btn:hover { color: #fff; background: rgba(188, 19, 254, 0.15); border-color: var(--neon); transform: translateX(-5px); }
 
-        .bot-title {
-            display: flex; align-items: center; gap: 15px; margin: 0;
-            font-size: 24px; font-weight: 800; text-shadow: 0 0 15px var(--neon);
-        }
-        .bot-title img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--neon); object-fit: cover; }
+        .profile-section { text-align: left; margin-top: 5px; }
+        .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
+        .nickname { font-size: 26px; font-weight: 800; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
+        .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); }
 
-        /* 🔥 НОВЫЙ БЛОК БИОГРАФИИ */
         .bio-block {
             background: rgba(188, 19, 254, 0.05);
             border-left: 4px solid var(--neon);
-            padding: 20px 25px;
-            border-radius: 16px;
-            font-size: 15px;
-            line-height: 1.6;
-            color: rgba(255,255,255,0.9);
-            box-shadow: inset 0 0 20px rgba(188, 19, 254, 0.05);
-            display: flex; flex-direction: column; gap: 10px;
+            padding: 20px; border-radius: 16px; font-size: 13px; line-height: 1.6;
+            color: rgba(255,255,255,0.9); box-shadow: inset 0 0 20px rgba(188, 19, 254, 0.05);
+            display: flex; flex-direction: column; gap: 10px; margin-top: 10px;
         }
         .bio-header { 
-            font-weight: 800; font-size: 18px; color: #fff; 
-            display: flex; align-items: center; gap: 10px;
-            text-shadow: 0 0 10px rgba(188, 19, 254, 0.5);
+            font-weight: 800; font-size: 15px; color: #fff; 
+            display: flex; align-items: center; gap: 8px; text-shadow: 0 0 10px rgba(188, 19, 254, 0.5);
         }
         .bio-header i { color: var(--neon); }
-        .bio-text b { color: #fff; font-weight: 700; text-shadow: 0 0 5px rgba(188, 19, 254, 0.5); }
+        .bio-block b { color: #fff; font-weight: 700; text-shadow: 0 0 5px rgba(188, 19, 254, 0.5); }
 
-        /* 🔥 СЕТКА ПРЕЗЕНТАЦИИ */
+        /* ПРАВАЯ КОЛОНКА: СЕТКА ПРЕЗЕНТАЦИИ */
         .presentation-grid {
-            display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; height: 480px;
+            display: grid; grid-template-columns: 1.2fr 1fr; gap: 25px; height: 100%; min-height: 520px;
         }
 
-        /* Левый блок: Экран */
         .mockup-screen {
             background: rgba(0,0,0,0.4); border-radius: 20px;
             border: 2px solid rgba(188, 19, 254, 0.2); box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
             position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
-            padding: 10px;
+            padding: 10px; height: 100%;
         }
 
         .screen-img {
@@ -117,10 +119,9 @@
         
         .screen-img.active { opacity: 1; transform: scale(1) translateY(0); z-index: 2; }
 
-        /* Правый блок: Меню кнопок с неоновым скроллом */
         .features-list { 
             display: flex; flex-direction: column; gap: 10px; 
-            overflow-y: auto; padding-right: 10px;
+            overflow-y: auto; padding-right: 10px; height: 100%; max-height: 520px;
         }
 
         .features-list::-webkit-scrollbar { width: 6px; }
@@ -142,11 +143,9 @@
 
         .feature-btn:hover { background: rgba(255,255,255,0.05); }
 
-        /* ИСПРАВЛЕНО: Убран сдвиг влево (transform), чтобы кнопки не съезжали */
         .feature-btn.active {
             background: rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.4);
             box-shadow: 0 0 20px rgba(188, 19, 254, 0.15); 
-            /* transform: translateX(-5px);  <-- ЭТУ СТРОКУ УБРАЛИ */
         }
         .feature-btn.active::before { transform: scaleY(1); }
 
@@ -163,14 +162,12 @@
         .feature-btn.active .feat-sub { color: rgba(255,255,255,0.8); }
 
         @media (max-width: 900px) {
-            body { padding: 15px; overflow: auto; }
-            .main-card { gap: 20px; padding: 25px; }
-            .presentation-grid { grid-template-columns: 1fr; height: auto; }
+            body { padding: 15px; }
+            .main-card { grid-template-columns: 1fr; gap: 25px; padding: 25px; }
+            .profile-section { display: flex; flex-direction: column; align-items: center; text-align: center; }
+            .presentation-grid { grid-template-columns: 1fr; height: auto; min-height: auto; }
             .mockup-screen { height: 350px; }
             .features-list { max-height: 400px; padding-right: 5px; }
-            .feature-btn.active { transform: none; }
-            .header-bar { flex-direction: column-reverse; gap: 20px; align-items: flex-start; }
-            .bio-block { font-size: 14px; padding: 15px; }
         }
     </style>
 </head>
@@ -179,111 +176,119 @@
     <canvas id="bg-canvas"></canvas>
 
     <div class="main-card">
-        <div class="header-bar">
-            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Назад к профилю</a>
+        
+        <div class="col-left">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Назад</a>
             
-            <div class="bot-title">
-                ArmяBot
-                <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" alt="Bot">
+            <div class="profile-section">
+                <div class="avatar-wrapper">
+                    <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" class="avatar" alt="Bot">
+                </div>
+                <h1 class="nickname">ArmяBot</h1>
+                <div class="sub-nick">AI Assistant</div>
+            </div>
+
+            <div class="bio-block">
+                <div class="bio-header"><i class="fas fa-history"></i> История</div>
+                <div class="bio-text">
+                    Изначально <b>ArmяBot</b> создавался из простой мечты — портировать всю мощь нейросети Gemini прямо в Telegram для личного удобства. Однако идея быстрого и умного ИИ-ассистента оказалась настолько востребованной, что проект перерос в нечто большее. Теперь это не просто инструмент, а полноценная часть цифровой семьи в нашем сообществе.
+                </div>
             </div>
         </div>
 
-        <div class="bio-block">
-            <div class="bio-header"><i class="fas fa-history"></i> История проекта</div>
-            <div class="bio-text">
-                Изначально <b>ArmяBot</b> создавался из простой мечты — портировать всю мощь нейросети Gemini прямо в Telegram для личного удобства. Однако идея быстрого и умного ИИ-ассистента оказалась настолько востребованной, что проект перерос в нечто большее. Теперь это не просто инструмент, а полноценная часть цифровой семьи в нашем сообществе.
-            </div>
-        </div>
-
-        <div class="presentation-grid">
-            <div class="mockup-screen">
-                <img src="assets/arm.png" id="img-arm" class="screen-img active">
-                <img src="assets/gflesh.png" id="img-gflesh" class="screen-img">
-                <img src="assets/gpro.png" id="img-gpro" class="screen-img">
-                <img src="assets/gifki.png" id="img-gifki" class="screen-img">
-                <img src="assets/photo.png" id="img-photo" class="screen-img">
-                <img src="assets/voice.png" id="img-voice" class="screen-img">
-                <img src="assets/vc.png" id="img-vc" class="screen-img">
-                <img src="assets/genphoto.png" id="img-genphoto" class="screen-img">
-                <img src="assets/armyan.png" id="img-armyan" class="screen-img">
-            </div>
-
-            <div class="features-list">
+        <div class="col-right">
+            <div class="presentation-grid">
                 
-                <div class="feature-btn active" onclick="switchFeature('arm', this)">
-                    <div class="feat-icon"><i class="fas fa-robot"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">ArmяBot</div>
-                        <div class="feat-sub">Многофункциональный ИИ-ассистент</div>
-                    </div>
+                <div class="mockup-screen">
+                    <img src="assets/arm.png" id="img-arm" class="screen-img active">
+                    <img src="assets/gflesh.png" id="img-gflesh" class="screen-img">
+                    <img src="assets/gpro.png" id="img-gpro" class="screen-img">
+                    <img src="assets/gifki.png" id="img-gifki" class="screen-img">
+                    <img src="assets/photo.png" id="img-photo" class="screen-img">
+                    <img src="assets/voice.png" id="img-voice" class="screen-img">
+                    <img src="assets/vc.png" id="img-vc" class="screen-img">
+                    <img src="assets/genphoto.png" id="img-genphoto" class="screen-img">
+                    <img src="assets/armyan.png" id="img-armyan" class="screen-img">
                 </div>
 
-                <div class="feature-btn" onclick="switchFeature('gflesh', this)">
-                    <div class="feat-icon"><i class="fas fa-bolt"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Режим FLASH</div>
-                        <div class="feat-sub">Быстрые, умные и общительные ответы</div>
+                <div class="features-list">
+                    
+                    <div class="feature-btn active" onclick="switchFeature('arm', this)">
+                        <div class="feat-icon"><i class="fas fa-robot"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">ArmяBot</div>
+                            <div class="feat-sub">Многофункциональный ИИ-ассистент</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('gpro', this)">
-                    <div class="feat-icon"><i class="fas fa-brain"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Pro-Ассистент</div>
-                        <div class="feat-sub">Официальный стиль, код и сложные задачи</div>
+                    <div class="feature-btn" onclick="switchFeature('gflesh', this)">
+                        <div class="feat-icon"><i class="fas fa-bolt"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Режим FLASH</div>
+                            <div class="feat-sub">Быстрые, умные и общительные ответы</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('gifki', this)">
-                    <div class="feat-icon"><i class="fas fa-film"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Распознавание GIF</div>
-                        <div class="feat-sub">Бот видит анимации и стикеры и описывает их</div>
+                    <div class="feature-btn" onclick="switchFeature('gpro', this)">
+                        <div class="feat-icon"><i class="fas fa-brain"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Pro-Ассистент</div>
+                            <div class="feat-sub">Официальный стиль, код и сложные задачи</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('photo', this)">
-                    <div class="feat-icon"><i class="fas fa-eye"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Умное зрение</div>
-                        <div class="feat-sub">Анализ фото, скриншотов и целых альбомов</div>
+                    <div class="feature-btn" onclick="switchFeature('gifki', this)">
+                        <div class="feat-icon"><i class="fas fa-film"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Распознавание GIF</div>
+                            <div class="feat-sub">Бот видит анимации и стикеры и описывает их</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('voice', this)">
-                    <div class="feat-icon"><i class="fas fa-headphones"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Слух и Кружочки</div>
-                        <div class="feat-sub">Транскрибация ГС и понимание видео-сообщений</div>
+                    <div class="feature-btn" onclick="switchFeature('photo', this)">
+                        <div class="feat-icon"><i class="fas fa-eye"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Умное зрение</div>
+                            <div class="feat-sub">Анализ фото, скриншотов и целых альбомов</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('vc', this)">
-                    <div class="feat-icon"><i class="fas fa-microphone-alt"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Синтез речи</div>
-                        <div class="feat-sub">Команда /войс для озвучки любого текста</div>
+                    <div class="feature-btn" onclick="switchFeature('voice', this)">
+                        <div class="feat-icon"><i class="fas fa-headphones"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Слух и Кружочки</div>
+                            <div class="feat-sub">Транскрибация ГС и понимание видео-сообщений</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('genphoto', this)">
-                    <div class="feat-icon"><i class="fas fa-paint-brush"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Генератор /img</div>
-                        <div class="feat-sub">Создание нейросетевых картинок по запросу</div>
+                    <div class="feature-btn" onclick="switchFeature('vc', this)">
+                        <div class="feat-icon"><i class="fas fa-microphone-alt"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Синтез речи</div>
+                            <div class="feat-sub">Команда /войс для озвучки любого текста</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="feature-btn" onclick="switchFeature('armyan', this)">
-                    <div class="feat-icon"><i class="fas fa-fire"></i></div>
-                    <div class="feat-info">
-                        <div class="feat-title">Режим Арама</div>
-                        <div class="feat-sub">Секретная личность с кавказским колоритом</div>
+                    <div class="feature-btn" onclick="switchFeature('genphoto', this)">
+                        <div class="feat-icon"><i class="fas fa-paint-brush"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Генератор /img</div>
+                            <div class="feat-sub">Создание нейросетевых картинок по запросу</div>
+                        </div>
                     </div>
-                </div>
 
+                    <div class="feature-btn" onclick="switchFeature('armyan', this)">
+                        <div class="feat-icon"><i class="fas fa-fire"></i></div>
+                        <div class="feat-info">
+                            <div class="feat-title">Режим Арама</div>
+                            <div class="feat-sub">Секретная личность с кавказским колоритом</div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
+
     </div>
 
     <script>
@@ -331,3 +336,4 @@
     </script>
 </body>
 </html>
+
