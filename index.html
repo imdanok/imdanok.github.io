@@ -27,16 +27,14 @@
 
         /* 🔥 КАСТОМНЫЕ КУРСОРЫ (Только для ПК) */
         @media (pointer: fine) { 
-            /* Базовый курсор для всего сайта */
+            /* Добавили координаты 0 0 для обычного и, например, 10 10 для пальца */
             * { 
-                cursor: url('assets/normal.png'), auto !important; 
+                cursor: url('assets/normal.png') 0 0, auto !important; 
             } 
-            /* Курсор-палец для самих кнопок и ВСЕХ элементов внутри них (текст, иконки и т.д.) */
             a, a *, button, button *, .btn, .btn *, .mail-block, .mail-block *, .game-card, .game-card *, .toggle-btn, .toggle-btn *, .footer-link, .footer-link * { 
-                cursor: url('assets/link.png'), pointer !important; 
+                cursor: url('assets/link.png') 12 10, pointer !important; 
             }
         }
-
         body { 
             background: #000; 
             color: #fff; 
@@ -552,6 +550,7 @@
     </script>
 </body>
 </html>
+
 
 
 
