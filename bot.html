@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArmяBot | AI Assistant</title>
+    <link rel="icon" type="image/jpeg" href="assets/galera1.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --neon: #bc13fe; 
+            --bg-glass: rgba(0, 0, 0, 0.65); 
+        }
+        
+        * { 
+            -webkit-user-drag: none; 
+            user-select: none; -webkit-user-select: none;
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* 🔥 Твой откалиброванный курсор (5 7) */
+        @media (pointer: fine) { 
+            * { 
+                cursor: url('assets/normal.png') 0 0, auto !important; 
+            } 
+            a, a *, button, button *, .btn, .btn *, .feature-btn, .feature-btn *, .back-btn, .back-btn * { 
+                cursor: url('assets/link.png') 5 7, pointer !important; 
+            }
+        }
+
+        body { 
+            background: #000; color: #fff; font-family: 'Inter', sans-serif; 
+            display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; margin: 0; padding: 20px; overflow: hidden; 
+        }
+
+        #bg-canvas { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            z-index: -100; filter: brightness(0.3) contrast(1.1); pointer-events: none;
+        }
+        #source-video { 
+            position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
+        }
+
+        @keyframes neon-breath {
+            0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
+            100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
+        }
+
+        .main-card {
+            width: 100%; max-width: 1150px; 
+            background: var(--bg-glass); backdrop-filter: blur(30px);
+            border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
+            padding: 35px; animation: neon-breath 4s ease-in-out infinite alternate;
+            position: relative; z-index: 10; display: flex; flex-direction: column; gap: 25px;
+        }
+
+        .header-bar {
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 20px;
+        }
+
+        .back-btn {
+            display: flex; align-items: center; gap: 10px; text-decoration: none;
+            color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 600; transition: 0.3s;
+            background: rgba(255,255,255,0.03); padding: 10px 20px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .back-btn:hover { color: #fff; background: rgba(188, 19, 254, 0.15); border-color: var(--neon); transform: translateX(-5px); }
+
+        .bot-title {
+            display: flex; align-items: center; gap: 15px; margin: 0;
+            font-size: 24px; font-weight: 800; text-shadow: 0 0 15px var(--neon);
+        }
+        .bot-title img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--neon); object-fit: cover; }
+
+        /* 🔥 СЕТКА ПРЕЗЕНТАЦИИ */
+        .presentation-grid {
+            display: grid; grid-template-columns: 1.4fr 1fr; gap: 30px; height: 550px;
+        }
+
+        /* Левый блок: Экран */
+        .mockup-screen {
+            background: rgba(0,0,0,0.4); border-radius: 20px;
+            border: 2px solid rgba(188, 19, 254, 0.2); box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+            position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;
+            padding: 10px;
+        }
+
+        .screen-img {
+            position: absolute; max-width: 95%; max-height: 95%; object-fit: contain;
+            opacity: 0; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95) translateY(10px); pointer-events: none; border-radius: 10px;
+        }
+        
+        .screen-img.active { opacity: 1; transform: scale(1) translateY(0); z-index: 2; }
+
+        /* Правый блок: Меню кнопок с неоновым скроллом */
+        .features-list { 
+            display: flex; flex-direction: column; gap: 10px; 
+            overflow-y: auto; padding-right: 10px;
+        }
+
+        /* Кастомный ползунок прокрутки */
+        .features-list::-webkit-scrollbar { width: 6px; }
+        .features-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.02); border-radius: 10px; }
+        .features-list::-webkit-scrollbar-thumb { background: rgba(188, 19, 254, 0.5); border-radius: 10px; }
+        .features-list::-webkit-scrollbar-thumb:hover { background: var(--neon); }
+
+        .feature-btn {
+            display: flex; align-items: center; gap: 15px; padding: 14px 18px;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 18px; color: #fff; text-align: left; transition: 0.3s;
+            position: relative; overflow: hidden; flex-shrink: 0;
+        }
+
+        .feature-btn::before {
+            content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px;
+            background: var(--neon); transform: scaleY(0); transition: 0.3s; transform-origin: center;
+        }
+
+        .feature-btn:hover { background: rgba(255,255,255,0.05); }
+
+        .feature-btn.active {
+            background: rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.4);
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.15); transform: translateX(-5px);
+        }
+        .feature-btn.active::before { transform: scaleY(1); }
+
+        .feat-icon {
+            width: 40px; height: 40px; border-radius: 12px; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+            font-size: 16px; color: rgba(255,255,255,0.5); transition: 0.3s; border: 1px solid rgba(255,255,255,0.05);
+        }
+        .feature-btn.active .feat-icon { color: var(--neon); background: rgba(188, 19, 254, 0.1); border-color: var(--neon); box-shadow: 0 0 15px rgba(188, 19, 254, 0.3); }
+
+        .feat-info { display: flex; flex-direction: column; gap: 4px; }
+        .feat-title { font-size: 14px; font-weight: 700; }
+        .feat-sub { font-size: 11px; color: rgba(255,255,255,0.5); line-height: 1.3;}
+        .feature-btn.active .feat-sub { color: rgba(255,255,255,0.8); }
+
+        @media (max-width: 900px) {
+            body { padding: 15px; overflow: auto; }
+            .presentation-grid { grid-template-columns: 1fr; height: auto; }
+            .mockup-screen { height: 350px; }
+            .features-list { max-height: 400px; padding-right: 5px; }
+            .feature-btn.active { transform: none; }
+            .header-bar { flex-direction: column-reverse; gap: 20px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+    <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="main-card">
+        <div class="header-bar">
+            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Назад к профилю</a>
+            
+            <div class="bot-title">
+                ArmяBot
+                <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" alt="Bot">
+            </div>
+        </div>
+
+        <div class="presentation-grid">
+            <div class="mockup-screen">
+                <img src="assets/arm.png" id="img-arm" class="screen-img active">
+                <img src="assets/gflesh.png" id="img-gflesh" class="screen-img">
+                <img src="assets/gpro.png" id="img-gpro" class="screen-img">
+                <img src="assets/gifki.png" id="img-gifki" class="screen-img">
+                <img src="assets/photo.png" id="img-photo" class="screen-img">
+                <img src="assets/voice.png" id="img-voice" class="screen-img">
+                <img src="assets/vc.png" id="img-vc" class="screen-img">
+                <img src="assets/genphoto.png" id="img-genphoto" class="screen-img">
+                <img src="assets/armyan.png" id="img-armyan" class="screen-img">
+            </div>
+
+            <div class="features-list">
+                
+                <div class="feature-btn active" onclick="switchFeature('arm', this)">
+                    <div class="feat-icon"><i class="fas fa-robot"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">ArmяBot</div>
+                        <div class="feat-sub">Многофункциональный ИИ-ассистент</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('gflesh', this)">
+                    <div class="feat-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Режим FLASH</div>
+                        <div class="feat-sub">Быстрые, умные и общительные ответы</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('gpro', this)">
+                    <div class="feat-icon"><i class="fas fa-brain"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Pro-Ассистент</div>
+                        <div class="feat-sub">Официальный стиль, код и сложные задачи</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('gifki', this)">
+                    <div class="feat-icon"><i class="fas fa-film"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Распознавание GIF</div>
+                        <div class="feat-sub">Бот видит анимации и стикеры и описывает их</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('photo', this)">
+                    <div class="feat-icon"><i class="fas fa-eye"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Умное зрение</div>
+                        <div class="feat-sub">Анализ фото, скриншотов и целых альбомов</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('voice', this)">
+                    <div class="feat-icon"><i class="fas fa-headphones"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Слух и Кружочки</div>
+                        <div class="feat-sub">Транскрибация ГС и понимание видео-сообщений</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('vc', this)">
+                    <div class="feat-icon"><i class="fas fa-microphone-alt"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Синтез речи</div>
+                        <div class="feat-sub">Команда /войс для озвучки любого текста</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('genphoto', this)">
+                    <div class="feat-icon"><i class="fas fa-paint-brush"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Генератор /img</div>
+                        <div class="feat-sub">Создание нейросетевых картинок по запросу</div>
+                    </div>
+                </div>
+
+                <div class="feature-btn" onclick="switchFeature('armyan', this)">
+                    <div class="feat-icon"><i class="fas fa-fire"></i></div>
+                    <div class="feat-info">
+                        <div class="feat-title">Режим Арама</div>
+                        <div class="feat-sub">Секретная личность с кавказским колоритом</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchFeature(featureId, btnElement) {
+            document.querySelectorAll('.feature-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            document.querySelectorAll('.screen-img').forEach(img => img.classList.remove('active'));
+            document.getElementById('img-' + featureId).classList.add('active');
+        }
+
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        window.oncontextmenu = function() { return false; }
+        document.addEventListener('dragstart', event => event.preventDefault());
+        document.addEventListener('selectstart', event => event.preventDefault());
+
+        const video = document.getElementById('source-video');
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d', { alpha: false });
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawVideo() {
+            if (!video.paused && !video.ended) {
+                const screenRatio = canvas.width / canvas.height;
+                const videoRatio = (video.videoWidth || 1280) / (video.videoHeight || 720);
+                let drawWidth, drawHeight;
+                if (screenRatio > videoRatio) { drawWidth = canvas.width; drawHeight = canvas.width / videoRatio; } 
+                else { drawHeight = canvas.height; drawWidth = canvas.height * videoRatio; }
+                const startX = (canvas.width - drawWidth) / 2;
+                const startY = (canvas.height - drawHeight) / 2;
+                ctx.drawImage(video, startX, startY, drawWidth, drawHeight);
+            }
+            requestAnimationFrame(drawVideo);
+        }
+        
+        video.play().then(() => { drawVideo(); }).catch(e => {
+            document.body.addEventListener('click', () => { video.play(); drawVideo(); }, { once: true });
+        });
+    </script>
+</body>
+</html>
