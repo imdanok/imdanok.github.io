@@ -25,84 +25,92 @@
 
         img, i { pointer-events: none !important; }
 
+        /* 🔥 КАСТОМНЫЕ КУРСОРЫ (Только для ПК) */
         @media (pointer: fine) { 
-            * { cursor: url('assets/normal.png') 0 0, auto !important; } 
+            * { 
+                cursor: url('assets/normal.png') 0 0, auto !important; 
+            } 
             a, a *, button, button *, .btn, .btn *, .mail-block, .mail-block *, .game-card, .game-card *, .project-card, .project-card *, .toggle-btn, .toggle-btn *, .footer-link, .footer-link * { 
                 cursor: url('assets/link.png') 5 7, pointer !important; 
             }
         }
 
-        /* 🌌 ТЕМНАЯ МАТЕРИЯ ДЛЯ ПЕРЕХОДА */
-        #cyber-overlay {
+        /* 🌊 CSS ДЛЯ ФИОЛЕТОВОЙ ВОЛНЫ */
+        #wave-transition {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-            background: #000;
+            background: linear-gradient(to top, #700099, #bc13fe);
             z-index: 999999; pointer-events: none;
-            opacity: 1; transition: opacity 0.5s ease-in-out; 
+            transform: translateY(0); /* Старт: закрывает экран */
+            transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1); 
+            box-shadow: 0 0 80px rgba(188, 19, 254, 0.8);
         }
 
         body { 
-            background: #000; color: #fff; font-family: 'Inter', sans-serif; 
-            display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; margin: 0; padding: 20px; overflow: hidden; 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+            overflow: hidden; 
         }
 
         #bg-canvas { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -100; filter: brightness(0.3) contrast(1.1); pointer-events: none;
+            z-index: -100; 
+            filter: brightness(0.3) contrast(1.1); 
+            pointer-events: none;
         }
         #source-video { 
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
-        /* 🔥 НОВАЯ АНИМАЦИЯ: "ПЛОХАЯ СВЯЗЬ" (CYBER PULSE) */
-        @keyframes cyber-pulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); opacity: 1; transform: translate(0, 0); filter: url('#liquid-filter') brightness(1); }
-            50% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); opacity: 1; }
-            
-            /* Микро-глюк 1 */
-            12% { transform: translate(-2px, 1px); filter: url('#liquid-filter') brightness(1.2); opacity: 0.9; }
-            13% { transform: translate(0, 0); filter: url('#liquid-filter') brightness(1); opacity: 1; }
-            
-            /* Микро-глюк 2 */
-            38% { opacity: 0.8; transform: skewX(0.5deg); }
-            39% { opacity: 1; transform: skewX(0); }
-            
-            /* Двойной разрыв связи (моргание) */
-            74% { transform: translate(1px, -1px); opacity: 0.8; }
-            75% { transform: translate(0, 0); opacity: 1; }
-            76% { transform: translate(-1px, 2px); opacity: 0.9; filter: url('#liquid-filter') brightness(1.3); }
-            77% { transform: translate(0, 0); opacity: 1; filter: url('#liquid-filter') brightness(1); }
+        /* АНИМАЦИЯ: ЭФФЕКТ ВЫЕЗДА И НЕОНА */
+        @keyframes neon-breath {
+            0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
+            100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
-
         @keyframes cardEnterSlideUp {
             from { opacity: 0; transform: translateY(60px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .main-card {
-            width: 100%; max-width: 1050px; min-height: 600px; height: auto; 
+            width: 100%; max-width: 1050px; 
+            min-height: 600px; 
+            height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
-            padding: 35px; display: grid; grid-template-columns: 320px 1fr; gap: 35px;
-            /* Используем новую анимацию прерывистой связи */
-            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, cyber-pulse 5s infinite;
-            position: relative; z-index: 10; align-items: stretch; opacity: 0; 
-            filter: url('#liquid-filter');
-            transform: translateZ(0); will-change: filter, transform;
+            padding: 35px; display: grid; grid-template-columns: 320px 1fr; 
+            gap: 35px;
+            /* Карточка ждет 0.2 сек, пока пройдет волна, и плавно выезжает */
+            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards, neon-breath 4s ease-in-out infinite alternate;
+            position: relative; z-index: 10;
+            align-items: stretch;
+            opacity: 0; /* Изначально скрыта для анимации */
         }
 
-        /* Чтобы кваказябры не ломали ширину при смене букв */
-        .glitch-text { display: inline-block; min-width: 10px; }
-
-        .col-left { display: flex; flex-direction: column; gap: 25px; height: 100%; justify-content: flex-start; position: relative; }
+        .col-left { 
+            display: flex; flex-direction: column; gap: 25px; 
+            height: 100%; justify-content: flex-start; position: relative;
+        }
+        
         .profile-section { text-align: left; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
         .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
         .status-dot { position: absolute; bottom: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--status-color); border: 3px solid #0b0b0b; }
+        
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
         
-        .mini-activity { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0; }
+        .mini-activity {
+            background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px;
+            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); 
+            margin-bottom: 0; 
+        }
         .mini-act-icon { width: 42px; height: 42px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .mini-act-icon img { width: 100%; height: 100%; object-fit: cover; }
         .mini-act-info { display: flex; flex-direction: column; overflow: hidden; width: 100%; flex-grow: 1; min-width: 0; }
@@ -111,13 +119,24 @@
         .mini-act-sub { font-size: 10px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .links-section { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
-        .btn { padding: 14px 20px; border-radius: 14px; text-decoration: none; color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; display: flex; align-items: center; font-size: 14px; pointer-events: auto !important; }
+        .btn { 
+            padding: 14px 20px; border-radius: 14px; 
+            text-decoration: none; color: rgba(255, 255, 255, 0.7); 
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
+            transition: 0.3s; display: flex; align-items: center; font-size: 14px; pointer-events: auto !important;
+        }
         .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 8px; }
         .btn:hover { background: rgba(188, 19, 254, 0.15); color: #fff; border-color: var(--neon); transform: translateX(5px); }
 
-        .internal-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; gap: 8px; padding-left: 0; }
+        .internal-footer {
+            margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column; gap: 8px; padding-left: 0; 
+        }
+
         .copyright { font-size: 11px; color: rgba(255, 255, 255, 0.3); font-weight: 500; }
+
         .footer-links { display: flex; gap: 12px; font-size: 11px; align-items: center; }
+
         .footer-link { color: rgba(255, 255, 255, 0.4); text-decoration: none; transition: 0.3s; display: flex; align-items: center; gap: 4px; }
         .footer-link i { color: var(--neon); font-size: 10px; }
         .footer-link:hover { color: #fff; text-shadow: 0 0 5px var(--neon); }
@@ -127,10 +146,17 @@
         .top-block-wrapper { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        .bio-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .bio-box { 
+            background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); 
+            height: 100%; display: flex; flex-direction: column; justify-content: center;
+        }
         .bio-text { font-size: 14px; line-height: 1.5; color: #eee; }
 
-        .mail-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; background: rgba(188, 19, 254, 0.05); border-radius: 18px; text-decoration: none; color: #fff; transition: 0.3s; border: 1px solid rgba(188, 19, 254, 0.1); height: 100%; }
+        .mail-block {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+            padding: 20px; background: rgba(188, 19, 254, 0.05); border-radius: 18px; text-decoration: none; 
+            color: #fff; transition: 0.3s; border: 1px solid rgba(188, 19, 254, 0.1); height: 100%;
+        }
         .mail-block:hover { background: rgba(188, 19, 254, 0.1); border-color: var(--neon); transform: translateY(-2px); }
         .mail-icon { font-size: 28px; color: var(--neon); margin-bottom: 10px; }
         .mail-info { display: flex; flex-direction: column; }
@@ -138,45 +164,121 @@
         .mail-sub { font-size: 11px; color: #aaa; margin-top: 4px; }
 
         .projects-wrapper { display: flex; flex-direction: column; gap: 15px; }
-        .toggle-container { display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 4px; width: fit-content; flex-shrink: 0; }
-        .toggle-btn { padding: 10px 24px; border-radius: 12px; border: none; background: transparent; color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; }
+
+        .toggle-container {
+            display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px; padding: 4px; width: fit-content; flex-shrink: 0;
+        }
+        .toggle-btn {
+            padding: 10px 24px; border-radius: 12px; border: none; background: transparent;
+            color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase;
+        }
         .toggle-btn:hover { color: rgba(255, 255, 255, 0.8); }
         .toggle-btn.active { color: #fff; background: rgba(188, 19, 254, 0.15); box-shadow: 0 0 15px rgba(188, 19, 254, 0.15); text-shadow: 0 0 8px var(--neon); }
         
-        @keyframes fadeInSlide { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInSlide {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         .tab-content { display: none; width: 100%; }
         .tab-content.active-content { display: block; animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-        .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px; position: relative; }
-        .grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px; z-index: 0; pointer-events: none; filter: brightness(0.5); }
-        @keyframes bg-glow { 0% { filter: brightness(1); } 100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); } }
+        .games-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            width: 100%; height: 340px; position: relative;
+        }
+
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px;
+            z-index: 0; pointer-events: none; filter: brightness(0.5);
+        }
+
+        @keyframes bg-glow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); }
+        }
+
         .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; } 
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
 
-        @keyframes card-pulse-strong { 0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); } 100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; } }
+        @keyframes card-pulse-strong {
+            0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); }
+            100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; }
+        }
 
-        .game-card { background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5); animation: card-pulse-strong 2s ease-in-out infinite alternate; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; z-index: 1; color: #fff !important; }
+        .game-card {
+            background: rgba(255,255,255,0.03); border-radius: 18px;
+            border: 2px solid rgba(188, 19, 254, 0.5);
+            animation: card-pulse-strong 2s ease-in-out infinite alternate;
+            position: relative; overflow: hidden; display: flex; 
+            flex-direction: column; justify-content: flex-end;
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
+            height: 100%; width: 100%; z-index: 1;
+            color: #fff !important; 
+        }
+
         .games-grid:has(.game-card:hover) .game-card:not(:hover) { opacity: 0; filter: blur(2px); }
         .games-grid .game-card:hover { opacity: 1; filter: none; border-color: transparent !important; box-shadow: none !important; animation: none; background: transparent; }
         .game-card:hover .game-bg-img { opacity: 0 !important; }
         .game-card:hover::after { opacity: 0 !important; }
         .game-card:hover .game-stat { opacity: 0 !important; transform: translateY(10px); }
 
-        .game-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; z-index: 0; filter: grayscale(20%); transition: 0.3s; }
+        .game-bg-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.5; z-index: 0; filter: grayscale(20%); transition: 0.3s;
+        }
+        
         .game-info { position: relative; z-index: 2; display: flex; flex-direction: column; width: 100%; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-        .game-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); z-index: 1; transition: 0.3s; }
+        
+        .game-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); z-index: 1; transition: 0.3s;
+        }
 
-        .game-title { font-size: 16px; font-weight: 800; text-transform: uppercase; text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); margin-bottom: 5px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left; position: absolute; bottom: 45px; left: 20px; z-index: 20; white-space: nowrap; color: #fff; }
-        .game-card:hover .game-title { bottom: 20px; left: 20px; font-size: 21px; text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8); }
-        .game-stat { font-size: 11px; color: #ddd; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); transition: 0.3s; }
+        .game-title { 
+            font-size: 16px; font-weight: 800; text-transform: uppercase; 
+            text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); margin-bottom: 5px; 
+            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left;
+            position: absolute; bottom: 45px; left: 20px; z-index: 20; white-space: nowrap; color: #fff;
+        }
+        
+        .game-card:hover .game-title {
+            bottom: 20px; left: 20px; font-size: 21px; text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .game-stat { 
+            font-size: 11px; color: #ddd; font-weight: 500; text-transform: uppercase; 
+            letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); transition: 0.3s;
+        }
         .game-stat i { font-size: 9px; margin-right: 5px; color: var(--neon); }
 
-        .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px; }
-        .project-card { background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5); animation: card-pulse-strong 2s ease-in-out infinite alternate; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; text-decoration: none; color: #fff; position: relative; overflow: hidden; }
-        .project-card:hover { background: rgba(188, 19, 254, 0.08); border-color: var(--neon) !important; box-shadow: 0 0 25px rgba(188, 19, 254, 0.4) !important; animation: none; transform: translateY(-5px); }
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px;
+        }
 
-        .bot-avatar-wrapper { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 20px; border: 2px solid var(--neon); box-shadow: 0 0 20px rgba(188, 19, 254, 0.3); overflow: hidden; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .project-card {
+            background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5);
+            animation: card-pulse-strong 2s ease-in-out infinite alternate;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
+            height: 100%; width: 100%; text-decoration: none; color: #fff; position: relative; overflow: hidden;
+        }
+
+        .project-card:hover {
+            background: rgba(188, 19, 254, 0.08); border-color: var(--neon) !important; 
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.4) !important; animation: none; transform: translateY(-5px);
+        }
+
+        .bot-avatar-wrapper {
+            width: 90px; height: 90px; border-radius: 50%; margin-bottom: 20px; border: 2px solid var(--neon);
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.3); overflow: hidden; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
         .bot-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .project-card:hover .bot-avatar-wrapper { transform: scale(1.08); box-shadow: 0 0 30px rgba(188, 19, 254, 0.6); }
         .project-title { font-size: 22px; font-weight: 800; text-shadow: 0 0 10px var(--neon); margin-bottom: 8px; transition: 0.3s; }
@@ -185,7 +287,11 @@
         .project-card:hover .project-sub { color: #fff; }
 
         .projects-grid .projects-box { grid-column: span 2; height: 100%; }
-        .projects-box { background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px); border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .projects-box {
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
+            border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
         .projects-icon { font-size: 40px; color: rgba(255,255,255,0.08); margin-bottom: 10px; }
         .projects-text { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 5px; text-transform: uppercase; font-weight: 700; }
 
@@ -216,14 +322,7 @@
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
     
-    <svg style="display: none;">
-        <filter id="liquid-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" id="turbulence" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="200" xChannelSelector="R" yChannelSelector="G" id="displacement" />
-        </filter>
-    </svg>
-
-    <div id="cyber-overlay"></div>
+    <div id="wave-transition"></div>
 
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
@@ -236,8 +335,8 @@
                         <img src="assets/avatar.png" class="avatar">
                         <div id="status-dot" class="status-dot"></div>
                     </div>
-                    <h1 class="nickname glitch-text">Im_Danokツ</h1>
-                    <div class="sub-nick glitch-text">Gamer / Digital Creator</div>
+                    <h1 class="nickname">Im_Danokツ</h1>
+                    <div class="sub-nick">Gamer / Digital Creator</div>
                     
                     <div class="mini-activity">
                         <div class="mini-act-icon" id="activity-icon">
@@ -252,10 +351,10 @@
                 </div>
 
                 <div class="links-section" style="margin-top: 25px;">
-                    <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i><span class="glitch-text">Discord</span></a>
-                    <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i><span class="glitch-text">Steam</span></a>
-                    <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i><span class="glitch-text">FunPay</span></a>
-                    <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i><span class="glitch-text">MyNickname</span></a>
+                    <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i>Discord</a>
+                    <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i>Steam</a>
+                    <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i>FunPay</a>
+                    <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i>MyNickname</a>
                 </div>
             </div>
 
@@ -263,11 +362,11 @@
                 <span class="copyright">© 2026 Im_Danok. Все права защищены.</span>
                 <div class="footer-links">
                     <a href="https://mynickname.com/Im_Danok" target="_blank" class="footer-link">
-                        <i class="fas fa-certificate"></i> <span class="glitch-text">Ник</span>
+                        <i class="fas fa-certificate"></i> Ник
                     </a>
                     <span class="sep">|</span>
                     <a href="https://github.com/imdanok/imdanok.github.io/blob/main/LICENSE" target="_blank" class="footer-link">
-                        <i class="fas fa-balance-scale"></i> <span class="glitch-text">MIT License</span>
+                        <i class="fas fa-balance-scale"></i> MIT License
                     </a>
                 </div>
             </div>
@@ -276,7 +375,7 @@
 
         <div class="col-right">
             <div class="top-block-wrapper">
-                <div class="section-title glitch-text">ABOUT ME</div>
+                <div class="section-title">ABOUT ME</div>
                 <div class="top-grid">
                     <div class="bio-box">
                         <div class="bio-text">
@@ -290,8 +389,8 @@
                     <a href="mailto:admin@imdanok.com" class="mail-block" target="_blank">
                         <i class="fas fa-paper-plane mail-icon"></i>
                         <div class="mail-info">
-                            <span class="mail-addr glitch-text">admin@imdanok.com</span>
-                            <span class="mail-sub glitch-text">Cooperation / Offers</span>
+                            <span class="mail-addr">admin@imdanok.com</span>
+                            <span class="mail-sub">Cooperation / Offers</span>
                         </div>
                     </a>
                 </div>
@@ -299,8 +398,8 @@
 
             <div class="projects-wrapper">
                 <div class="toggle-container">
-                    <button class="toggle-btn active" onclick="switchTab('games', this)"><span class="glitch-text">MY GAMES</span></button>
-                    <button class="toggle-btn" onclick="switchTab('projects', this)"><span class="glitch-text">PROJECTS</span></button>
+                    <button class="toggle-btn active" onclick="switchTab('games', this)">MY GAMES</button>
+                    <button class="toggle-btn" onclick="switchTab('projects', this)">PROJECTS</button>
                 </div>
 
                 <div id="tab-games" class="tab-content active-content">
@@ -312,7 +411,7 @@
 
                         <div class="game-card card-wt">
                             <img src="assets/wt-poster.jpeg?v=3" class="game-bg-img">
-                            <span class="game-title glitch-text">War Thunder</span>
+                            <span class="game-title">War Thunder</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-plane"></i> Air Superiority</span>
                             </div>
@@ -320,7 +419,7 @@
 
                         <div class="game-card card-hsr">
                             <img src="assets/hsr-poster.jpg?v=3" class="game-bg-img">
-                            <span class="game-title glitch-text">Star Rail</span>
+                            <span class="game-title">Star Rail</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-star"></i> TL 70 • Endgame</span>
                             </div>
@@ -328,7 +427,7 @@
 
                         <div class="game-card card-end">
                             <img src="assets/endfield-poster.jpg?v=3" class="game-bg-img">
-                            <span class="game-title glitch-text">Endfield</span>
+                            <span class="game-title">Endfield</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-cube"></i> Endministrator</span>
                             </div>
@@ -344,13 +443,13 @@
                             <div class="bot-avatar-wrapper">
                                 <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" alt="ArmяBot">
                             </div>
-                            <div class="project-title glitch-text">ArmяBot</div>
+                            <div class="project-title">ArmяBot</div>
                             <div class="project-sub">Многофункциональный<br>Telegram AI-ассистент</div>
                         </a>
 
                         <div class="projects-box">
                             <i class="fas fa-code projects-icon"></i>
-                            <span class="projects-text glitch-text">PROJECTS SOON</span>
+                            <span class="projects-text">PROJECTS SOON</span>
                         </div>
                         
                     </div>
@@ -363,94 +462,39 @@
     <script>
         function switchTab(tabName, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-content'));
-            // Фикс, чтобы нажатие на span (кваказябру) тоже работало как клик по кнопке
-            const btn = element.closest('.toggle-btn') || element;
             document.querySelectorAll('.toggle-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active-content');
-            btn.classList.add('active');
+            element.classList.add('active');
         }
 
-        // 🧠 ЭФФЕКТ "КВАКАЗЯБР" (Hacker Text Decoding)
-        const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+<>{}[]~";
+        // 🌊 МАГИЯ ВОЛНЫ И ПЕРЕХОДОВ 
+        const wave = document.getElementById('wave-transition');
         
-        document.querySelectorAll('.glitch-text').forEach(el => {
-            el.dataset.original = el.innerText;
-            el.addEventListener('mouseenter', function() {
-                let iterations = 0;
-                const originalText = this.dataset.original;
-                clearInterval(this.interval);
-                
-                this.interval = setInterval(() => {
-                    this.innerText = originalText.split("")
-                        .map((char, index) => {
-                            if(index < iterations || char === " ") return originalText[index];
-                            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
-                        })
-                        .join("");
-                    
-                    if(iterations >= originalText.length) { 
-                        clearInterval(this.interval);
-                        this.innerText = originalText;
-                    }
-                    iterations += 1 / 2; // Скорость расшифровки (чем больше дробь, тем быстрее)
-                }, 30); // Частота обновления букв
-            });
-        });
-
-        // 🔮 МАГИЯ ЖИДКОГО КИБЕРПАНКА (LIQUID DISTORTION TRANSITION)
-        const overlay = document.getElementById('cyber-overlay');
-        const displacement = document.getElementById('displacement');
-        const turbulence = document.getElementById('turbulence');
-
+        // При загрузке страницы волна уходит ВВЕРХ
         window.addEventListener('load', () => {
-            let scale = 200; 
-            let freq = 0.03; 
-            overlay.style.opacity = '0'; 
-            
-            function materialize() {
-                scale -= 5; 
-                freq -= 0.0005;
-                if(freq < 0.01) freq = 0.01;
-
-                if (scale > 0) {
-                    displacement.setAttribute('scale', scale);
-                    turbulence.setAttribute('baseFrequency', freq);
-                    requestAnimationFrame(materialize);
-                } else {
-                    displacement.setAttribute('scale', 0); 
-                }
-            }
-            requestAnimationFrame(materialize);
+            wave.style.transform = 'translateY(-100%)';
+            setTimeout(() => {
+                wave.style.transition = 'none'; 
+                wave.style.transform = 'translateY(100%)';
+                setTimeout(() => {
+                    wave.style.transition = 'transform 0.6s cubic-bezier(0.76, 0, 0.24, 1)';
+                }, 50);
+            }, 600); 
         });
 
+        // При клике на внутренние ссылки волна поднимается СНИЗУ ВВЕРХ
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const target = this.getAttribute('href');
                 const isBlank = this.getAttribute('target') === '_blank';
 
+                // Если ссылка не открывает новую вкладку и не является почтой
                 if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank && !this.hasAttribute('download')) {
                     e.preventDefault(); 
-                    
-                    overlay.style.opacity = '1'; 
-                    document.body.style.pointerEvents = 'none'; 
-                    
-                    let scale = 0;
-                    let freq = 0.01;
-                    
-                    function melt() {
-                        scale += 6; 
-                        freq += 0.0005;
-                        
-                        displacement.setAttribute('scale', scale);
-                        turbulence.setAttribute('baseFrequency', freq);
-                        
-                        if (scale < 250) { 
-                            requestAnimationFrame(melt);
-                        } else {
-                            window.location.href = target; 
-                        }
-                    }
-                    requestAnimationFrame(melt);
+                    wave.style.transform = 'translateY(0)';
+                    setTimeout(() => { 
+                        window.location.href = target; 
+                    }, 600); 
                 }
             });
         });
@@ -548,6 +592,7 @@
     </script>
 </body>
 </html>
+
 
 
 
