@@ -24,9 +24,7 @@
         img, i { pointer-events: none !important; }
 
         @media (pointer: fine) { 
-            * { 
-                cursor: url('assets/normal.png') 0 0, auto !important; 
-            } 
+            * { cursor: url('assets/normal.png') 0 0, auto !important; } 
             a, a *, button, button *, .btn, .btn *, .feature-btn, .feature-btn *, .back-btn, .back-btn *, .screen-img { 
                 cursor: url('assets/link.png') 5 7, pointer !important; 
             }
@@ -46,9 +44,24 @@
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
+        /* 🌊 CSS ДЛЯ ФИОЛЕТОВОЙ ВОЛНЫ */
+        #wave-transition {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: linear-gradient(to top, #700099, #bc13fe);
+            z-index: 999999; pointer-events: none;
+            transform: translateY(0); /* Старт: закрывает экран */
+            transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1); 
+            box-shadow: 0 0 80px rgba(188, 19, 254, 0.8); /* Неоновое свечение на краю */
+        }
+
+        /* АНИМАЦИЯ: ЭФФЕКТ №3 (Выезд снизу) */
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
+        }
+        @keyframes cardEnterSlideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .main-card {
@@ -58,8 +71,10 @@
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; display: grid; grid-template-columns: 320px 1fr; 
             gap: 35px;
-            animation: neon-breath 4s ease-in-out infinite alternate;
+            /* Карточка ждет 0.2 сек, пока пройдет волна, и плавно выезжает */
+            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards, neon-breath 4s ease-in-out infinite alternate;
             position: relative; z-index: 10; align-items: stretch;
+            opacity: 0; /* Изначально скрыта для анимации */
         }
 
         /* ЛЕВАЯ КОЛОНКА */
@@ -82,7 +97,6 @@
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 0px; }
         
-        /* 🔥 Вот тут математика: отступ 20px, высота 320px = ровно 5 кнопок, а общая высота блока не изменилась! */
         .features-scroll-container {
             flex-grow: 1; overflow-y: auto; padding-right: 5px; margin-top: 20px;
             max-height: 320px; display: flex; flex-direction: column; gap: 10px;
@@ -149,9 +163,9 @@
         .screen-img.active { opacity: 1; transform: scale(1); z-index: 2; }
         .screen-img.active:hover { transform: scale(1.02); }
 
-        /* 🔥 МОДАЛЬНОЕ ОКНО С НОВОЙ АНИМАЦИЕЙ И ЛЕГКИМ СВЕЧЕНИЕМ */
+        /* 🔥 МОДАЛЬНОЕ ОКНО */
         .image-modal {
-            display: none; position: fixed; z-index: 99999;
+            display: none; position: fixed; z-index: 9999999; /* Поверх волны */
             left: 0; top: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
             align-items: center; justify-content: center;
@@ -163,19 +177,13 @@
         .modal-content {
             max-width: 90vw; max-height: 90vh;
             border-radius: 12px;
-            /* Уменьшили яркость бордера и тени */
             border: 1px solid rgba(188, 19, 254, 0.3);
             box-shadow: 0 0 15px rgba(188, 19, 254, 0.15), 0 0 30px rgba(188, 19, 254, 0.05);
             display: block; object-fit: contain;
-            /* Настройки анимации (сначала картинка меньше) */
             transform: scale(0.7); 
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        
-        /* Когда модалка открыта, картинка увеличивается до нормального размера (эффект пружинки) */
-        .image-modal.show .modal-content {
-            transform: scale(1);
-        }
+        .image-modal.show .modal-content { transform: scale(1); }
 
         @media (max-width: 900px) {
             body { overflow: auto; padding: 20px; }
@@ -190,6 +198,9 @@
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+    
+    <div id="wave-transition"></div>
+
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
 
@@ -216,7 +227,6 @@
                             <div class="feat-sub">Главное меню</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('gflesh', this)">
                         <i class="fas fa-bolt feat-icon"></i>
                         <div class="feat-info">
@@ -224,7 +234,6 @@
                             <div class="feat-sub">Быстрые ответы</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('gpro', this)">
                         <i class="fas fa-brain feat-icon"></i>
                         <div class="feat-info">
@@ -232,7 +241,6 @@
                             <div class="feat-sub">Сложные задачи и код</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('gifki', this)">
                         <i class="fas fa-film feat-icon"></i>
                         <div class="feat-info">
@@ -240,7 +248,6 @@
                             <div class="feat-sub">Понимание анимаций</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('photo', this)">
                         <i class="fas fa-eye feat-icon"></i>
                         <div class="feat-info">
@@ -248,7 +255,6 @@
                             <div class="feat-sub">Фото и альбомы</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('voice', this)">
                         <i class="fas fa-headphones feat-icon"></i>
                         <div class="feat-info">
@@ -256,7 +262,6 @@
                             <div class="feat-sub">Транскрибация</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('vc', this)">
                         <i class="fas fa-microphone-alt feat-icon"></i>
                         <div class="feat-info">
@@ -264,7 +269,6 @@
                             <div class="feat-sub">Команда /войс</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('genphoto', this)">
                         <i class="fas fa-paint-brush feat-icon"></i>
                         <div class="feat-info">
@@ -272,7 +276,6 @@
                             <div class="feat-sub">Создание картинок</div>
                         </div>
                     </div>
-
                     <div class="feature-btn" onclick="switchFeature('armyan', this)">
                         <i class="fas fa-fire feat-icon"></i>
                         <div class="feat-info">
@@ -328,28 +331,58 @@
             document.getElementById('img-' + featureId).classList.add('active');
         }
 
-        /* Обновленные функции для модального окна (чтобы работала плавная анимация) */
         function openModal(src) {
             const modal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-img');
             modalImg.src = src;
-            modal.style.display = 'flex'; // Сначала показываем блок
-            
-            // Небольшая задержка, чтобы браузер успел отрисовать блок перед запуском анимации
-            setTimeout(() => {
-                modal.classList.add('show');
-            }, 10);
+            modal.style.display = 'flex'; 
+            setTimeout(() => { modal.classList.add('show'); }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('image-modal');
-            modal.classList.remove('show'); // Сначала убираем анимацию
-            
-            // Ждем 300мс пока закончится анимация исчезновения, потом прячем блок
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
+            modal.classList.remove('show'); 
+            setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
+
+        // 🌊 МАГИЯ ВОЛНЫ И ПЕРЕХОДОВ 
+        const wave = document.getElementById('wave-transition');
+        
+        // Когда страница загружается, волна поднимается ВВЕРХ, открывая контент
+        window.addEventListener('load', () => {
+            wave.style.transform = 'translateY(-100%)';
+            
+            // После того как волна ушла, мгновенно и невидимо телепортируем её ВНИЗ для будущих кликов
+            setTimeout(() => {
+                wave.style.transition = 'none'; 
+                wave.style.transform = 'translateY(100%)';
+                // Возвращаем плавность
+                setTimeout(() => {
+                    wave.style.transition = 'transform 0.6s cubic-bezier(0.76, 0, 0.24, 1)';
+                }, 50);
+            }, 600); 
+        });
+
+        // При клике на любую внутреннюю ссылку
+        document.querySelectorAll('a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = this.getAttribute('href');
+                const isBlank = this.getAttribute('target') === '_blank';
+
+                // Если это внутренняя ссылка (назад на главную)
+                if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank && !this.hasAttribute('download')) {
+                    e.preventDefault(); 
+                    
+                    // Волна поднимается СНИЗУ ВВЕРХ, закрывая экран
+                    wave.style.transform = 'translateY(0)';
+                    
+                    // Ждем пока закроет, и переходим
+                    setTimeout(() => { 
+                        window.location.href = target; 
+                    }, 600); 
+                }
+            });
+        });
 
         document.addEventListener('contextmenu', event => event.preventDefault());
         window.oncontextmenu = function() { return false; }
@@ -387,6 +420,7 @@
     </script>
 </body>
 </html>
+
 
 
 
