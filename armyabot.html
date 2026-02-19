@@ -24,7 +24,9 @@
         img, i { pointer-events: none !important; }
 
         @media (pointer: fine) { 
-            * { cursor: url('assets/normal.png') 0 0, auto !important; } 
+            * { 
+                cursor: url('assets/normal.png') 0 0, auto !important; 
+            } 
             a, a *, button, button *, .btn, .btn *, .feature-btn, .feature-btn *, .back-btn, .back-btn *, .screen-img { 
                 cursor: url('assets/link.png') 5 7, pointer !important; 
             }
@@ -44,42 +46,35 @@
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
-        /* Анимация появления карточки (Красивый переход) */
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
-        @keyframes cardEnter {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
 
-        /* КАРТОЧКА ОДИН В ОДИН С ГЛАВНОЙ */
         .main-card {
-            width: 100%; max-width: 1100px; /* Размер как на главной */
+            width: 100%; max-width: 1050px; 
+            min-height: 600px; height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; display: grid; grid-template-columns: 320px 1fr; 
             gap: 35px;
-            animation: cardEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards, neon-breath 4s ease-in-out infinite alternate;
+            animation: neon-breath 4s ease-in-out infinite alternate;
             position: relative; z-index: 10; align-items: stretch;
-            opacity: 0; 
         }
 
         /* ЛЕВАЯ КОЛОНКА */
         .col-left { 
-            display: flex; flex-direction: column; height: 100%; justify-content: flex-start; 
+            display: flex; flex-direction: column; gap: 25px; 
+            height: 100%; justify-content: flex-start; position: relative;
         }
 
-        /* Кнопка "Назад" на старом месте (Вверху слева) */
         .back-btn {
-            display: flex; align-items: center; gap: 8px; text-decoration: none;
+            display: flex; align-items: center; gap: 10px; text-decoration: none;
             color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 600; transition: 0.3s;
-            background: rgba(255,255,255,0.03); padding: 8px 14px; border-radius: 12px;
+            background: rgba(255,255,255,0.03); padding: 8px 15px; border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.05); width: fit-content;
-            margin-bottom: 20px; /* Отступ до аватарки */
         }
-        .back-btn:hover { color: #fff; background: rgba(188, 19, 254, 0.15); border-color: var(--neon); transform: translateY(-2px); }
+        .back-btn:hover { color: #fff; background: rgba(188, 19, 254, 0.15); border-color: var(--neon); transform: translateX(-3px); }
         
         .profile-section { text-align: left; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
@@ -87,12 +82,10 @@
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 0px; }
         
-        /* ЖЕСТКАЯ ВЫСОТА: Показывает РОВНО 5 кнопок */
+        /* 🔥 Вот тут математика: отступ 20px, высота 320px = ровно 5 кнопок, а общая высота блока не изменилась! */
         .features-scroll-container {
-            height: 300px; flex-shrink: 0;
-            overflow-y: auto; padding-right: 5px; 
-            margin-top: 25px; /* Аккуратный отступ от профиля */
-            display: flex; flex-direction: column; gap: 10px;
+            flex-grow: 1; overflow-y: auto; padding-right: 5px; margin-top: 20px;
+            max-height: 320px; display: flex; flex-direction: column; gap: 10px;
         }
 
         .features-scroll-container::-webkit-scrollbar { width: 4px; }
@@ -105,7 +98,6 @@
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
             border-radius: 14px; color: #fff; text-align: left; transition: 0.2s;
             position: relative; overflow: hidden; flex-shrink: 0;
-            height: 52px; /* Фиксируем высоту кнопки для точного расчета 5 штук */
         }
         .feature-btn:hover { background: rgba(255,255,255,0.05); border-color: rgba(188, 19, 254, 0.3); }
         .feature-btn.active {
@@ -126,19 +118,18 @@
         .copyright { font-size: 11px; color: rgba(255, 255, 255, 0.3); font-weight: 500; }
 
         /* ПРАВАЯ КОЛОНКА */
-        .col-right { display: flex; flex-direction: column; height: 100%; justify-content: space-between; gap: 25px; }
+        .col-right { display: flex; flex-direction: column; height: 100%; justify-content: flex-start; gap: 25px; }
         
         .bio-expanded {
             background: rgba(188, 19, 254, 0.05); border: 1px solid rgba(188, 19, 254, 0.1);
-            border-radius: 18px; padding: 25px; display: flex; flex-direction: column; gap: 10px;
+            border-radius: 18px; padding: 25px; display: flex; flex-direction: column; gap: 15px;
         }
         .section-title { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .bio-text { font-size: 14px; line-height: 1.6; color: #eee; }
         .bio-text b { color: var(--neon); }
 
-        /* ЭКРАН ЖЕСТКО ЗАДАН ПО ВЫСОТЕ (Равен высоте 3 карточек игр на главной) */
         .demonstration-wrapper {
-            width: 100%; height: 350px; flex-shrink: 0; position: relative;
+            flex-grow: 1; width: 100%; position: relative;
             border-radius: 18px; overflow: hidden;
             border: 2px solid rgba(188, 19, 254, 0.2);
             box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
@@ -158,7 +149,7 @@
         .screen-img.active { opacity: 1; transform: scale(1); z-index: 2; }
         .screen-img.active:hover { transform: scale(1.02); }
 
-        /* МОДАЛЬНОЕ ОКНО */
+        /* 🔥 МОДАЛЬНОЕ ОКНО С НОВОЙ АНИМАЦИЕЙ И ЛЕГКИМ СВЕЧЕНИЕМ */
         .image-modal {
             display: none; position: fixed; z-index: 99999;
             left: 0; top: 0; width: 100%; height: 100%;
@@ -172,117 +163,135 @@
         .modal-content {
             max-width: 90vw; max-height: 90vh;
             border-radius: 12px;
+            /* Уменьшили яркость бордера и тени */
             border: 1px solid rgba(188, 19, 254, 0.3);
             box-shadow: 0 0 15px rgba(188, 19, 254, 0.15), 0 0 30px rgba(188, 19, 254, 0.05);
             display: block; object-fit: contain;
+            /* Настройки анимации (сначала картинка меньше) */
             transform: scale(0.7); 
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
-        .image-modal.show .modal-content { transform: scale(1); }
+        /* Когда модалка открыта, картинка увеличивается до нормального размера (эффект пружинки) */
+        .image-modal.show .modal-content {
+            transform: scale(1);
+        }
 
         @media (max-width: 900px) {
             body { overflow: auto; padding: 20px; }
             .main-card { grid-template-columns: 1fr; gap: 25px; padding: 25px; height: auto; }
             .col-left, .col-right { gap: 20px; }
-            .profile-section { display: flex; flex-direction: column; align-items: center; text-align: center; }
-            .back-btn { margin: 0 auto 15px auto; }
+            .nickname, .sub-nick { text-align: center; }
             .avatar-wrapper { margin: 0 auto 15px auto; }
-            .features-scroll-container { height: 300px; margin-top: 15px; }
+            .features-scroll-container { max-height: 300px; }
             .demonstration-wrapper { height: 350px; }
+            .back-btn { margin: 0 auto; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
-    
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
 
     <div class="main-card">
         
         <div class="col-left">
-            <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Назад</a>
-            
-            <div class="profile-section">
-                <div class="avatar-wrapper">
-                    <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" class="avatar" alt="Bot Logo">
+            <div>
+                <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Назад</a>
+                
+                <div class="profile-section" style="margin-top: 20px;">
+                    <div class="avatar-wrapper">
+                        <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" class="avatar" alt="Bot Logo">
+                    </div>
+                    <h1 class="nickname">ArmяBot</h1>
+                    <div class="sub-nick">Многофункциональный AI Assistant</div>
                 </div>
-                <h1 class="nickname">ArmяBot</h1>
-                <div class="sub-nick">Многофункциональный AI Assistant</div>
-            </div>
 
-            <div class="features-scroll-container">
-                <div class="feature-btn active" onclick="switchFeature('arm', this)">
-                    <i class="fas fa-robot feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">ArmяBot</div>
-                        <div class="feat-sub">Главное меню</div>
+                <div class="features-scroll-container">
+                    
+                    <div class="feature-btn active" onclick="switchFeature('arm', this)">
+                        <i class="fas fa-robot feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">ArmяBot</div>
+                            <div class="feat-sub">Главное меню</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('gflesh', this)">
-                    <i class="fas fa-bolt feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Режим FLASH</div>
-                        <div class="feat-sub">Быстрые ответы</div>
+
+                    <div class="feature-btn" onclick="switchFeature('gflesh', this)">
+                        <i class="fas fa-bolt feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Режим FLASH</div>
+                            <div class="feat-sub">Быстрые ответы</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('gpro', this)">
-                    <i class="fas fa-brain feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Pro-Ассистент</div>
-                        <div class="feat-sub">Сложные задачи и код</div>
+
+                    <div class="feature-btn" onclick="switchFeature('gpro', this)">
+                        <i class="fas fa-brain feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Pro-Ассистент</div>
+                            <div class="feat-sub">Сложные задачи и код</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('gifki', this)">
-                    <i class="fas fa-film feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Анализ GIF</div>
-                        <div class="feat-sub">Понимание анимаций</div>
+
+                    <div class="feature-btn" onclick="switchFeature('gifki', this)">
+                        <i class="fas fa-film feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Анализ GIF</div>
+                            <div class="feat-sub">Понимание анимаций</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('photo', this)">
-                    <i class="fas fa-eye feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Умное зрение</div>
-                        <div class="feat-sub">Фото и альбомы</div>
+
+                    <div class="feature-btn" onclick="switchFeature('photo', this)">
+                        <i class="fas fa-eye feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Умное зрение</div>
+                            <div class="feat-sub">Фото и альбомы</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('voice', this)">
-                    <i class="fas fa-headphones feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Слух и ГС</div>
-                        <div class="feat-sub">Транскрибация</div>
+
+                    <div class="feature-btn" onclick="switchFeature('voice', this)">
+                        <i class="fas fa-headphones feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Слух и ГС</div>
+                            <div class="feat-sub">Транскрибация</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('vc', this)">
-                    <i class="fas fa-microphone-alt feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Синтез речи</div>
-                        <div class="feat-sub">Команда /войс</div>
+
+                    <div class="feature-btn" onclick="switchFeature('vc', this)">
+                        <i class="fas fa-microphone-alt feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Синтез речи</div>
+                            <div class="feat-sub">Команда /войс</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('genphoto', this)">
-                    <i class="fas fa-paint-brush feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Генератор /img</div>
-                        <div class="feat-sub">Создание картинок</div>
+
+                    <div class="feature-btn" onclick="switchFeature('genphoto', this)">
+                        <i class="fas fa-paint-brush feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Генератор /img</div>
+                            <div class="feat-sub">Создание картинок</div>
+                        </div>
                     </div>
-                </div>
-                <div class="feature-btn" onclick="switchFeature('armyan', this)">
-                    <i class="fas fa-fire feat-icon"></i>
-                    <div class="feat-info">
-                        <div class="feat-title">Режим Арама</div>
-                        <div class="feat-sub">Секретная личность</div>
+
+                    <div class="feature-btn" onclick="switchFeature('armyan', this)">
+                        <i class="fas fa-fire feat-icon"></i>
+                        <div class="feat-info">
+                            <div class="feat-title">Режим Арама</div>
+                            <div class="feat-sub">Секретная личность</div>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
             <div class="internal-footer">
                 <span class="copyright">Dev: @Im_Danok. All rights reserved.</span>
             </div>
+            
         </div>
 
         <div class="col-right">
+            
             <div class="bio-expanded">
                 <div class="section-title">О ПРОЕКТЕ</div>
                 <div class="bio-text">
@@ -303,6 +312,7 @@
                     <img src="assets/armyan.png" id="img-armyan" class="screen-img" onclick="openModal(this.src)">
                 </div>
             </div>
+
         </div>
     </div>
 
@@ -318,34 +328,28 @@
             document.getElementById('img-' + featureId).classList.add('active');
         }
 
+        /* Обновленные функции для модального окна (чтобы работала плавная анимация) */
         function openModal(src) {
             const modal = document.getElementById('image-modal');
             const modalImg = document.getElementById('modal-img');
             modalImg.src = src;
-            modal.style.display = 'flex'; 
-            setTimeout(() => { modal.classList.add('show'); }, 10);
+            modal.style.display = 'flex'; // Сначала показываем блок
+            
+            // Небольшая задержка, чтобы браузер успел отрисовать блок перед запуском анимации
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('image-modal');
-            modal.classList.remove('show'); 
-            setTimeout(() => { modal.style.display = 'none'; }, 300);
+            modal.classList.remove('show'); // Сначала убираем анимацию
+            
+            // Ждем 300мс пока закончится анимация исчезновения, потом прячем блок
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
         }
-
-        // Анимация ухода: Карточка плавно уезжает вниз
-        document.querySelectorAll('a.back-btn').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault(); 
-                const target = this.getAttribute('href');
-                const card = document.querySelector('.main-card');
-                
-                card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px) scale(0.98)';
-                
-                setTimeout(() => { window.location.href = target; }, 400); 
-            });
-        });
 
         document.addEventListener('contextmenu', event => event.preventDefault());
         window.oncontextmenu = function() { return false; }
