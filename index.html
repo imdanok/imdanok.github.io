@@ -32,27 +32,13 @@
             }
         }
 
-        /* ⭕ CSS ДЛЯ ЭФФЕКТА РАСШИРЯЮЩЕГОСЯ КРУГА (КАК В ВИДЕО) */
-        #circle-transition {
-            position: fixed;
-            top: 50%; left: 50%;
-            width: 150vmax; height: 150vmax; /* Гарантированно перекроет весь экран */
-            background: #020005; /* Очень глубокий черный с микро-оттенком фиолетового */
-            border-radius: 50%; /* Идеальный круг */
-            z-index: 999999;
-            pointer-events: none;
-            
-            /* Начальное состояние (загрузка): круг огромный, закрывает всё */
-            transform: translate(-50%, -50%) scale(1); 
-            transition: transform 0.8s cubic-bezier(0.85, 0, 0.15, 1); /* Плавная кинематографичная кривая */
-            
-            /* Неоновое свечение по краю круга */
-            box-shadow: 0 0 100px rgba(188, 19, 254, 0.8), inset 0 0 50px rgba(188, 19, 254, 0.4);
-        }
-
-        /* Состояние, когда страница открыта: круг сжимается в невидимую точку в центре */
-        #circle-transition.circle-closed {
-            transform: translate(-50%, -50%) scale(0);
+        /* 🌌 ТЕМНАЯ МАТЕРИЯ ДЛЯ ПЕРЕХОДА */
+        #cyber-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: #000;
+            z-index: 999999; pointer-events: none;
+            opacity: 1; /* Экран изначально черный, пока страница "собирается" */
+            transition: opacity 0.5s ease-in-out; 
         }
 
         body { 
@@ -73,18 +59,19 @@
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
-        @keyframes cardEnterSlideUp {
-            from { opacity: 0; transform: translateY(60px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
         .main-card {
             width: 100%; max-width: 1050px; min-height: 600px; height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; display: grid; grid-template-columns: 320px 1fr; gap: 35px;
-            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, neon-breath 4s ease-in-out infinite alternate;
-            position: relative; z-index: 10; align-items: stretch; opacity: 0; 
+            animation: neon-breath 4s ease-in-out infinite alternate;
+            position: relative; z-index: 10; align-items: stretch;
+            
+            /* 🔥 ПОДКЛЮЧЕНИЕ ШЕЙДЕРА ИСКАЖЕНИЯ */
+            filter: url('#liquid-filter');
+            transform: translateZ(0); /* Включаем аппаратное ускорение видеокарты */
+            will-change: filter, transform;
         }
 
         .col-left { display: flex; flex-direction: column; gap: 25px; height: 100%; justify-content: flex-start; position: relative; }
@@ -207,8 +194,15 @@
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
+    
+    <svg style="display: none;">
+        <filter id="liquid-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="noise" id="turbulence" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="200" xChannelSelector="R" yChannelSelector="G" id="displacement" />
+        </filter>
+    </svg>
 
-    <div id="circle-transition"></div>
+    <div id="cyber-overlay"></div>
 
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
@@ -353,31 +347,64 @@
             element.classList.add('active');
         }
 
-        // ⭕ МАГИЯ КРУГОВОГО ПЕРЕХОДА 
-        const circle = document.getElementById('circle-transition');
-        
-        // При загрузке страницы круг стягивается в центр и открывает сайт
+        // 🔮 МАГИЯ ЖИДКОГО КИБЕРПАНКА (LIQUID DISTORTION TRANSITION)
+        const overlay = document.getElementById('cyber-overlay');
+        const displacement = document.getElementById('displacement');
+        const turbulence = document.getElementById('turbulence');
+
+        // Фаза 1: МАТЕРИАЛИЗАЦИЯ (При загрузке страницы карточка "собирается" из жидкости)
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                circle.classList.add('circle-closed');
-            }, 50); 
+            let scale = 200; // Уровень жидкого хаоса на старте
+            let freq = 0.03; // Скорость волн
+            
+            overlay.style.opacity = '0'; // Рассеиваем тьму
+            
+            function materialize() {
+                scale -= 5; // Плавно уменьшаем искажение
+                freq -= 0.0005;
+                if(freq < 0.01) freq = 0.01;
+
+                if (scale > 0) {
+                    displacement.setAttribute('scale', scale);
+                    turbulence.setAttribute('baseFrequency', freq);
+                    requestAnimationFrame(materialize);
+                } else {
+                    displacement.setAttribute('scale', 0); // Фиксируем идеальную форму
+                }
+            }
+            requestAnimationFrame(materialize);
         });
 
-        // При клике на внутреннюю ссылку черный круг разворачивается на весь экран
+        // Фаза 2: РАСПЛАВЛЕНИЕ (При клике на ссылку карточка растворяется)
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const target = this.getAttribute('href');
                 const isBlank = this.getAttribute('target') === '_blank';
 
+                // Срабатывает только для внутренних переходов (например, на ArmяBot)
                 if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank && !this.hasAttribute('download')) {
                     e.preventDefault(); 
                     
-                    circle.classList.remove('circle-closed'); // Запускаем расширение круга
+                    overlay.style.opacity = '1'; // Надвигаем тьму
+                    document.body.style.pointerEvents = 'none'; // Блокируем новые клики
                     
-                    // Ждем пока круг закроет экран и переходим на другую страницу
-                    setTimeout(() => { 
-                        window.location.href = target; 
-                    }, 800); 
+                    let scale = 0;
+                    let freq = 0.01;
+                    
+                    function melt() {
+                        scale += 6; // Увеличиваем искажение
+                        freq += 0.0005;
+                        
+                        displacement.setAttribute('scale', scale);
+                        turbulence.setAttribute('baseFrequency', freq);
+                        
+                        if (scale < 250) { // Когда карточка полностью "размазана"
+                            requestAnimationFrame(melt);
+                        } else {
+                            window.location.href = target; // Перекидываем на новую страницу
+                        }
+                    }
+                    requestAnimationFrame(melt);
                 }
             });
         });
@@ -475,6 +502,7 @@
     </script>
 </body>
 </html>
+
 
 
 
