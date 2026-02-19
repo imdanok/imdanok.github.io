@@ -37,8 +37,7 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: #000;
             z-index: 999999; pointer-events: none;
-            opacity: 1; /* Экран изначально черный, пока страница "собирается" */
-            transition: opacity 0.5s ease-in-out; 
+            opacity: 1; transition: opacity 0.5s ease-in-out; 
         }
 
         body { 
@@ -55,9 +54,29 @@
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
-        @keyframes neon-breath {
-            0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
-            100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
+        /* 🔥 НОВАЯ АНИМАЦИЯ: "ПЛОХАЯ СВЯЗЬ" (CYBER PULSE) */
+        @keyframes cyber-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); opacity: 1; transform: translate(0, 0); filter: url('#liquid-filter') brightness(1); }
+            50% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); opacity: 1; }
+            
+            /* Микро-глюк 1 */
+            12% { transform: translate(-2px, 1px); filter: url('#liquid-filter') brightness(1.2); opacity: 0.9; }
+            13% { transform: translate(0, 0); filter: url('#liquid-filter') brightness(1); opacity: 1; }
+            
+            /* Микро-глюк 2 */
+            38% { opacity: 0.8; transform: skewX(0.5deg); }
+            39% { opacity: 1; transform: skewX(0); }
+            
+            /* Двойной разрыв связи (моргание) */
+            74% { transform: translate(1px, -1px); opacity: 0.8; }
+            75% { transform: translate(0, 0); opacity: 1; }
+            76% { transform: translate(-1px, 2px); opacity: 0.9; filter: url('#liquid-filter') brightness(1.3); }
+            77% { transform: translate(0, 0); opacity: 1; filter: url('#liquid-filter') brightness(1); }
+        }
+
+        @keyframes cardEnterSlideUp {
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .main-card {
@@ -65,14 +84,15 @@
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; display: grid; grid-template-columns: 320px 1fr; gap: 35px;
-            animation: neon-breath 4s ease-in-out infinite alternate;
-            position: relative; z-index: 10; align-items: stretch;
-            
-            /* 🔥 ПОДКЛЮЧЕНИЕ ШЕЙДЕРА ИСКАЖЕНИЯ */
+            /* Используем новую анимацию прерывистой связи */
+            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, cyber-pulse 5s infinite;
+            position: relative; z-index: 10; align-items: stretch; opacity: 0; 
             filter: url('#liquid-filter');
-            transform: translateZ(0); /* Включаем аппаратное ускорение видеокарты */
-            will-change: filter, transform;
+            transform: translateZ(0); will-change: filter, transform;
         }
+
+        /* Чтобы кваказябры не ломали ширину при смене букв */
+        .glitch-text { display: inline-block; min-width: 10px; }
 
         .col-left { display: flex; flex-direction: column; gap: 25px; height: 100%; justify-content: flex-start; position: relative; }
         .profile-section { text-align: left; }
@@ -133,6 +153,7 @@
         .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; } 
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
+
         @keyframes card-pulse-strong { 0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); } 100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; } }
 
         .game-card { background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5); animation: card-pulse-strong 2s ease-in-out infinite alternate; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; z-index: 1; color: #fff !important; }
@@ -215,8 +236,8 @@
                         <img src="assets/avatar.png" class="avatar">
                         <div id="status-dot" class="status-dot"></div>
                     </div>
-                    <h1 class="nickname">Im_Danokツ</h1>
-                    <div class="sub-nick">Gamer / Digital Creator</div>
+                    <h1 class="nickname glitch-text">Im_Danokツ</h1>
+                    <div class="sub-nick glitch-text">Gamer / Digital Creator</div>
                     
                     <div class="mini-activity">
                         <div class="mini-act-icon" id="activity-icon">
@@ -231,10 +252,10 @@
                 </div>
 
                 <div class="links-section" style="margin-top: 25px;">
-                    <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i>Discord</a>
-                    <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i>Steam</a>
-                    <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i>FunPay</a>
-                    <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i>MyNickname</a>
+                    <a href="https://discordapp.com/users/852876367871082519" class="btn" target="_blank"><i class="fab fa-discord"></i><span class="glitch-text">Discord</span></a>
+                    <a href="https://steamcommunity.com/id/im_danok/" class="btn" target="_blank"><i class="fab fa-steam"></i><span class="glitch-text">Steam</span></a>
+                    <a href="https://funpay.com/users/8726493/" class="btn" target="_blank"><i class="fas fa-bolt"></i><span class="glitch-text">FunPay</span></a>
+                    <a href="https://mynickname.com/Im_Danok" class="btn" target="_blank"><i class="fas fa-id-card"></i><span class="glitch-text">MyNickname</span></a>
                 </div>
             </div>
 
@@ -242,11 +263,11 @@
                 <span class="copyright">© 2026 Im_Danok. Все права защищены.</span>
                 <div class="footer-links">
                     <a href="https://mynickname.com/Im_Danok" target="_blank" class="footer-link">
-                        <i class="fas fa-certificate"></i> Ник
+                        <i class="fas fa-certificate"></i> <span class="glitch-text">Ник</span>
                     </a>
                     <span class="sep">|</span>
                     <a href="https://github.com/imdanok/imdanok.github.io/blob/main/LICENSE" target="_blank" class="footer-link">
-                        <i class="fas fa-balance-scale"></i> MIT License
+                        <i class="fas fa-balance-scale"></i> <span class="glitch-text">MIT License</span>
                     </a>
                 </div>
             </div>
@@ -255,7 +276,7 @@
 
         <div class="col-right">
             <div class="top-block-wrapper">
-                <div class="section-title">ABOUT ME</div>
+                <div class="section-title glitch-text">ABOUT ME</div>
                 <div class="top-grid">
                     <div class="bio-box">
                         <div class="bio-text">
@@ -269,8 +290,8 @@
                     <a href="mailto:admin@imdanok.com" class="mail-block" target="_blank">
                         <i class="fas fa-paper-plane mail-icon"></i>
                         <div class="mail-info">
-                            <span class="mail-addr">admin@imdanok.com</span>
-                            <span class="mail-sub">Cooperation / Offers</span>
+                            <span class="mail-addr glitch-text">admin@imdanok.com</span>
+                            <span class="mail-sub glitch-text">Cooperation / Offers</span>
                         </div>
                     </a>
                 </div>
@@ -278,8 +299,8 @@
 
             <div class="projects-wrapper">
                 <div class="toggle-container">
-                    <button class="toggle-btn active" onclick="switchTab('games', this)">MY GAMES</button>
-                    <button class="toggle-btn" onclick="switchTab('projects', this)">PROJECTS</button>
+                    <button class="toggle-btn active" onclick="switchTab('games', this)"><span class="glitch-text">MY GAMES</span></button>
+                    <button class="toggle-btn" onclick="switchTab('projects', this)"><span class="glitch-text">PROJECTS</span></button>
                 </div>
 
                 <div id="tab-games" class="tab-content active-content">
@@ -291,7 +312,7 @@
 
                         <div class="game-card card-wt">
                             <img src="assets/wt-poster.jpeg?v=3" class="game-bg-img">
-                            <span class="game-title">War Thunder</span>
+                            <span class="game-title glitch-text">War Thunder</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-plane"></i> Air Superiority</span>
                             </div>
@@ -299,7 +320,7 @@
 
                         <div class="game-card card-hsr">
                             <img src="assets/hsr-poster.jpg?v=3" class="game-bg-img">
-                            <span class="game-title">Star Rail</span>
+                            <span class="game-title glitch-text">Star Rail</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-star"></i> TL 70 • Endgame</span>
                             </div>
@@ -307,7 +328,7 @@
 
                         <div class="game-card card-end">
                             <img src="assets/endfield-poster.jpg?v=3" class="game-bg-img">
-                            <span class="game-title">Endfield</span>
+                            <span class="game-title glitch-text">Endfield</span>
                             <div class="game-info">
                                 <span class="game-stat"><i class="fas fa-cube"></i> Endministrator</span>
                             </div>
@@ -323,13 +344,13 @@
                             <div class="bot-avatar-wrapper">
                                 <img src="assets/bot-avatar.png" onerror="this.src='assets/avatar.png'" alt="ArmяBot">
                             </div>
-                            <div class="project-title">ArmяBot</div>
+                            <div class="project-title glitch-text">ArmяBot</div>
                             <div class="project-sub">Многофункциональный<br>Telegram AI-ассистент</div>
                         </a>
 
                         <div class="projects-box">
                             <i class="fas fa-code projects-icon"></i>
-                            <span class="projects-text">PROJECTS SOON</span>
+                            <span class="projects-text glitch-text">PROJECTS SOON</span>
                         </div>
                         
                     </div>
@@ -342,25 +363,52 @@
     <script>
         function switchTab(tabName, element) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active-content'));
+            // Фикс, чтобы нажатие на span (кваказябру) тоже работало как клик по кнопке
+            const btn = element.closest('.toggle-btn') || element;
             document.querySelectorAll('.toggle-btn').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active-content');
-            element.classList.add('active');
+            btn.classList.add('active');
         }
+
+        // 🧠 ЭФФЕКТ "КВАКАЗЯБР" (Hacker Text Decoding)
+        const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+<>{}[]~";
+        
+        document.querySelectorAll('.glitch-text').forEach(el => {
+            el.dataset.original = el.innerText;
+            el.addEventListener('mouseenter', function() {
+                let iterations = 0;
+                const originalText = this.dataset.original;
+                clearInterval(this.interval);
+                
+                this.interval = setInterval(() => {
+                    this.innerText = originalText.split("")
+                        .map((char, index) => {
+                            if(index < iterations || char === " ") return originalText[index];
+                            return glitchChars[Math.floor(Math.random() * glitchChars.length)];
+                        })
+                        .join("");
+                    
+                    if(iterations >= originalText.length) { 
+                        clearInterval(this.interval);
+                        this.innerText = originalText;
+                    }
+                    iterations += 1 / 2; // Скорость расшифровки (чем больше дробь, тем быстрее)
+                }, 30); // Частота обновления букв
+            });
+        });
 
         // 🔮 МАГИЯ ЖИДКОГО КИБЕРПАНКА (LIQUID DISTORTION TRANSITION)
         const overlay = document.getElementById('cyber-overlay');
         const displacement = document.getElementById('displacement');
         const turbulence = document.getElementById('turbulence');
 
-        // Фаза 1: МАТЕРИАЛИЗАЦИЯ (При загрузке страницы карточка "собирается" из жидкости)
         window.addEventListener('load', () => {
-            let scale = 200; // Уровень жидкого хаоса на старте
-            let freq = 0.03; // Скорость волн
-            
-            overlay.style.opacity = '0'; // Рассеиваем тьму
+            let scale = 200; 
+            let freq = 0.03; 
+            overlay.style.opacity = '0'; 
             
             function materialize() {
-                scale -= 5; // Плавно уменьшаем искажение
+                scale -= 5; 
                 freq -= 0.0005;
                 if(freq < 0.01) freq = 0.01;
 
@@ -369,39 +417,37 @@
                     turbulence.setAttribute('baseFrequency', freq);
                     requestAnimationFrame(materialize);
                 } else {
-                    displacement.setAttribute('scale', 0); // Фиксируем идеальную форму
+                    displacement.setAttribute('scale', 0); 
                 }
             }
             requestAnimationFrame(materialize);
         });
 
-        // Фаза 2: РАСПЛАВЛЕНИЕ (При клике на ссылку карточка растворяется)
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const target = this.getAttribute('href');
                 const isBlank = this.getAttribute('target') === '_blank';
 
-                // Срабатывает только для внутренних переходов (например, на ArmяBot)
                 if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank && !this.hasAttribute('download')) {
                     e.preventDefault(); 
                     
-                    overlay.style.opacity = '1'; // Надвигаем тьму
-                    document.body.style.pointerEvents = 'none'; // Блокируем новые клики
+                    overlay.style.opacity = '1'; 
+                    document.body.style.pointerEvents = 'none'; 
                     
                     let scale = 0;
                     let freq = 0.01;
                     
                     function melt() {
-                        scale += 6; // Увеличиваем искажение
+                        scale += 6; 
                         freq += 0.0005;
                         
                         displacement.setAttribute('scale', scale);
                         turbulence.setAttribute('baseFrequency', freq);
                         
-                        if (scale < 250) { // Когда карточка полностью "размазана"
+                        if (scale < 250) { 
                             requestAnimationFrame(melt);
                         } else {
-                            window.location.href = target; // Перекидываем на новую страницу
+                            window.location.href = target; 
                         }
                     }
                     requestAnimationFrame(melt);
@@ -502,6 +548,7 @@
     </script>
 </body>
 </html>
+
 
 
 
