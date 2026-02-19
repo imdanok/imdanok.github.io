@@ -30,13 +30,6 @@
             }
         }
 
-        /* 🌌 ПЛАВНЫЙ ПЕРЕХОД МЕЖДУ СТРАНИЦАМИ */
-        #page-transition {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 999999; pointer-events: none;
-            opacity: 1; transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
         body { 
             background: #000; color: #fff; font-family: 'Inter', sans-serif; 
             display: flex; align-items: center; justify-content: center; 
@@ -51,21 +44,30 @@
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
+        /* Анимация неонового дыхания + КРАСИВЫЙ ПЕРЕХОД ПОЯВЛЕНИЯ КАРТОЧКИ */
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
         }
+        
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-        /* КАРТОЧКА ОДИН В ОДИН (Гарантия!) */
+        /* КАРТОЧКА ОДИН В ОДИН С ГЛАВНОЙ (Теперь высокая!) */
         .main-card {
             width: 100%; max-width: 1050px; 
-            min-height: 600px; height: auto; 
+            min-height: 680px; /* Растянули скелет */
+            height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; display: grid; grid-template-columns: 320px 1fr; 
             gap: 35px;
-            animation: neon-breath 4s ease-in-out infinite alternate;
+            /* Добавили анимацию красивого появления (cardEnter) */
+            animation: cardEnter 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards, neon-breath 4s ease-in-out infinite alternate;
             position: relative; z-index: 10; align-items: stretch;
+            opacity: 0; /* Стартует с 0 для анимации */
         }
 
         /* ЛЕВАЯ КОЛОНКА */
@@ -76,7 +78,6 @@
 
         .profile-section { text-align: left; position: relative; }
         
-        /* Кнопка "Назад" теперь висит справа от аватарки, не ломая высоту! */
         .back-btn {
             position: absolute; top: 0; right: 0;
             display: flex; align-items: center; gap: 8px; text-decoration: none;
@@ -91,11 +92,12 @@
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 0px; }
         
-        /* Идеальная копия блока ссылок: отступ 91px (вместо статуса) и жесткая высота 225px */
+        /* ВЫТЯНУТЫЙ СПИСОК (Вмещает 5 кнопок) */
         .features-scroll-container {
-            height: 225px; flex-shrink: 0;
+            height: 380px; /* Сделали значительно выше */
+            flex-shrink: 0;
             overflow-y: auto; padding-right: 5px; 
-            margin-top: 91px; 
+            margin-top: 50px; /* Отступ */
             display: flex; flex-direction: column; gap: 10px;
         }
 
@@ -133,20 +135,20 @@
         
         .bio-expanded {
             background: rgba(188, 19, 254, 0.05); border: 1px solid rgba(188, 19, 254, 0.1);
-            border-radius: 18px; padding: 25px; display: flex; flex-direction: column; gap: 15px;
+            border-radius: 18px; padding: 20px 25px; display: flex; flex-direction: column; gap: 10px;
         }
         .section-title { font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
         .bio-text { font-size: 14px; line-height: 1.6; color: #eee; }
         .bio-text b { color: var(--neon); }
 
-        /* Экран 340px, отступ 51px имитирует высоту скрытых кнопок переключения */
+        /* ЭКРАН РАСТЯНУТ ДО 430px (Чтобы карточка стала высокой) */
         .demonstration-wrapper {
-            width: 100%; height: 340px; flex-shrink: 0; position: relative;
+            width: 100%; height: 430px; flex-shrink: 0; position: relative;
             border-radius: 18px; overflow: hidden;
             border: 2px solid rgba(188, 19, 254, 0.2);
             box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
             background: rgba(0,0,0,0.3);
-            margin-top: 51px; 
+            margin-top: 20px; 
         }
         
         .mockup-screen {
@@ -162,7 +164,7 @@
         .screen-img.active { opacity: 1; transform: scale(1); z-index: 2; }
         .screen-img.active:hover { transform: scale(1.02); }
 
-        /* 🔥 МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО */
+        /* МОДАЛЬНОЕ ОКНО */
         .image-modal {
             display: none; position: fixed; z-index: 99999;
             left: 0; top: 0; width: 100%; height: 100%;
@@ -199,8 +201,6 @@
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
     
-    <div id="page-transition"></div>
-
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
 
@@ -339,23 +339,19 @@
             setTimeout(() => { modal.style.display = 'none'; }, 300);
         }
 
-        // 🌌 Магия плавного перехода страниц
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('page-transition').style.opacity = '0';
-            }, 50); 
-        });
-
-        document.querySelectorAll('a').forEach(anchor => {
+        // КРАСИВЫЙ УХОД СО СТРАНИЦЫ (Без черного экрана, просто растворяем саму карточку)
+        document.querySelectorAll('a.back-btn').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
+                e.preventDefault(); 
                 const target = this.getAttribute('href');
-                const isBlank = this.getAttribute('target') === '_blank';
-
-                if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank) {
-                    e.preventDefault(); 
-                    document.getElementById('page-transition').style.opacity = '1'; 
-                    setTimeout(() => { window.location.href = target; }, 400); 
-                }
+                const card = document.querySelector('.main-card');
+                
+                // Плавно уводим карточку вниз и растворяем
+                card.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px) scale(0.98)';
+                
+                setTimeout(() => { window.location.href = target; }, 400); 
             });
         });
 
@@ -395,6 +391,7 @@
     </script>
 </body>
 </html>
+
 
 
 
