@@ -26,43 +26,10 @@
         img, i { pointer-events: none !important; }
 
         @media (pointer: fine) { 
-            * { 
-                cursor: url('assets/normal.png') 0 0, auto !important; 
-            } 
+            * { cursor: url('assets/normal.png') 0 0, auto !important; } 
             a, a *, button, button *, .btn, .btn *, .mail-block, .mail-block *, .game-card, .game-card *, .project-card, .project-card *, .toggle-btn, .toggle-btn *, .footer-link, .footer-link * { 
                 cursor: url('assets/link.png') 5 7, pointer !important; 
             }
-        }
-
-        /* 🌊 ДОРОГАЯ 3D-ВОЛНА (ПЕРЕЛИВ С ЧЕРНЫМ И ОБЪЕМ) */
-        #wave-transition {
-            position: fixed; 
-            top: -10vh; left: 0; 
-            width: 100%; height: 120vh; /* Делаем чуть больше экрана, чтобы изгиб скрывался, когда экран закрыт */
-            
-            /* Переливающийся 3D градиент (Черный -> Темно-фиолетовый -> Яркий неон -> Черный) */
-            background: linear-gradient(180deg, 
-                #000000 0%, 
-                #0d001a 15%, 
-                #5a0099 40%, 
-                #bc13fe 50%, 
-                #5a0099 60%, 
-                #0d001a 85%, 
-                #000000 100%);
-                
-            z-index: 999999; pointer-events: none;
-            transform: translateY(0); 
-            transition: transform 0.7s cubic-bezier(0.76, 0, 0.24, 1); 
-            
-            /* Имитация физического изгиба (дуга сверху и снизу) */
-            border-radius: 50% / 80px; 
-            
-            /* 3D Блики для объема + внешнее свечение */
-            box-shadow: 
-                inset 0 15px 20px rgba(255, 255, 255, 0.25),  /* Верхний светлый блик */
-                inset 0 -15px 20px rgba(255, 255, 255, 0.25), /* Нижний светлый блик */
-                0 0 100px rgba(188, 19, 254, 0.9),            /* Мощный внешний неон */
-                0 0 200px rgba(188, 19, 254, 0.4);
         }
 
         body { 
@@ -79,6 +46,54 @@
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
+        /* 🌊 CSS ДЛЯ ЭФФЕКТА ЖИДКОСТИ (ВОДЫ) */
+        #liquid-container {
+            position: fixed;
+            bottom: 0; left: 0; /* Центр находится в левом нижнем углу */
+            width: 0; height: 0;
+            z-index: 999999;
+            pointer-events: none;
+            transform: translate(0, 0);
+        }
+
+        .water-layer {
+            position: absolute;
+            bottom: -150vmax; left: -150vmax;
+            width: 300vmax; height: 300vmax;
+            /* Неправильная органическая форма для эффекта жидкости */
+            border-radius: 43% 57% 49% 51% / 45% 52% 48% 55%; 
+            transform-origin: center center;
+            transform: scale(0) rotate(0deg);
+            transition: transform 0.9s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* 3 слоя с легкой задержкой, чтобы был объемный наплыв */
+        .layer-1 { background: #1a0033; transition-duration: 0.7s; z-index: 1; }
+        .layer-2 { background: #5a0099; transition-duration: 0.9s; z-index: 2; }
+        .layer-3 { background: #bc13fe; transition-duration: 1.1s; z-index: 3; box-shadow: inset 0 0 50px rgba(0,0,0,0.3); }
+
+        /* Эффект заливки (от левого нижнего угла) */
+        .is-filling .water-layer {
+            transform: scale(1) rotate(120deg);
+        }
+
+        /* Мгновенная заливка до загрузки, чтобы не моргал белый экран */
+        .is-filled-instant .water-layer {
+            transition: none !important;
+            transform: scale(1) rotate(120deg) !important;
+        }
+
+        /* Эффект стока (вода уезжает в правый верхний угол) */
+        #liquid-container.is-draining {
+            transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+            transform: translate(200vw, -200vh); /* Двигаем весь контейнер по диагонали */
+        }
+        .is-draining .water-layer {
+            transform: scale(1) rotate(240deg); /* Продолжает бурлить, пока утекает */
+            transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        /* АНИМАЦИИ КАРТОЧКИ */
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
@@ -93,7 +108,7 @@
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
             padding: 35px; display: grid; grid-template-columns: 320px 1fr; gap: 35px;
-            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards, neon-breath 4s ease-in-out infinite alternate;
+            animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards, neon-breath 4s ease-in-out infinite alternate;
             position: relative; z-index: 10; align-items: stretch; opacity: 0; 
         }
 
@@ -102,14 +117,10 @@
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
         .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
         .status-dot { position: absolute; bottom: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--status-color); border: 3px solid #0b0b0b; }
-        
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
         
-        .mini-activity {
-            background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px;
-            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0; 
-        }
+        .mini-activity { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px; display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0; }
         .mini-act-icon { width: 42px; height: 42px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .mini-act-icon img { width: 100%; height: 100%; object-fit: cover; }
         .mini-act-info { display: flex; flex-direction: column; overflow: hidden; width: 100%; flex-grow: 1; min-width: 0; }
@@ -118,11 +129,7 @@
         .mini-act-sub { font-size: 10px; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         .links-section { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
-        .btn { 
-            padding: 14px 20px; border-radius: 14px; text-decoration: none; color: rgba(255, 255, 255, 0.7); 
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
-            transition: 0.3s; display: flex; align-items: center; font-size: 14px; pointer-events: auto !important;
-        }
+        .btn { padding: 14px 20px; border-radius: 14px; text-decoration: none; color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); transition: 0.3s; display: flex; align-items: center; font-size: 14px; pointer-events: auto !important; }
         .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 8px; }
         .btn:hover { background: rgba(188, 19, 254, 0.15); color: #fff; border-color: var(--neon); transform: translateX(5px); }
 
@@ -141,11 +148,7 @@
         .bio-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); height: 100%; display: flex; flex-direction: column; justify-content: center; }
         .bio-text { font-size: 14px; line-height: 1.5; color: #eee; }
 
-        .mail-block {
-            display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
-            padding: 20px; background: rgba(188, 19, 254, 0.05); border-radius: 18px; text-decoration: none; 
-            color: #fff; transition: 0.3s; border: 1px solid rgba(188, 19, 254, 0.1); height: 100%;
-        }
+        .mail-block { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; background: rgba(188, 19, 254, 0.05); border-radius: 18px; text-decoration: none; color: #fff; transition: 0.3s; border: 1px solid rgba(188, 19, 254, 0.1); height: 100%; }
         .mail-block:hover { background: rgba(188, 19, 254, 0.1); border-color: var(--neon); transform: translateY(-2px); }
         .mail-icon { font-size: 28px; color: var(--neon); margin-bottom: 10px; }
         .mail-info { display: flex; flex-direction: column; }
@@ -154,11 +157,7 @@
 
         .projects-wrapper { display: flex; flex-direction: column; gap: 15px; }
         .toggle-container { display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 4px; width: fit-content; flex-shrink: 0; }
-        .toggle-btn {
-            padding: 10px 24px; border-radius: 12px; border: none; background: transparent;
-            color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase;
-        }
+        .toggle-btn { padding: 10px 24px; border-radius: 12px; border: none; background: transparent; color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); text-transform: uppercase; }
         .toggle-btn:hover { color: rgba(255, 255, 255, 0.8); }
         .toggle-btn.active { color: #fff; background: rgba(188, 19, 254, 0.15); box-shadow: 0 0 15px rgba(188, 19, 254, 0.15); text-shadow: 0 0 8px var(--neon); }
         
@@ -167,25 +166,14 @@
         .tab-content.active-content { display: block; animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
         .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px; position: relative; }
-        .grid-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center;
-            opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px; z-index: 0; pointer-events: none; filter: brightness(0.5);
-        }
-
+        .grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px; z-index: 0; pointer-events: none; filter: brightness(0.5); }
         @keyframes bg-glow { 0% { filter: brightness(1); } 100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); } }
         .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; } 
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
-
         @keyframes card-pulse-strong { 0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); } 100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; } }
 
-        .game-card {
-            background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5);
-            animation: card-pulse-strong 2s ease-in-out infinite alternate; position: relative; overflow: hidden; display: flex; 
-            flex-direction: column; justify-content: flex-end; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
-            height: 100%; width: 100%; z-index: 1; color: #fff !important; 
-        }
-
+        .game-card { background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5); animation: card-pulse-strong 2s ease-in-out infinite alternate; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; z-index: 1; color: #fff !important; }
         .games-grid:has(.game-card:hover) .game-card:not(:hover) { opacity: 0; filter: blur(2px); }
         .games-grid .game-card:hover { opacity: 1; filter: none; border-color: transparent !important; box-shadow: none !important; animation: none; background: transparent; }
         .game-card:hover .game-bg-img { opacity: 0 !important; }
@@ -196,20 +184,13 @@
         .game-info { position: relative; z-index: 2; display: flex; flex-direction: column; width: 100%; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
         .game-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); z-index: 1; transition: 0.3s; }
 
-        .game-title { 
-            font-size: 16px; font-weight: 800; text-transform: uppercase; text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); margin-bottom: 5px; 
-            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left; position: absolute; bottom: 45px; left: 20px; z-index: 20; white-space: nowrap; color: #fff;
-        }
+        .game-title { font-size: 16px; font-weight: 800; text-transform: uppercase; text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); margin-bottom: 5px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left; position: absolute; bottom: 45px; left: 20px; z-index: 20; white-space: nowrap; color: #fff; }
         .game-card:hover .game-title { bottom: 20px; left: 20px; font-size: 21px; text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8); }
         .game-stat { font-size: 11px; color: #ddd; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); transition: 0.3s; }
         .game-stat i { font-size: 9px; margin-right: 5px; color: var(--neon); }
 
         .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px; }
-        .project-card {
-            background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5);
-            animation: card-pulse-strong 2s ease-in-out infinite alternate; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; text-decoration: none; color: #fff; position: relative; overflow: hidden;
-        }
+        .project-card { background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5); animation: card-pulse-strong 2s ease-in-out infinite alternate; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; text-decoration: none; color: #fff; position: relative; overflow: hidden; }
         .project-card:hover { background: rgba(188, 19, 254, 0.08); border-color: var(--neon) !important; box-shadow: 0 0 25px rgba(188, 19, 254, 0.4) !important; animation: none; transform: translateY(-5px); }
 
         .bot-avatar-wrapper { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 20px; border: 2px solid var(--neon); box-shadow: 0 0 20px rgba(188, 19, 254, 0.3); overflow: hidden; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
@@ -221,10 +202,7 @@
         .project-card:hover .project-sub { color: #fff; }
 
         .projects-grid .projects-box { grid-column: span 2; height: 100%; }
-        .projects-box {
-            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
-            border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
-        }
+        .projects-box { background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px); border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .projects-icon { font-size: 40px; color: rgba(255,255,255,0.08); margin-bottom: 10px; }
         .projects-text { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 5px; text-transform: uppercase; font-weight: 700; }
 
@@ -254,8 +232,13 @@
     </style>
 </head>
 <body oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
-    
-    <div id="wave-transition"></div>
+
+    <div id="liquid-container" class="is-filled-instant">
+        <div class="water-layer layer-1"></div>
+        <div class="water-layer layer-2"></div>
+        <div class="water-layer layer-3"></div>
+    </div>
+    <script>document.getElementById('liquid-container').classList.add('is-filled-instant');</script>
 
     <video id="source-video" src="assets/video1.mp4" autoplay muted loop playsinline></video>
     <canvas id="bg-canvas"></canvas>
@@ -400,22 +383,26 @@
             element.classList.add('active');
         }
 
-        // 🌊 МАГИЯ ВОЛНЫ И ПЕРЕХОДОВ 
-        const wave = document.getElementById('wave-transition');
+        // 🌊 МАГИЯ ЖИДКОГО ПЕРЕХОДА
+        const liquid = document.getElementById('liquid-container');
         
-        // При загрузке страницы волна уходит ВВЕРХ
         window.addEventListener('load', () => {
-            wave.style.transform = 'translateY(-120%)'; // Уезжает выше экрана
+            // Как только страница прогрузилась, снимаем мгновенную заливку и пускаем воду стекать в ПРАВЫЙ ВЕРХНИЙ угол
             setTimeout(() => {
-                wave.style.transition = 'none'; 
-                wave.style.transform = 'translateY(120%)'; // Телепорт вниз
+                liquid.classList.remove('is-filled-instant');
+                liquid.classList.add('is-draining');
+                
+                // Через 1.2 сек очищаем классы, чтобы вернуть в исходное (пустое) состояние
                 setTimeout(() => {
-                    wave.style.transition = 'transform 0.7s cubic-bezier(0.76, 0, 0.24, 1)';
-                }, 50);
-            }, 700); 
+                    liquid.classList.remove('is-draining');
+                    // Важно сбросить transform контейнера без анимации, чтобы вернуть его в нижний левый угол невидимым
+                    liquid.style.transition = 'none';
+                    liquid.style.transform = 'translate(0, 0)';
+                    setTimeout(() => liquid.style.transition = '', 50);
+                }, 1200);
+            }, 50); 
         });
 
-        // При клике на внутренние ссылки волна выплывает СНИЗУ ВВЕРХ
         document.querySelectorAll('a').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 const target = this.getAttribute('href');
@@ -423,10 +410,14 @@
 
                 if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank && !this.hasAttribute('download')) {
                     e.preventDefault(); 
-                    wave.style.transform = 'translateY(0)'; // Закрывает экран
+                    
+                    // Запускаем заливку (Жидкость вытекает из нижнего левого угла)
+                    liquid.classList.add('is-filling');
+                    
+                    // Ждем пока вода покроет экран и переходим
                     setTimeout(() => { 
                         window.location.href = target; 
-                    }, 700); 
+                    }, 1000); 
                 }
             });
         });
@@ -524,6 +515,7 @@
     </script>
 </body>
 </html>
+
 
 
 
