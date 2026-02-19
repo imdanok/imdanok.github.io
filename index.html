@@ -25,6 +25,7 @@
 
         img, i { pointer-events: none !important; }
 
+        /* 🔥 КАСТОМНЫЕ КУРСОРЫ (Только для ПК) */
         @media (pointer: fine) { 
             * { 
                 cursor: url('assets/normal.png') 0 0, auto !important; 
@@ -34,41 +35,40 @@
             }
         }
 
-        /* 🌊 CSS ДЛЯ ФИОЛЕТОВОЙ ВОЛНЫ С ГИФКАМИ */
+        /* 🌊 CSS ДЛЯ ФИОЛЕТОВОЙ ВОЛНЫ */
         #wave-transition {
             position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
             background: linear-gradient(to top, #700099, #bc13fe);
             z-index: 999999; pointer-events: none;
-            transform: translateY(0); 
+            transform: translateY(0); /* Старт: закрывает экран */
             transition: transform 0.6s cubic-bezier(0.76, 0, 0.24, 1); 
             box-shadow: 0 0 80px rgba(188, 19, 254, 0.8);
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden; /* Чтобы гифки не вылезали за края */
-        }
-
-        .wave-gif-main {
-            width: 280px; height: 280px; object-fit: contain; z-index: 10;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.4));
-        }
-
-        .wave-gif-small {
-            position: absolute; object-fit: contain; z-index: 5;
         }
 
         body { 
-            background: #000; color: #fff; font-family: 'Inter', sans-serif; 
-            display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; margin: 0; padding: 20px; overflow: hidden; 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+            overflow: hidden; 
         }
 
         #bg-canvas { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            z-index: -100; filter: brightness(0.3) contrast(1.1); pointer-events: none;
+            z-index: -100; 
+            filter: brightness(0.3) contrast(1.1); 
+            pointer-events: none;
         }
         #source-video { 
             position: fixed; top: 0; left: 0; width: 1px; height: 1px; opacity: 0; z-index: -9999; pointer-events: none;
         }
 
+        /* АНИМАЦИЯ: ЭФФЕКТ ВЫЕЗДА И НЕОНА */
         @keyframes neon-breath {
             0% { box-shadow: 0 0 20px rgba(188, 19, 254, 0.1); border-color: rgba(188, 19, 254, 0.2); }
             100% { box-shadow: 0 0 60px rgba(188, 19, 254, 0.35); border-color: rgba(188, 19, 254, 0.5); }
@@ -79,25 +79,37 @@
         }
 
         .main-card {
-            width: 100%; max-width: 1050px; min-height: 600px; height: auto; 
+            width: 100%; max-width: 1050px; 
+            min-height: 600px; 
+            height: auto; 
             background: var(--bg-glass); backdrop-filter: blur(30px);
             border-radius: 35px; border: 2px solid rgba(188, 19, 254, 0.2);
-            padding: 35px; display: grid; grid-template-columns: 320px 1fr; gap: 35px;
+            padding: 35px; display: grid; grid-template-columns: 320px 1fr; 
+            gap: 35px;
+            /* Карточка ждет 0.2 сек, пока пройдет волна, и плавно выезжает */
             animation: cardEnterSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards, neon-breath 4s ease-in-out infinite alternate;
-            position: relative; z-index: 10; align-items: stretch; opacity: 0; 
+            position: relative; z-index: 10;
+            align-items: stretch;
+            opacity: 0; /* Изначально скрыта для анимации */
         }
 
-        .col-left { display: flex; flex-direction: column; gap: 25px; height: 100%; justify-content: flex-start; position: relative; }
+        .col-left { 
+            display: flex; flex-direction: column; gap: 25px; 
+            height: 100%; justify-content: flex-start; position: relative;
+        }
+        
         .profile-section { text-align: left; }
         .avatar-wrapper { position: relative; width: 100px; height: 100px; margin-bottom: 15px; }
         .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--neon); box-shadow: 0 0 30px rgba(188, 19, 254, 0.3); }
         .status-dot { position: absolute; bottom: 5px; right: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--status-color); border: 3px solid #0b0b0b; }
+        
         .nickname { font-size: 26px; font-weight: 700; text-shadow: 0 0 15px var(--neon); margin: 0 0 5px 0; }
         .sub-nick { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
         
         .mini-activity {
             background: rgba(255,255,255,0.03); border-radius: 15px; padding: 12px;
-            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 0; 
+            display: flex; align-items: center; gap: 12px; border: 1px solid rgba(255,255,255,0.05); 
+            margin-bottom: 0; 
         }
         .mini-act-icon { width: 42px; height: 42px; border-radius: 10px; overflow: hidden; background: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
         .mini-act-icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -108,16 +120,23 @@
 
         .links-section { display: flex; flex-direction: column; gap: 15px; margin-top: 0; }
         .btn { 
-            padding: 14px 20px; border-radius: 14px; text-decoration: none; color: rgba(255, 255, 255, 0.7); 
+            padding: 14px 20px; border-radius: 14px; 
+            text-decoration: none; color: rgba(255, 255, 255, 0.7); 
             background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
             transition: 0.3s; display: flex; align-items: center; font-size: 14px; pointer-events: auto !important;
         }
         .btn i { width: 30px; text-align: center; font-size: 18px; margin-right: 8px; }
         .btn:hover { background: rgba(188, 19, 254, 0.15); color: #fff; border-color: var(--neon); transform: translateX(5px); }
 
-        .internal-footer { margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; gap: 8px; padding-left: 0; }
+        .internal-footer {
+            margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column; gap: 8px; padding-left: 0; 
+        }
+
         .copyright { font-size: 11px; color: rgba(255, 255, 255, 0.3); font-weight: 500; }
+
         .footer-links { display: flex; gap: 12px; font-size: 11px; align-items: center; }
+
         .footer-link { color: rgba(255, 255, 255, 0.4); text-decoration: none; transition: 0.3s; display: flex; align-items: center; gap: 4px; }
         .footer-link i { color: var(--neon); font-size: 10px; }
         .footer-link:hover { color: #fff; text-shadow: 0 0 5px var(--neon); }
@@ -127,7 +146,10 @@
         .top-block-wrapper { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
         .top-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         
-        .bio-box { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .bio-box { 
+            background: rgba(255,255,255,0.02); padding: 20px; border-radius: 18px; border: 1px solid rgba(255,255,255,0.03); 
+            height: 100%; display: flex; flex-direction: column; justify-content: center;
+        }
         .bio-text { font-size: 14px; line-height: 1.5; color: #eee; }
 
         .mail-block {
@@ -142,7 +164,11 @@
         .mail-sub { font-size: 11px; color: #aaa; margin-top: 4px; }
 
         .projects-wrapper { display: flex; flex-direction: column; gap: 15px; }
-        .toggle-container { display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 4px; width: fit-content; flex-shrink: 0; }
+
+        .toggle-container {
+            display: flex; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px; padding: 4px; width: fit-content; flex-shrink: 0;
+        }
         .toggle-btn {
             padding: 10px 24px; border-radius: 12px; border: none; background: transparent;
             color: rgba(255, 255, 255, 0.4); font-size: 11px; font-weight: 800; letter-spacing: 1px;
@@ -151,28 +177,49 @@
         .toggle-btn:hover { color: rgba(255, 255, 255, 0.8); }
         .toggle-btn.active { color: #fff; background: rgba(188, 19, 254, 0.15); box-shadow: 0 0 15px rgba(188, 19, 254, 0.15); text-shadow: 0 0 8px var(--neon); }
         
-        @keyframes fadeInSlide { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInSlide {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         .tab-content { display: none; width: 100%; }
         .tab-content.active-content { display: block; animation: fadeInSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
-        .games-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px; position: relative; }
-        .grid-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center;
-            opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px; z-index: 0; pointer-events: none; filter: brightness(0.5);
+        .games-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;
+            width: 100%; height: 340px; position: relative;
         }
 
-        @keyframes bg-glow { 0% { filter: brightness(1); } 100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); } }
+        .grid-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-size: cover; background-position: center;
+            opacity: 0; transition: 0.5s cubic-bezier(0.22, 1, 0.36, 1); border-radius: 18px;
+            z-index: 0; pointer-events: none; filter: brightness(0.5);
+        }
+
+        @keyframes bg-glow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.05) drop-shadow(0 0 15px rgba(188, 19, 254, 0.4)); }
+        }
+
         .games-grid:has(.card-wt:hover) .bg-wt { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; } 
         .games-grid:has(.card-hsr:hover) .bg-hsr { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
         .games-grid:has(.card-end:hover) .bg-end { opacity: 1; animation: bg-glow 2s ease-in-out infinite alternate; }
 
-        @keyframes card-pulse-strong { 0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); } 100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; } }
+        @keyframes card-pulse-strong {
+            0% { box-shadow: 0 0 5px rgba(188, 19, 254, 0.3); border-color: rgba(188, 19, 254, 0.5); }
+            100% { box-shadow: 0 0 25px rgba(188, 19, 254, 0.6); border-color: #bc13fe; }
+        }
 
         .game-card {
-            background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5);
-            animation: card-pulse-strong 2s ease-in-out infinite alternate; position: relative; overflow: hidden; display: flex; 
-            flex-direction: column; justify-content: flex-end; padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
-            height: 100%; width: 100%; z-index: 1; color: #fff !important; 
+            background: rgba(255,255,255,0.03); border-radius: 18px;
+            border: 2px solid rgba(188, 19, 254, 0.5);
+            animation: card-pulse-strong 2s ease-in-out infinite alternate;
+            position: relative; overflow: hidden; display: flex; 
+            flex-direction: column; justify-content: flex-end;
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
+            height: 100%; width: 100%; z-index: 1;
+            color: #fff !important; 
         }
 
         .games-grid:has(.game-card:hover) .game-card:not(:hover) { opacity: 0; filter: blur(2px); }
@@ -181,27 +228,57 @@
         .game-card:hover::after { opacity: 0 !important; }
         .game-card:hover .game-stat { opacity: 0 !important; transform: translateY(10px); }
 
-        .game-bg-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; z-index: 0; filter: grayscale(20%); transition: 0.3s; }
+        .game-bg-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0.5; z-index: 0; filter: grayscale(20%); transition: 0.3s;
+        }
+        
         .game-info { position: relative; z-index: 2; display: flex; flex-direction: column; width: 100%; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
-        .game-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); z-index: 1; transition: 0.3s; }
+        
+        .game-card::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%); z-index: 1; transition: 0.3s;
+        }
 
         .game-title { 
-            font-size: 16px; font-weight: 800; text-transform: uppercase; text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); margin-bottom: 5px; 
-            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left; position: absolute; bottom: 45px; left: 20px; z-index: 20; white-space: nowrap; color: #fff;
+            font-size: 16px; font-weight: 800; text-transform: uppercase; 
+            text-shadow: 0 1px 8px rgba(188, 19, 254, 0.5); margin-bottom: 5px; 
+            transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); transform-origin: bottom left;
+            position: absolute; bottom: 45px; left: 20px; z-index: 20; white-space: nowrap; color: #fff;
         }
-        .game-card:hover .game-title { bottom: 20px; left: 20px; font-size: 21px; text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8); }
-        .game-stat { font-size: 11px; color: #ddd; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); transition: 0.3s; }
+        
+        .game-card:hover .game-title {
+            bottom: 20px; left: 20px; font-size: 21px; text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon), 0 0 30px rgba(0,0,0,0.8);
+        }
+
+        .game-stat { 
+            font-size: 11px; color: #ddd; font-weight: 500; text-transform: uppercase; 
+            letter-spacing: 1px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); transition: 0.3s;
+        }
         .game-stat i { font-size: 9px; margin-right: 5px; color: var(--neon); }
 
-        .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px; }
+        .projects-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; height: 340px;
+        }
+
         .project-card {
             background: rgba(255,255,255,0.03); border-radius: 18px; border: 2px solid rgba(188, 19, 254, 0.5);
-            animation: card-pulse-strong 2s ease-in-out infinite alternate; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); height: 100%; width: 100%; text-decoration: none; color: #fff; position: relative; overflow: hidden;
+            animation: card-pulse-strong 2s ease-in-out infinite alternate;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); 
+            height: 100%; width: 100%; text-decoration: none; color: #fff; position: relative; overflow: hidden;
         }
-        .project-card:hover { background: rgba(188, 19, 254, 0.08); border-color: var(--neon) !important; box-shadow: 0 0 25px rgba(188, 19, 254, 0.4) !important; animation: none; transform: translateY(-5px); }
 
-        .bot-avatar-wrapper { width: 90px; height: 90px; border-radius: 50%; margin-bottom: 20px; border: 2px solid var(--neon); box-shadow: 0 0 20px rgba(188, 19, 254, 0.3); overflow: hidden; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1); }
+        .project-card:hover {
+            background: rgba(188, 19, 254, 0.08); border-color: var(--neon) !important; 
+            box-shadow: 0 0 25px rgba(188, 19, 254, 0.4) !important; animation: none; transform: translateY(-5px);
+        }
+
+        .bot-avatar-wrapper {
+            width: 90px; height: 90px; border-radius: 50%; margin-bottom: 20px; border: 2px solid var(--neon);
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.3); overflow: hidden; transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        
         .bot-avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
         .project-card:hover .bot-avatar-wrapper { transform: scale(1.08); box-shadow: 0 0 30px rgba(188, 19, 254, 0.6); }
         .project-title { font-size: 22px; font-weight: 800; text-shadow: 0 0 10px var(--neon); margin-bottom: 8px; transition: 0.3s; }
@@ -212,7 +289,8 @@
         .projects-grid .projects-box { grid-column: span 2; height: 100%; }
         .projects-box {
             background: repeating-linear-gradient(45deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01) 10px, rgba(255,255,255,0.03) 10px, rgba(255,255,255,0.03) 20px);
-            border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 18px; border: 1px solid rgba(255,255,255,0.05); width: 100%; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
         .projects-icon { font-size: 40px; color: rgba(255,255,255,0.08); margin-bottom: 10px; }
         .projects-text { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 5px; text-transform: uppercase; font-weight: 700; }
@@ -389,38 +467,9 @@
             element.classList.add('active');
         }
 
-        // 🌊 МАГИЯ ВОЛНЫ И ГЕНЕРАТОР ГИФОК 
+        // 🌊 МАГИЯ ВОЛНЫ И ПЕРЕХОДОВ 
         const wave = document.getElementById('wave-transition');
-        const gifSrc = 'assets/wave.gif'; // <--- ВОТ ТУТ УКАЗАНО ИМЯ ТВОЕЙ ГИФКИ!
         
-        // 1. Создаем ОГРОМНУЮ гифку по центру
-        const mainGif = document.createElement('img');
-        mainGif.src = gifSrc;
-        mainGif.className = 'wave-gif-main';
-        wave.appendChild(mainGif);
-
-        // 2. Раскидываем 50 мелких гифок вокруг
-        for (let i = 0; i < 50; i++) {
-            const smallGif = document.createElement('img');
-            smallGif.src = gifSrc;
-            smallGif.className = 'wave-gif-small';
-            
-            // Рандомный размер от 20 до 70 пикселей
-            const size = Math.floor(Math.random() * 50) + 20;
-            smallGif.style.width = size + 'px';
-            smallGif.style.height = size + 'px';
-            
-            // Рандомная позиция на экране
-            smallGif.style.top = Math.random() * 100 + '%';
-            smallGif.style.left = Math.random() * 100 + '%';
-            
-            // Рандомный поворот и полупрозрачность
-            smallGif.style.transform = `rotate(${Math.random() * 360}deg)`;
-            smallGif.style.opacity = (Math.random() * 0.4 + 0.1).toFixed(2);
-            
-            wave.appendChild(smallGif);
-        }
-
         // При загрузке страницы волна уходит ВВЕРХ
         window.addEventListener('load', () => {
             wave.style.transform = 'translateY(-100%)';
@@ -439,6 +488,7 @@
                 const target = this.getAttribute('href');
                 const isBlank = this.getAttribute('target') === '_blank';
 
+                // Если ссылка не открывает новую вкладку и не является почтой
                 if (target && !target.startsWith('http') && !target.startsWith('mailto') && !target.startsWith('#') && !isBlank && !this.hasAttribute('download')) {
                     e.preventDefault(); 
                     wave.style.transform = 'translateY(0)';
@@ -542,6 +592,7 @@
     </script>
 </body>
 </html>
+
 
 
 
