@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArmяBot | Ultimate system </title>
+  <title>ArmяBot | Ultimate system</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -310,10 +310,12 @@
       gap: 20px;
       width: max-content;
       animation: matrixScroll 35s linear infinite; 
+      will-change: transform; /* ЗАСТАВЛЯЕМ РАБОТАТЬ ВИДЕОКАРТУ */
     }
 
     .matrix-card {
       width: 320px; 
+      flex-shrink: 0; /* ЖЕСТКИЙ ФИКС: запрет на микро-сжатие пикселей */
       position: relative;
       background: #000; 
       border-radius: 20px; 
@@ -653,8 +655,8 @@
     }
 
     @keyframes matrixScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(calc(-50% - 10px)); }
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(calc(-50% - 10px), 0, 0); }
     }
 
     /* === АДАПТИВ === */
@@ -681,7 +683,7 @@
   </nav>
 
   <section class="intro-wrapper">
-    <div class="section-title">Протокол Генезис</div>
+    <div class="section-title">ArmяBot</div>
     <div class="bot-intro-block">
       <div class="bot-text-column">
         <h2 class="massive-text">Автономный <span class="accent-word">ИИ-Ассистент</span>.</h2>
@@ -693,7 +695,7 @@
     </div>
   </section>
 
-  <div class="section-title reveal-elite">Основные Модули</div>
+  <div class="section-title reveal-elite">Обзор возможностей</div>
 
   <ul id="cards">
     <li class="card">
@@ -793,7 +795,7 @@
     </li>
   </ul>
 
-  <div class="section-title reveal-elite" style="margin-top: 100px; margin-bottom: 40px;">Матрица Телеметрии</div>
+  <div class="section-title reveal-elite" style="margin-top: 100px; margin-bottom: 40px;">Полезные функции</div>
   
   <div class="matrix-slider-wrapper reveal-elite">
     <div class="matrix-slider">
@@ -963,4 +965,3 @@
   </script>
 </body>
 </html>
-
