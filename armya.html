@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARMЯBOT | ULTIMATE SYSTEM</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&family=Playfair+Display:ital,wght@1,700&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-dark: #000000;
+      --card-height: clamp(30rem, 45vw, 38rem); 
+      --card-gap: clamp(2rem, 4vw, 4rem);
+      --card-offset: 1.2rem; 
+      --radius-lg: 2.5rem;
+      --radius-sm: 1.5rem;
+      
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --neon-purple: #BC13FE;
+      --neon-glow: rgba(188, 19, 254, 0.4);
+    }
+
+    * { box-sizing: border-box; }
+
+    /* === УБИРАЕМ СКРОЛЛБАРЫ ВО ВСЕМ БРАУЗЕРЕ === */
+    html, body {
+      margin: 0; padding: 0; 
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-dark);
+      scroll-behavior: smooth;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+    }
+    ::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    /* === НАВИГАЦИЯ === */
+    .top-nav {
+      width: 100%; padding: 40px 5%; position: absolute; top: 0; left: 0; z-index: 100;
+      display: flex; justify-content: flex-start;
+    }
+    .back-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 800;
+      color: #888; text-decoration: none; letter-spacing: 2px;
+      display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+    .back-btn:hover { color: var(--neon-purple); transform: translateX(-5px); text-shadow: 0 0 10px var(--neon-glow); }
+
+    /* === ИНТРО === */
+    .intro-wrapper {
+      padding: 150px 5% 50px;
+      width: 100%; max-width: 1400px; margin: 0 auto 50px;
+    }
+    .section-title {
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #666; 
+      text-align: center; letter-spacing: 6px; text-transform: uppercase;
+      margin-bottom: 50px;
+    }
+    .bot-intro-block { display: flex; align-items: center; justify-content: space-between; }
+    .bot-text-column { width: 30%; padding-right: 40px; }
+    .bot-image-column { width: 70%; perspective: 1200px; display: flex; justify-content: flex-end; }
+
+    .massive-text { margin: 0 0 20px 0; font-weight: 800; font-size: clamp(24px, 2.5vw, 40px); line-height: 1.2; letter-spacing: -0.5px; }
+    .sub-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #888; line-height: 1.6; }
+    .accent-word { font-family: 'Playfair Display', serif; font-style: italic; color: #CCC; }
+
+    .main-demo-img {
+      width: 100%; max-width: 950px; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
+      border: 1px solid rgba(188, 19, 254, 0.2); border-radius: 24px;
+      transform-style: preserve-3d;
+      box-shadow: 25px 35px 60px rgba(0,0,0,0.9), 0 0 50px rgba(188, 19, 254, 0.15);
+      transform: rotateY(-20deg) rotateX(5deg);
+    }
+
+    /* === МАГИЯ СКРОЛЛА (STICKY DECK) === */
+    #cards {
+      max-width: 1300px; margin-inline: auto; padding: 0 0 calc(4 * var(--card-gap));
+      list-style: none; display: grid; grid-template-rows: repeat(8, var(--card-height)); gap: var(--card-gap);
+    }
+
+    .card {
+      position: sticky; top: 8vh; height: var(--card-height);
+      padding-top: calc(var(--index) * var(--card-offset));
+      perspective: 1500px; 
+    }
+
+    .card__content {
+      position: relative; isolation: isolate; height: 100%; padding: 40px 50px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--bg); border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg); transform-origin: top center; transform-style: preserve-3d;
+      will-change: transform, filter;
+      animation: scale-card linear forwards; animation-timeline: view();
+      animation-range: exit-crossing 0% exit-crossing 100%;
+      overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    }
+
+    .card:nth-child(1) { --index: 1; --bg: #050505; --shadow: rgba(188, 19, 254, 0.3); }
+    .card:nth-child(2) { --index: 2; --bg: #0a0a0a; --shadow: rgba(0, 0, 0, 0.8); border-color: rgba(188, 19, 254, 0.2); }
+    .card:nth-child(3) { --index: 3; --bg: #050505; --shadow: rgba(188, 19, 254, 0.3); }
+    .card:nth-child(4) { --index: 4; --bg: #0a0a0a; --shadow: rgba(0, 0, 0, 0.8); border-color: rgba(188, 19, 254, 0.2); }
+    .card:nth-child(5) { --index: 5; --bg: #050505; --shadow: rgba(188, 19, 254, 0.3); }
+    .card:nth-child(6) { --index: 6; --bg: #0a0a0a; --shadow: rgba(0, 0, 0, 0.8); border-color: rgba(188, 19, 254, 0.2); }
+    .card:nth-child(7) { --index: 7; --bg: #050505; --shadow: rgba(188, 19, 254, 0.3); }
+    .card:nth-child(8) { --index: 8; --bg: #0a0a0a; --shadow: rgba(0, 0, 0, 0.8); border-color: rgba(188, 19, 254, 0.2); }
+
+    .card-col-text { width: 30%; padding-right: 30px; z-index: 2; display: flex; flex-direction: column; }
+    .card-col-image { width: 65%; perspective: 1200px; display: flex; justify-content: flex-end; z-index: 2; }
+    .card-icon { font-size: 36px; color: var(--neon-purple); margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-glow); }
+    .card h2 { margin: 0 0 15px 0; font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
+    .card p { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: clamp(0.9rem, 1vw, 1.1rem); line-height: 1.6; color: var(--text-muted); }
+
+    .card-demo-img {
+      width: 100%; max-width: 800px; height: auto; aspect-ratio: 16/9; object-fit: cover;
+      border-radius: 20px; border: 1px solid rgba(188, 19, 254, 0.2);
+      transform: rotateY(-15deg) rotateX(5deg); box-shadow: 15px 20px 40px rgba(0,0,0,0.8);
+    }
+    .number { position: absolute; top: -2rem; right: 2rem; font-family: "JetBrains Mono", monospace; font-size: clamp(8rem, 15vw, 12rem); font-weight: 800; color: rgba(255, 255, 255, 0.03); z-index: 1; pointer-events: none; }
+
+    /* === СТИЛИ БЕГУЩЕЙ СТРОКИ (TELEMETRY MATRIX) === */
+    .matrix-slider-wrapper {
+      width: 100%; max-width: 100vw; overflow: hidden; margin-bottom: 120px;
+      position: relative;
+    }
+    .matrix-slider-wrapper::before, .matrix-slider-wrapper::after {
+      content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 3; pointer-events: none;
+    }
+    .matrix-slider-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-dark), transparent); }
+    .matrix-slider-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-dark), transparent); }
+
+    .matrix-slider {
+      display: flex; gap: 20px; width: max-content;
+      animation: matrixScroll 35s linear infinite; 
+    }
+
+    .matrix-card {
+      width: 320px; 
+      position: relative;
+      background: #000; 
+      border-radius: 20px; 
+      padding: 35px 30px;
+      display: flex; flex-direction: column; justify-content: flex-start;
+      overflow: hidden; 
+      box-shadow: none; 
+      border: none; 
+    }
+
+    .matrix-card::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: conic-gradient(transparent 0%, transparent 75%, var(--neon-purple) 100%);
+      animation: borderSpin 4s linear infinite; z-index: 0;
+    }
+
+    .matrix-card::after {
+      content: ''; position: absolute; inset: 2px; 
+      background: #0a0a0a; border-radius: 18px; z-index: 1;
+    }
+
+    .matrix-card > * { position: relative; z-index: 2; }
+    .matrix-icon { font-size: 30px; color: var(--neon-purple); margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-glow); }
+    .matrix-title { font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0 0 10px 0; letter-spacing: -0.5px; }
+    .matrix-desc { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #888; margin: 0; line-height: 1.6; }
+
+    /* Рассинхрон линий для красоты */
+    .matrix-card:nth-child(8n + 1)::before { animation-delay: 0s; }
+    .matrix-card:nth-child(8n + 2)::before { animation-delay: -1.7s; }
+    .matrix-card:nth-child(8n + 3)::before { animation-delay: -0.5s; }
+    .matrix-card:nth-child(8n + 4)::before { animation-delay: -3.2s; }
+    .matrix-card:nth-child(8n + 5)::before { animation-delay: -1.1s; }
+    .matrix-card:nth-child(8n + 6)::before { animation-delay: -2.4s; }
+    .matrix-card:nth-child(8n + 7)::before { animation-delay: -0.8s; }
+    .matrix-card:nth-child(8n + 8)::before { animation-delay: -2.9s; }
+
+    /* === ТЕЛЕГРАМ ЧАТ === */
+    .tg-chat-container {
+      width: 100%; max-width: 800px; margin: 0 auto 100px; background: #0e1621; border: 1px solid rgba(188, 19, 254, 0.2); border-radius: 20px; overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 30px rgba(188, 19, 254, 0.05); display: flex; flex-direction: column;
+    }
+    .tg-chat-header { background: #17212b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #101921; }
+    .tg-header-info { display: flex; align-items: center; gap: 15px; }
+    .tg-avatar-wrap { position: relative; width: 42px; height: 42px; }
+    .tg-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .tg-online-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #00ff66; border: 2px solid #17212b; border-radius: 50%; }
+    .tg-name { font-size: 16px; font-weight: 600; color: #fff; }
+    .tg-status { font-size: 13px; color: #7f91a4; }
+    
+    .tg-chat-messages { 
+      height: 450px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background-color: #0e1621;
+      scrollbar-width: none; -ms-overflow-style: none; /* Убираем скроллбар в чате */
+    }
+    .tg-chat-messages::-webkit-scrollbar { display: none; }
+
+    .tg-message { max-width: 75%; padding: 8px 12px 6px; position: relative; font-size: 15px; line-height: 1.4; border-radius: 12px; }
+    .tg-bot-message { align-self: flex-start; background: #182533; color: #fff; border-radius: 12px 12px 12px 4px; }
+    .tg-user-message { align-self: flex-end; background: #2b5278; color: #fff; border-radius: 12px 12px 4px 12px; }
+    .tg-msg-time { font-size: 11px; color: rgba(255,255,255,0.4); float: right; margin: 6px 0 -4px 10px; }
+    .tg-chat-input-area { background: #17212b; padding: 12px 20px; display: flex; gap: 15px; align-items: center; }
+    .tg-input { flex: 1; background: #242f3d; border: none; color: #fff; border-radius: 12px; padding: 12px 15px; font-size: 15px; outline: none; }
+    .tg-send-btn { background: transparent; border: none; color: #5288c1; font-size: 22px; cursor: pointer; }
+
+    /* === АНИМАЦИИ === */
+    @keyframes scale-card { to { transform: scale(0.8) translateY(-5vh) rotateX(-15deg); filter: brightness(0.4); border-radius: var(--radius-sm); box-shadow: 0 3rem 5rem -1rem var(--shadow); } }
+    @keyframes borderSpin { 100% { transform: rotate(360deg); } }
+    @keyframes matrixScroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 10px)); } }
+
+    /* === АДАПТИВ === */
+    @media (max-width: 992px) {
+      .bot-intro-block { flex-direction: column; text-align: left; }
+      .bot-text-column, .bot-image-column { width: 100%; padding: 0; }
+      .bot-image-column { margin-top: 40px; justify-content: center; }
+      .main-demo-img { transform: none !important; }
+      .card__content { flex-direction: column; padding: 30px; }
+      .card-col-text, .card-col-image { width: 100%; padding: 0; }
+      .card-col-image { margin-top: 30px; justify-content: center; }
+      .card-demo-img { transform: none !important; }
+      .number { font-size: 6rem; top: 0; right: 1rem; }
+      .matrix-slider-wrapper::before, .matrix-slider-wrapper::after { width: 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="top-nav">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> ВЕРНУТЬСЯ В ХАБ</a>
+  </nav>
+
+  <section class="intro-wrapper">
+    <div class="section-title">Протокол Генезис</div>
+    <div class="bot-intro-block">
+      <div class="bot-text-column">
+        <h2 class="massive-text">Многофункциональный <span class="accent-word">ИИ-Ассистент</span>.</h2>
+        <p class="sub-text">От локального скрипта до автономной нейро-сущности. Полный контроль и генерация данных прямо в твоем интерфейсе.</p>
+      </div>
+      <div class="bot-image-column">
+        <img src="assets/arm.png" class="main-demo-img" alt="ArmяBot Dashboard">
+      </div>
+    </div>
+  </section>
+
+  <div class="section-title">Основные Модули</div>
+
+  <ul id="cards">
+    <li class="card">
+      <div class="card__content">
+        <span class="number">01</span>
+        <div class="card-col-text">
+          <i class="fas fa-bolt card-icon"></i>
+          <h2>Режим FLASH</h2>
+          <p>Быстрые ответы. Оптимизированный протокол для мгновенной генерации текста и отклика без задержек.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/gflesh.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">02</span>
+        <div class="card-col-text">
+          <i class="fas fa-brain card-icon"></i>
+          <h2>Pro-Ассистент</h2>
+          <p>Сложные задачи и код. Полноценное ядро для написания, рефакторинга и глубокой аналитики алгоритмов.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/gpro.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">03</span>
+        <div class="card-col-text">
+          <i class="fas fa-film card-icon"></i>
+          <h2>Анализ GIF</h2>
+          <p>Понимание анимаций. Встроенное машинное зрение для покадрового разбора видеофрагментов и GIF-файлов.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/gifki.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">04</span>
+        <div class="card-col-text">
+          <i class="fas fa-eye card-icon"></i>
+          <h2>Умное зрение</h2>
+          <p>Фото и альбомы. Распознавание объектов, чтение текста с изображений и комплексный анализ медиафайлов.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/photo.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">05</span>
+        <div class="card-col-text">
+          <i class="fas fa-headphones card-icon"></i>
+          <h2>Слух и ГС</h2>
+          <p>Транскрибация голосовых сообщений. Бот слушает аудио и переводит его в читаемый текст с пунктуацией.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/voice.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">06</span>
+        <div class="card-col-text">
+          <i class="fas fa-microphone-alt card-icon"></i>
+          <h2>Синтез речи</h2>
+          <p>Команда /войс. Превращение любого текста в реалистичную голосовую аудиодорожку высокого качества.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/vc.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">07</span>
+        <div class="card-col-text">
+          <i class="fas fa-paint-brush card-icon"></i>
+          <h2>Генератор /img</h2>
+          <p>Создание картинок. Интегрированная нейросеть для генерации потрясающих артов по текстовому запросу.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/genphoto.png" class="card-demo-img"></div>
+      </div>
+    </li>
+
+    <li class="card">
+      <div class="card__content">
+        <span class="number">08</span>
+        <div class="card-col-text">
+          <i class="fas fa-fire card-icon"></i>
+          <h2>Режим Арама</h2>
+          <p>Секретная личность. Специальный протокол со скрытым функционалом и особым паттерном поведения.</p>
+        </div>
+        <div class="card-col-image"><img src="assets/armyan.png" class="card-demo-img"></div>
+      </div>
+    </li>
+  </ul>
+
+  <div class="section-title" style="margin-top: 100px; margin-bottom: 40px;">Матрица Телеметрии</div>
+  
+  <div class="matrix-slider-wrapper">
+    <div class="matrix-slider">
+      
+      <div class="matrix-card">
+        <i class="fas fa-bolt matrix-icon"></i>
+        <h3 class="matrix-title">Режим FLASH</h3>
+        <p class="matrix-desc">Молниеносная генерация ответов. Отклик системы занимает менее 12мс.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-brain matrix-icon"></i>
+        <h3 class="matrix-title">Pro-Ядро</h3>
+        <p class="matrix-desc">Глубокая аналитика, решение сложных текстовых и математических задач.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-film matrix-icon"></i>
+        <h3 class="matrix-title">Анализ GIF</h3>
+        <p class="matrix-desc">Покадровый разбор анимаций и видеофрагментов встроенным зрением.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-eye matrix-icon"></i>
+        <h3 class="matrix-title">Модуль Зрения</h3>
+        <p class="matrix-desc">Распознавание объектов и чтение текста прямо с загруженных изображений.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-headphones matrix-icon"></i>
+        <h3 class="matrix-title">Транскрибация</h3>
+        <p class="matrix-desc">Перевод аудиосообщений в текст с идеальным соблюдением пунктуации.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-microphone-alt matrix-icon"></i>
+        <h3 class="matrix-title">Синтез Речи</h3>
+        <p class="matrix-desc">Озвучка текстовых команд реалистичными голосами через команду /войс.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-paint-brush matrix-icon"></i>
+        <h3 class="matrix-title">Render /img</h3>
+        <p class="matrix-desc">Интегрированный генератор графики по любым текстовым промптам.</p>
+      </div>
+
+      <div class="matrix-card">
+        <i class="fas fa-fire matrix-icon"></i>
+        <h3 class="matrix-title">Режим АРАМА</h3>
+        <p class="matrix-desc">Скрытый протокол. Вай мэ, брат, лучший шашлык и самый черный Мерседес!</p>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section-title">Песочница ИИ</div>
+  <div style="text-align: center; margin-bottom: 50px;">
+    <h2 class="massive-text">Хотите <span class="accent-word">протестировать?</span></h2>
+    <p class="sub-text">Лимит запросов: 10/10 на IP.</p>
+  </div>
+
+  <div class="tg-chat-container">
+    <div class="tg-chat-header">
+      <div class="tg-header-info">
+        <div class="tg-avatar-wrap">
+          <img src="assets/armavatar.png" class="tg-avatar">
+          <div class="tg-online-dot"></div>
+        </div>
+        <div>
+          <div class="tg-name">ArmяBot <i class="fas fa-check-circle" style="color: var(--neon-purple); font-size: 13px;"></i></div>
+          <div class="tg-status">бот</div>
+        </div>
+      </div>
+    </div>
+    <div class="tg-chat-messages" id="tg-chat-messages">
+      <div class="tg-message tg-bot-message">Система инициализирована. Я использую модель gemini-3.0-flash-preview. Задавай вопросы.</div>
+    </div>
+    <div class="tg-chat-input-area">
+      <input type="text" id="tg-chat-input" class="tg-input" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
+      <button class="tg-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <script>
+    const WORKER_URL = 'https://white-sun-a521.imdanokcoc.workers.dev';
+    async function sendMessage() {
+      const input = document.getElementById('tg-chat-input');
+      const text = input.value.trim();
+      if(!text) return;
+      addMsg(text, 'tg-user-message'); input.value = '';
+      try {
+        const res = await fetch(WORKER_URL, {method:'POST', body:JSON.stringify({message:text})});
+        const data = await res.json();
+        addMsg(data.reply, 'tg-bot-message');
+      } catch(e) { addMsg("🔌 Сбой подключения к нейросети. 🖤", 'tg-bot-message'); }
+    }
+    
+    function addMsg(text, cls) {
+      const formatted = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+      document.getElementById('tg-chat-messages').insertAdjacentHTML('beforeend', `<div class="tg-message ${cls}">${formatted}</div>`);
+      document.getElementById('tg-chat-messages').scrollTop = document.getElementById('tg-chat-messages').scrollHeight;
+    }
+
+    // === ЛОГИКА БЕСКОНЕЧНОГО СЛАЙДЕРА ===
+    document.addEventListener('DOMContentLoaded', () => {
+      const slider = document.querySelector('.matrix-slider');
+      if (slider) {
+        // Берем все 8 карточек и копируем их один раз для эффекта ленты
+        const cards = Array.from(slider.children);
+        cards.forEach(card => {
+          const clone = card.cloneNode(true);
+          slider.appendChild(clone);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
