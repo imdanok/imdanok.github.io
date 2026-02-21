@@ -7,10 +7,11 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;800;900&family=Playfair+Display:ital,wght@1,700&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&family=Playfair+Display:ital,wght@1,700&family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   
   <style>
+    /* === ПЕРЕМЕННЫЕ === */
     :root {
       --bg-dark: #000000;
       --card-height: clamp(30rem, 45vw, 38rem); 
@@ -25,22 +26,29 @@
       --neon-glow: rgba(188, 19, 254, 0.4);
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    /* === УБИРАЕМ СКРОЛЛБАРЫ ВО ВСЕМ БРАУЗЕРЕ === */
+    /* === БАЗОВЫЕ НАСТРОЙКИ И СКРОЛЛБАРЫ === */
     html, body {
-      margin: 0; padding: 0; 
+      margin: 0;
+      padding: 0; 
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
+      font-weight: 400; /* Восстановлен нормальный вес шрифта */
       color: var(--text-main);
       background-color: var(--bg-dark);
       scroll-behavior: smooth;
-      scrollbar-width: none; 
-      -ms-overflow-style: none; 
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
     }
-    ::-webkit-scrollbar { display: none; } 
 
-    /* === ЗАЩИТА ИЗОБРАЖЕНИЙ (БЕЗ ПКМ И ПЕРЕТАСКИВАНИЙ) === */
+    ::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    } 
+
+    /* === ЗАЩИТА ИЗОБРАЖЕНИЙ === */
     img {
       -webkit-user-drag: none;
       -khtml-user-drag: none;
@@ -48,43 +56,108 @@
       -o-user-drag: none;
       user-drag: none;
       user-select: none;
-      pointer-events: none; /* Блокирует контекстное меню и клики */
+      pointer-events: none; 
     }
 
     /* === НАВИГАЦИЯ === */
     .top-nav {
-      width: 100%; padding: 40px 5%; position: absolute; top: 0; left: 0; z-index: 100;
-      display: flex; justify-content: flex-start;
+      width: 100%;
+      padding: 40px 5%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-start;
     }
+
     .back-btn {
-      font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 800;
-      color: #888; text-decoration: none; letter-spacing: 2px;
-      display: flex; align-items: center; gap: 10px; transition: all 0.3s ease;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 800;
+      color: #888;
+      text-decoration: none;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
       text-transform: uppercase;
     }
-    .back-btn:hover { color: var(--neon-purple); transform: translateX(-5px); text-shadow: 0 0 10px var(--neon-glow); }
+
+    .back-btn:hover {
+      color: var(--neon-purple);
+      transform: translateX(-5px);
+      text-shadow: 0 0 10px var(--neon-glow);
+    }
 
     /* === ИНТРО === */
     .intro-wrapper {
       padding: 150px 5% 50px;
-      width: 100%; max-width: 1400px; margin: 0 auto 50px;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto 50px;
     }
+
     .section-title {
-      font-family: 'JetBrains Mono', monospace; font-size: 16px; color: #666; 
-      text-align: center; letter-spacing: 6px; text-transform: uppercase;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 16px;
+      font-weight: 600;
+      color: #666; 
+      text-align: center;
+      letter-spacing: 6px;
+      text-transform: uppercase;
       margin-bottom: 50px;
     }
-    .bot-intro-block { display: flex; align-items: center; justify-content: space-between; }
-    .bot-text-column { width: 30%; padding-right: 40px; }
-    .bot-image-column { width: 70%; perspective: 1200px; display: flex; justify-content: flex-end; }
 
-    .massive-text { margin: 0 0 20px 0; font-weight: 800; font-size: clamp(24px, 2.5vw, 40px); line-height: 1.2; letter-spacing: -0.5px; }
-    .sub-text { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #888; line-height: 1.6; }
-    .accent-word { font-family: 'Playfair Display', serif; font-style: italic; color: #CCC; }
+    .bot-intro-block {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .bot-text-column {
+      width: 30%;
+      padding-right: 40px;
+    }
+
+    .bot-image-column {
+      width: 70%;
+      perspective: 1200px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .massive-text {
+      margin: 0 0 20px 0;
+      font-weight: 800;
+      font-size: clamp(24px, 2.5vw, 40px);
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+    }
+
+    .sub-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 400;
+      color: #888;
+      line-height: 1.6;
+    }
+
+    .accent-word {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: #CCC;
+    }
 
     .main-demo-img {
-      width: 100%; max-width: 950px; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
-      border: 1px solid rgba(188, 19, 254, 0.2); border-radius: 24px;
+      width: 100%;
+      max-width: 950px;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border: 1px solid rgba(188, 19, 254, 0.2);
+      border-radius: 24px;
       transform-style: preserve-3d;
       box-shadow: 25px 35px 60px rgba(0,0,0,0.9), 0 0 50px rgba(188, 19, 254, 0.15);
       transform: rotateY(-20deg) rotateX(5deg);
@@ -92,25 +165,42 @@
 
     /* === МАГИЯ СКРОЛЛА (STICKY DECK) === */
     #cards {
-      max-width: 1300px; margin-inline: auto; padding: 0 0 calc(4 * var(--card-gap));
-      list-style: none; display: grid; grid-template-rows: repeat(8, var(--card-height)); gap: var(--card-gap);
+      max-width: 1300px;
+      margin-inline: auto;
+      padding: 0 0 calc(4 * var(--card-gap));
+      list-style: none;
+      display: grid;
+      grid-template-rows: repeat(8, var(--card-height));
+      gap: var(--card-gap);
     }
 
     .card {
-      position: sticky; top: 8vh; height: var(--card-height);
+      position: sticky;
+      top: 8vh;
+      height: var(--card-height);
       padding-top: calc(var(--index) * var(--card-offset));
       perspective: 1500px; 
     }
 
     .card__content {
-      position: relative; isolation: isolate; height: 100%; padding: 40px 50px;
-      display: flex; justify-content: space-between; align-items: center;
-      background: var(--bg); border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: var(--radius-lg); transform-origin: top center; transform-style: preserve-3d;
+      position: relative;
+      isolation: isolate;
+      height: 100%;
+      padding: 40px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-lg);
+      transform-origin: top center;
+      transform-style: preserve-3d;
       will-change: transform, filter;
-      animation: scale-card linear forwards; animation-timeline: view();
+      animation: scale-card linear forwards;
+      animation-timeline: view();
       animation-range: exit-crossing 0% exit-crossing 100%;
-      overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.9);
     }
 
     .card:nth-child(1) { --index: 1; --bg: #050505; --shadow: rgba(188, 19, 254, 0.3); }
@@ -122,32 +212,103 @@
     .card:nth-child(7) { --index: 7; --bg: #050505; --shadow: rgba(188, 19, 254, 0.3); }
     .card:nth-child(8) { --index: 8; --bg: #0a0a0a; --shadow: rgba(0, 0, 0, 0.8); border-color: rgba(188, 19, 254, 0.2); }
 
-    .card-col-text { width: 30%; padding-right: 30px; z-index: 2; display: flex; flex-direction: column; }
-    .card-col-image { width: 65%; perspective: 1200px; display: flex; justify-content: flex-end; z-index: 2; }
-    .card-icon { font-size: 36px; color: var(--neon-purple); margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-glow); }
-    .card h2 { margin: 0 0 15px 0; font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
-    .card p { margin: 0; font-family: 'JetBrains Mono', monospace; font-size: clamp(0.9rem, 1vw, 1.1rem); line-height: 1.6; color: var(--text-muted); }
+    .card-col-text {
+      width: 30%;
+      padding-right: 30px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-col-image {
+      width: 65%;
+      perspective: 1200px;
+      display: flex;
+      justify-content: flex-end;
+      z-index: 2;
+    }
+
+    .card-icon {
+      font-size: 36px;
+      color: var(--neon-purple);
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    .card h2 {
+      margin: 0 0 15px 0;
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      text-transform: uppercase;
+    }
+
+    .card p {
+      margin: 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.9rem, 1vw, 1.1rem);
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
 
     .card-demo-img {
-      width: 100%; max-width: 800px; height: auto; aspect-ratio: 16/9; object-fit: cover;
-      border-radius: 20px; border: 1px solid rgba(188, 19, 254, 0.2);
-      transform: rotateY(-15deg) rotateX(5deg); box-shadow: 15px 20px 40px rgba(0,0,0,0.8);
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid rgba(188, 19, 254, 0.2);
+      transform: rotateY(-15deg) rotateX(5deg);
+      box-shadow: 15px 20px 40px rgba(0,0,0,0.8);
     }
-    .number { position: absolute; top: -2rem; right: 2rem; font-family: "JetBrains Mono", monospace; font-size: clamp(8rem, 15vw, 12rem); font-weight: 800; color: rgba(255, 255, 255, 0.03); z-index: 1; pointer-events: none; }
 
-    /* === СТИЛИ БЕГУЩЕЙ СТРОКИ (TELEMETRY MATRIX) === */
+    .number {
+      position: absolute;
+      top: -2rem;
+      right: 2rem;
+      font-family: "JetBrains Mono", monospace;
+      font-size: clamp(8rem, 15vw, 12rem);
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.03);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* === СТИЛИ БЕГУЩЕЙ СТРОКИ === */
     .matrix-slider-wrapper {
-      width: 100%; max-width: 100vw; overflow: hidden; margin-bottom: 120px;
+      width: 100%;
+      max-width: 100vw;
+      overflow: hidden;
+      margin-bottom: 120px;
       position: relative;
     }
-    .matrix-slider-wrapper::before, .matrix-slider-wrapper::after {
-      content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 3; pointer-events: none;
+
+    .matrix-slider-wrapper::before, 
+    .matrix-slider-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      width: 150px;
+      height: 100%;
+      z-index: 3;
+      pointer-events: none;
     }
-    .matrix-slider-wrapper::before { left: 0; background: linear-gradient(to right, var(--bg-dark), transparent); }
-    .matrix-slider-wrapper::after { right: 0; background: linear-gradient(to left, var(--bg-dark), transparent); }
+
+    .matrix-slider-wrapper::before {
+      left: 0;
+      background: linear-gradient(to right, var(--bg-dark), transparent);
+    }
+
+    .matrix-slider-wrapper::after {
+      right: 0;
+      background: linear-gradient(to left, var(--bg-dark), transparent);
+    }
 
     .matrix-slider {
-      display: flex; gap: 20px; width: max-content;
+      display: flex;
+      gap: 20px;
+      width: max-content;
       animation: matrixScroll 35s linear infinite; 
     }
 
@@ -157,29 +318,64 @@
       background: #000; 
       border-radius: 20px; 
       padding: 35px 30px;
-      display: flex; flex-direction: column; justify-content: flex-start;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
       overflow: hidden; 
       box-shadow: none; 
       border: none; 
     }
 
     .matrix-card::before {
-      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
       background: conic-gradient(transparent 0%, transparent 75%, var(--neon-purple) 100%);
-      animation: borderSpin 4s linear infinite; z-index: 0;
+      animation: borderSpin 4s linear infinite;
+      z-index: 0;
     }
 
     .matrix-card::after {
-      content: ''; position: absolute; inset: 2px; 
-      background: #0a0a0a; border-radius: 18px; z-index: 1;
+      content: '';
+      position: absolute;
+      inset: 2px; 
+      background: #0a0a0a;
+      border-radius: 18px;
+      z-index: 1;
     }
 
-    .matrix-card > * { position: relative; z-index: 2; }
-    .matrix-icon { font-size: 30px; color: var(--neon-purple); margin-bottom: 20px; text-shadow: 0 0 15px var(--neon-glow); }
-    .matrix-title { font-size: 18px; font-weight: 800; color: #fff; text-transform: uppercase; margin: 0 0 10px 0; letter-spacing: -0.5px; }
-    .matrix-desc { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #888; margin: 0; line-height: 1.6; }
+    .matrix-card > * {
+      position: relative;
+      z-index: 2;
+    }
 
-    /* Рассинхрон линий для красоты */
+    .matrix-icon {
+      font-size: 30px;
+      color: var(--neon-purple);
+      margin-bottom: 20px;
+      text-shadow: 0 0 15px var(--neon-glow);
+    }
+
+    .matrix-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      text-transform: uppercase;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .matrix-desc {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #888;
+      margin: 0;
+      line-height: 1.6;
+    }
+
     .matrix-card:nth-child(8n + 1)::before { animation-delay: 0s; }
     .matrix-card:nth-child(8n + 2)::before { animation-delay: -1.7s; }
     .matrix-card:nth-child(8n + 3)::before { animation-delay: -0.5s; }
@@ -191,35 +387,275 @@
 
     /* === ТЕЛЕГРАМ ЧАТ === */
     .tg-chat-container {
-      width: 100%; max-width: 800px; margin: 0 auto 100px; background: #0e1621; border: 1px solid rgba(188, 19, 254, 0.2); border-radius: 20px; overflow: hidden;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 30px rgba(188, 19, 254, 0.05); display: flex; flex-direction: column;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto 100px;
+      background: #0e1621;
+      border: 1px solid rgba(188, 19, 254, 0.2);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.9), 0 0 30px rgba(188, 19, 254, 0.05);
+      display: flex;
+      flex-direction: column;
     }
-    .tg-chat-header { background: #17212b; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #101921; }
-    .tg-header-info { display: flex; align-items: center; gap: 15px; }
-    .tg-avatar-wrap { position: relative; width: 42px; height: 42px; }
-    .tg-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .tg-online-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: #00ff66; border: 2px solid #17212b; border-radius: 50%; }
-    .tg-name { font-size: 16px; font-weight: 600; color: #fff; }
-    .tg-status { font-size: 13px; color: #7f91a4; }
+
+    .tg-chat-header {
+      background: #17212b;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #101921;
+    }
+
+    .tg-header-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .tg-avatar-wrap {
+      position: relative;
+      width: 42px;
+      height: 42px;
+    }
+
+    .tg-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .tg-online-dot {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      background: #00ff66;
+      border: 2px solid #17212b;
+      border-radius: 50%;
+    }
+
+    .tg-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+    }
+
+    .tg-status {
+      font-size: 13px;
+      color: #7f91a4;
+    }
     
     .tg-chat-messages { 
-      height: 450px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background-color: #0e1621;
-      scrollbar-width: none; -ms-overflow-style: none;
+      height: 450px;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background-color: #0e1621;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
-    .tg-chat-messages::-webkit-scrollbar { display: none; }
 
-    .tg-message { max-width: 75%; padding: 8px 12px 6px; position: relative; font-size: 15px; line-height: 1.4; border-radius: 12px; }
-    .tg-bot-message { align-self: flex-start; background: #182533; color: #fff; border-radius: 12px 12px 12px 4px; }
-    .tg-user-message { align-self: flex-end; background: #2b5278; color: #fff; border-radius: 12px 12px 4px 12px; }
-    .tg-msg-time { font-size: 11px; color: rgba(255,255,255,0.4); float: right; margin: 6px 0 -4px 10px; }
-    .tg-chat-input-area { background: #17212b; padding: 12px 20px; display: flex; gap: 15px; align-items: center; }
-    .tg-input { flex: 1; background: #242f3d; border: none; color: #fff; border-radius: 12px; padding: 12px 15px; font-size: 15px; outline: none; }
-    .tg-send-btn { background: transparent; border: none; color: #5288c1; font-size: 22px; cursor: pointer; }
+    .tg-chat-messages::-webkit-scrollbar {
+      display: none;
+    }
 
-    /* === АНИМАЦИИ === */
-    @keyframes scale-card { to { transform: scale(0.8) translateY(-5vh) rotateX(-15deg); filter: brightness(0.4); border-radius: var(--radius-sm); box-shadow: 0 3rem 5rem -1rem var(--shadow); } }
-    @keyframes borderSpin { 100% { transform: rotate(360deg); } }
-    @keyframes matrixScroll { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-50% - 10px)); } }
+    .tg-message {
+      max-width: 75%;
+      padding: 8px 12px 6px;
+      position: relative;
+      font-size: 15px;
+      line-height: 1.4;
+      border-radius: 12px;
+    }
+
+    .tg-bot-message {
+      align-self: flex-start;
+      background: #182533;
+      color: #fff;
+      border-radius: 12px 12px 12px 4px;
+    }
+
+    .tg-user-message {
+      align-self: flex-end;
+      background: #2b5278;
+      color: #fff;
+      border-radius: 12px 12px 4px 12px;
+    }
+
+    .tg-msg-time {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+      float: right;
+      margin: 6px 0 -4px 10px;
+    }
+
+    .tg-chat-input-area {
+      background: #17212b;
+      padding: 12px 20px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .tg-input {
+      flex: 1;
+      background: #242f3d;
+      border: none;
+      color: #fff;
+      border-radius: 12px;
+      padding: 12px 15px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .tg-send-btn {
+      background: transparent;
+      border: none;
+      color: #5288c1;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    /* === СТИЛИ ФУТЕРА === */
+    .system-footer {
+      width: 100%;
+      border-top: 1px solid rgba(255, 255, 255, 0.2); 
+      padding: 30px 5%;
+      background: #000;
+      margin-top: 80px; 
+    }
+
+    .footer-content {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      flex-wrap: wrap;
+    }
+
+    .f-copy {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .f-link {
+      color: #bbb;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .f-link:hover {
+      color: #fff;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .f-email-block {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .f-email-block:hover {
+      opacity: 0.8;
+    }
+
+    .f-email-icon {
+      width: 45px;
+      height: 45px;
+      border: 1px solid rgba(255,255,255,0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .f-email-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .f-email-title {
+      color: #fff;
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .f-email-sub {
+      color: #888;
+      font-size: 11px;
+    }
+
+    /* === ЭЛИТНЫЕ АНИМАЦИИ (FIGMA STYLE) === */
+    @keyframes fadeUpElite {
+      from { opacity: 0; transform: translateY(40px) scale(0.98); filter: blur(10px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    .top-nav { animation: fadeUpElite 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.1s; }
+    .intro-wrapper .section-title { animation: fadeUpElite 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.2s; }
+    .bot-text-column .massive-text { animation: fadeUpElite 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.4s; }
+    .bot-text-column .sub-text { animation: fadeUpElite 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.5s; }
+    .bot-image-column { animation: fadeUpElite 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.7s; }
+
+    .reveal-elite {
+      opacity: 0;
+      transform: translateY(50px);
+      filter: blur(8px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform, filter;
+    }
+
+    .reveal-elite.active {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* === АНИМАЦИИ КЛЮЧЕЙ === */
+    @keyframes scale-card {
+      to {
+        transform: scale(0.8) translateY(-5vh) rotateX(-15deg);
+        filter: brightness(0.4);
+        border-radius: var(--radius-sm);
+        box-shadow: 0 3rem 5rem -1rem var(--shadow);
+      }
+    }
+
+    @keyframes borderSpin {
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes matrixScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(calc(-50% - 10px)); }
+    }
 
     /* === АДАПТИВ === */
     @media (max-width: 992px) {
@@ -233,6 +669,8 @@
       .card-demo-img { transform: none !important; }
       .number { font-size: 6rem; top: 0; right: 1rem; }
       .matrix-slider-wrapper::before, .matrix-slider-wrapper::after { width: 40px; }
+      .footer-content { flex-direction: column; align-items: flex-start; gap: 30px; }
+      .footer-right { flex-direction: column; align-items: flex-start; width: 100%; gap: 15px; }
     }
   </style>
 </head>
@@ -255,7 +693,7 @@
     </div>
   </section>
 
-  <div class="section-title">Основные Модули</div>
+  <div class="section-title reveal-elite">Основные Модули</div>
 
   <ul id="cards">
     <li class="card">
@@ -355,15 +793,15 @@
     </li>
   </ul>
 
-  <div class="section-title" style="margin-top: 100px; margin-bottom: 40px;">Матрица Телеметрии</div>
+  <div class="section-title reveal-elite" style="margin-top: 100px; margin-bottom: 40px;">Матрица Телеметрии</div>
   
-  <div class="matrix-slider-wrapper">
+  <div class="matrix-slider-wrapper reveal-elite">
     <div class="matrix-slider">
       
       <div class="matrix-card">
         <i class="fas fa-bolt matrix-icon"></i>
         <h3 class="matrix-title">Режим FLASH</h3>
-        <p class="matrix-desc">На базе 3.0 Flash Preview. Молниеносная генерация, отклик системы < 12мс.</p>
+        <p class="matrix-desc">На базе 3.0 Flash Preview. Молниеносная генерация, отклик системы &lt; 12мс.</p>
       </div>
 
       <div class="matrix-card">
@@ -411,46 +849,85 @@
     </div>
   </div>
 
-  <div class="section-title">Песочница ИИ</div>
-  <div style="text-align: center; margin-bottom: 50px;">
+  <div class="section-title reveal-elite">Песочница ИИ</div>
+  <div class="reveal-elite" style="text-align: center; margin-bottom: 50px;">
     <h2 class="massive-text">Хотите протестировать?</h2>
     <p class="sub-text">Лимит запросов: 10/10 на IP.</p>
   </div>
 
-  <div class="tg-chat-container">
+  <div class="tg-chat-container reveal-elite">
     <div class="tg-chat-header">
       <div class="tg-header-info">
         <div class="tg-avatar-wrap">
           <img src="assets/armavatar.png" class="tg-avatar">
           <div class="tg-online-dot"></div>
         </div>
-        <div>
-          <div class="tg-name">ArmяBot <i class="fas fa-check-circle" style="color: var(--neon-purple); font-size: 13px;"></i></div>
-          <div class="tg-status">бот</div>
+        <div class="tg-name">
+          ArmяBot <i class="fas fa-check-circle" style="color: var(--neon-purple); font-size: 14px; margin-left: 5px;"></i>
+          <div class="tg-status" style="margin-left: 10px; font-weight: 400;">бот</div>
         </div>
       </div>
     </div>
+    
     <div class="tg-chat-messages" id="tg-chat-messages">
-      <div class="tg-message tg-bot-message">Система инициализирована. Я использую модель gemini-3.0-flash-preview. Задавай вопросы.</div>
+      <div class="tg-message tg-bot-message">
+        Система инициализирована. Я использую модель gemini-3.0-flash-preview. Задавай вопросы 👾🔮
+      </div>
     </div>
+    
     <div class="tg-chat-input-area">
       <input type="text" id="tg-chat-input" class="tg-input" placeholder="Написать сообщение..." onkeypress="if(event.key==='Enter')sendMessage()">
       <button class="tg-send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 
+  <footer class="system-footer reveal-elite">
+    <div class="footer-content">
+      <div class="footer-left">
+        <span class="f-copy">© 2024–2026 Im_Danokツ</span>
+        <a href="#" class="f-link">Discord Community</a>
+        <a href="#" class="f-link">Steam Profile</a>
+        <a href="#" class="f-link">FunPay Shop</a>
+      </div>
+      
+      <div class="footer-right">
+        <a href="mailto:admin@imdanok.com" class="f-email-block">
+          <div class="f-email-icon"><i class="fas fa-paper-plane"></i></div>
+          <div class="f-email-text">
+            <span class="f-email-title">admin@imdanok.com</span>
+            <span class="f-email-sub">Cooperation / Offers</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </footer>
+
   <script>
+    // === ЧАТ ЛОГИКА ===
     const WORKER_URL = 'https://white-sun-a521.imdanokcoc.workers.dev';
+    
     async function sendMessage() {
       const input = document.getElementById('tg-chat-input');
       const text = input.value.trim();
-      if(!text) return;
-      addMsg(text, 'tg-user-message'); input.value = '';
+      
+      if (!text) return;
+      
+      addMsg(text, 'tg-user-message');
+      input.value = '';
+      
       try {
-        const res = await fetch(WORKER_URL, {method:'POST', body:JSON.stringify({message:text})});
+        const res = await fetch(WORKER_URL, {
+          method: 'POST', 
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text })
+        });
+        
         const data = await res.json();
         addMsg(data.reply, 'tg-bot-message');
-      } catch(e) { addMsg("🔌 Сбой подключения к нейросети. 🖤", 'tg-bot-message'); }
+        
+      } catch (e) { 
+        addMsg("🔌 Сбой подключения к нейросети. 🖤", 'tg-bot-message'); 
+      }
     }
     
     function addMsg(text, cls) {
@@ -459,17 +936,29 @@
       document.getElementById('tg-chat-messages').scrollTop = document.getElementById('tg-chat-messages').scrollHeight;
     }
 
-    // === ЛОГИКА БЕСКОНЕЧНОГО СЛАЙДЕРА ===
+    // === ИНИЦИАЛИЗАЦИЯ (СЛАЙДЕР И АНИМАЦИИ) ===
     document.addEventListener('DOMContentLoaded', () => {
+      
+      // 1. Дублирование карточек слайдера для эффекта бесконечности
       const slider = document.querySelector('.matrix-slider');
       if (slider) {
-        // Берем все 8 карточек и копируем их один раз для эффекта ленты
         const cards = Array.from(slider.children);
         cards.forEach(card => {
-          const clone = card.cloneNode(true);
-          slider.appendChild(clone);
+          slider.appendChild(card.cloneNode(true));
         });
       }
+
+      // 2. Наблюдатель за появлением блоков (Элитная анимация)
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            obs.unobserve(entry.target); 
+          }
+        });
+      }, { root: null, rootMargin: '0px', threshold: 0.15 });
+
+      document.querySelectorAll('.reveal-elite').forEach(el => observer.observe(el));
     });
   </script>
 </body>
