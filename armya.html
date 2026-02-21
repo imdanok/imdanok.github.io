@@ -35,10 +35,21 @@
       color: var(--text-main);
       background-color: var(--bg-dark);
       scroll-behavior: smooth;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
+      scrollbar-width: none; 
+      -ms-overflow-style: none; 
     }
-    ::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+    ::-webkit-scrollbar { display: none; } 
+
+    /* === ЗАЩИТА ИЗОБРАЖЕНИЙ (БЕЗ ПКМ И ПЕРЕТАСКИВАНИЙ) === */
+    img {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
+      user-select: none;
+      pointer-events: none; /* Блокирует контекстное меню и клики */
+    }
 
     /* === НАВИГАЦИЯ === */
     .top-nav {
@@ -193,7 +204,7 @@
     
     .tg-chat-messages { 
       height: 450px; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; background-color: #0e1621;
-      scrollbar-width: none; -ms-overflow-style: none; /* Убираем скроллбар в чате */
+      scrollbar-width: none; -ms-overflow-style: none;
     }
     .tg-chat-messages::-webkit-scrollbar { display: none; }
 
@@ -235,8 +246,8 @@
     <div class="section-title">Протокол Генезис</div>
     <div class="bot-intro-block">
       <div class="bot-text-column">
-        <h2 class="massive-text">Многофункциональный <span class="accent-word">ИИ-Ассистент</span>.</h2>
-        <p class="sub-text">От локального скрипта до автономной нейро-сущности. Полный контроль и генерация данных прямо в твоем интерфейсе.</p>
+        <h2 class="massive-text">Автономный <span class="accent-word">ИИ-Ассистент</span>.</h2>
+        <p class="sub-text">От локального скрипта до автономной нейро-сущности. Полный контроль и генерация данных прямо в твоем интерфейсе Telegram.</p>
       </div>
       <div class="bot-image-column">
         <img src="assets/arm.png" class="main-demo-img" alt="ArmяBot Dashboard">
@@ -253,7 +264,7 @@
         <div class="card-col-text">
           <i class="fas fa-bolt card-icon"></i>
           <h2>Режим FLASH</h2>
-          <p>Быстрые ответы. Оптимизированный протокол для мгновенной генерации текста и отклика без задержек.</p>
+          <p>Интегрировано ядро на базе Gemini 3.0 Flash Preview. Оптимизированный легковесный протокол для мгновенной генерации текста и отклика без задержек.</p>
         </div>
         <div class="card-col-image"><img src="assets/gflesh.png" class="card-demo-img"></div>
       </div>
@@ -264,8 +275,8 @@
         <span class="number">02</span>
         <div class="card-col-text">
           <i class="fas fa-brain card-icon"></i>
-          <h2>Pro-Ассистент</h2>
-          <p>Сложные задачи и код. Полноценное ядро для написания, рефакторинга и глубокой аналитики алгоритмов.</p>
+          <h2>Pro-Ядро</h2>
+          <p>Развернуто на базе Gemini 3.1 Pro Preview. Мощный вычислительный кластер для глубокой аналитики, написания кода и решения многоуровневых задач.</p>
         </div>
         <div class="card-col-image"><img src="assets/gpro.png" class="card-demo-img"></div>
       </div>
@@ -352,13 +363,13 @@
       <div class="matrix-card">
         <i class="fas fa-bolt matrix-icon"></i>
         <h3 class="matrix-title">Режим FLASH</h3>
-        <p class="matrix-desc">Молниеносная генерация ответов. Отклик системы занимает менее 12мс.</p>
+        <p class="matrix-desc">На базе 3.0 Flash Preview. Молниеносная генерация, отклик системы < 12мс.</p>
       </div>
 
       <div class="matrix-card">
         <i class="fas fa-brain matrix-icon"></i>
         <h3 class="matrix-title">Pro-Ядро</h3>
-        <p class="matrix-desc">Глубокая аналитика, решение сложных текстовых и математических задач.</p>
+        <p class="matrix-desc">Архитектура 3.1 Pro Preview. Решение сложных алгоритмических и аналитических задач.</p>
       </div>
 
       <div class="matrix-card">
@@ -402,7 +413,7 @@
 
   <div class="section-title">Песочница ИИ</div>
   <div style="text-align: center; margin-bottom: 50px;">
-    <h2 class="massive-text">Хотите <span class="accent-word">протестировать?</span></h2>
+    <h2 class="massive-text">Хотите протестировать?</h2>
     <p class="sub-text">Лимит запросов: 10/10 на IP.</p>
   </div>
 
